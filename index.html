@@ -344,11 +344,9 @@
       
         
           
-            <h2 id="Python与JavaScript对照学习总结点"><a href="#Python与JavaScript对照学习总结点" class="headerlink" title="Python与JavaScript对照学习总结点"></a>Python与JavaScript对照学习总结点</h2><h3 id="Python：-廖雪峰-Python"><a href="#Python：-廖雪峰-Python" class="headerlink" title="Python： 廖雪峰-Python"></a>Python： 廖雪峰-Python</h3><h3 id="传送门：-https-www-liaoxuefeng-com-wiki-1016959663602400"><a href="#传送门：-https-www-liaoxuefeng-com-wiki-1016959663602400" class="headerlink" title="传送门： https://www.liaoxuefeng.com/wiki/1016959663602400"></a>传送门： <a href="https://www.liaoxuefeng.com/wiki/1016959663602400" target="_blank" rel="noopener">https://www.liaoxuefeng.com/wiki/1016959663602400</a></h3><p>begin：…..Go</p>
-<p>命令行打开 .py 文件；<br>Python交互环境，执行Python代码</p>
+            <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><h2 id="Python：-廖雪峰-Python"><a href="#Python：-廖雪峰-Python" class="headerlink" title="Python： 廖雪峰-Python"></a>Python： 廖雪峰-Python</h2><h2 id="传送门：-https-www-liaoxuefeng-com-wiki-1016959663602400"><a href="#传送门：-https-www-liaoxuefeng-com-wiki-1016959663602400" class="headerlink" title="传送门： https://www.liaoxuefeng.com/wiki/1016959663602400"></a>传送门： <a href="https://www.liaoxuefeng.com/wiki/1016959663602400" target="_blank" rel="noopener">https://www.liaoxuefeng.com/wiki/1016959663602400</a></h2><h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>命令行打开 .py 文件；<br>Python交互环境，执行Python代码</p>
 <p>缩进方式进行代码格式！！4格空格缩进<br>大小写敏感</p>
-<p>数据类型：</p>
-<ol>
+<h2 id="数据类型："><a href="#数据类型：" class="headerlink" title="数据类型："></a>数据类型：</h2><ol>
 <li>整数 </li>
 <li>浮点数 </li>
 <li>字符串</li>
@@ -376,8 +374,7 @@
 
 </li>
 </ol>
-<p>格式化：  </p>
-<ol>
+<h2 id="格式化："><a href="#格式化：" class="headerlink" title="格式化："></a>格式化：</h2><ol>
 <li>Python与C一致，都采用 % 实现<br>%运算符就是用来格式化字符串的。在字符串内部，%s表示用字符串替换，%d表示用整数替换<br><code>&#39;age: %s. nmae: %s&#39; %(25, fhl)</code>  </li>
 <li>format() 格式化，比较麻烦  </li>
 </ol>
@@ -394,8 +391,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> age &gt;= <span class="number">18</span>:</span><br><span class="line">    print(<span class="string">'成年人'</span>)</span><br><span class="line"><span class="keyword">elif</span> age &gt;= <span class="number">1</span>:</span><br><span class="line">    print(<span class="string">'幼儿期'</span>)</span><br><span class="line"><span class="keyword">else</span>: </span><br><span class="line">    print(<span class="string">'婴儿期'</span>)</span><br></pre></td></tr></table></figure>
 
 <p>int()  转化为整数函数</p>
-<p>循环：  </p>
-<ol>
+<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><ol>
 <li>for…in循环</li>
 <li>while 循环</li>
 <li>range() 生成一个整数序列,再通过list()函数可以转换为list</li>
@@ -403,7 +399,7 @@
 <li>continue 跳过循环   配合if使用</li>
 </ol>
 <p>使用dict和set：<br>dictionary字典，其他语言叫map，使用key-value存储，也就是js的对象。json的话，本质是字符串，也可以类比吧。<br><code>d = {&#39;name&#39;: &#39;fhl&#39;, &#39;age&#39;: 22, }</code><br>PS: 区别点： js的对象可以使用 . 方法调用，Python目前只能 d[‘age’]或者 d.get(‘age’,-1)获取存储的值<br>删除一个key，可以用 pop(key)<br>dictionary是空间换时间的方法，list时间换空间  </p>
-<p>set：<br>同js中的key同根同源，存储key的集合,不存储value，且key不重复！！！<br>创建set，需要一个list作为输入集合  </p>
+<h2 id="set"><a href="#set" class="headerlink" title="set"></a>set</h2><p>同js中的key同根同源，存储key的集合,不存储value，且key不重复！！！<br>创建set，需要一个list作为输入集合  </p>
 <ol>
 <li>add(key) 添加元素到set中，重复添加不会有效果   </li>
 <li>remove(key) 删除元素</li>
@@ -411,30 +407,21 @@
 
 </li>
 </ol>
-<p>函数：<br>自带函数（内置函数）： abs() 、max()<br>数据类型转换函数： int() float()  str() bool() 参考js的数据转换函数 String() Number()  Boolean()</p>
-<ol>
-<li><p>定义函数：<br>关键字： def, 依次写出函数名、括号、括号中的参数和冒号:,然后，在缩进块中编写函数体，函数的返回值用return语句返回<br>类比js: 关键字function ，后面都一致，然后把 冒号 换成 js中的 大括号 即可</p>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>自带函数（内置函数）： abs() 、max()<br>数据类型转换函数： int() float()  str() bool() 参考js的数据转换函数 String() Number()  Boolean()</p>
+<h3 id="定义函数："><a href="#定义函数：" class="headerlink" title="定义函数："></a>定义函数：</h3><p>关键字： def, 依次写出函数名、括号、括号中的参数和冒号:,然后，在缩进块中编写函数体，函数的返回值用return语句返回<br>类比js: 关键字function ，后面都一致，然后把 冒号 换成 js中的 大括号 即可</p>
 <pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">my_abs</span><span class="params">(num)</span>:</span> 
- <span class="keyword">if</span> x &gt;= <span class="number">10</span>: 
-     <span class="keyword">return</span> x
- <span class="keyword">else</span>: 
-     <span class="keyword">return</span> -x</code></pre>
+    <span class="keyword">if</span> x &gt;= <span class="number">10</span>: 
+        <span class="keyword">return</span> x
+    <span class="keyword">else</span>: 
+        <span class="keyword">return</span> -x</code></pre>
 <p>执行函数： 相比于Python，js的函数执行比较简单，定义完函数后，直接用函数名字加一堆小括号就可以调用当前函数，但Python貌似得先导入该函数，才可以调用</p>
 <pre><code class="python"><span class="keyword">from</span> test <span class="keyword">import</span> my_abs
 my_abs(<span class="number">-1</span>)</code></pre>
-</li>
-<li><p>pass关键字<br>pass语句啥都不做，就和0一样，用来占位的。让程序可以跑起来。可以理解为斗地主时，你的牌大不过上家的，你就可以大吼一声： pass/过，让单线程的斗地主可以走下去，而不至于卡在这里，让队友喷你</p>
-</li>
-<li><p>Python函数返回值<br>js函数没有return语句时，返回的是 undefined。Python返回的是 None，在存在返回多个值的情况下。Python返回的是tuple，一个tuple可以被好多个变量接收，具体场景参考ES6的解构赋值，一毛一样。</p>
-</li>
-<li><p>默认参数<br>没啥好讲的，和ES6函数默认参数一毛一样，默认参数在后，必填参数在前</p>
-</li>
-<li><p>可变参数<br>参数前面添加 * ，在函数内部，参数numbers接收到的是一个tuple，因此，函数代码完全不变。但是，调用该函数时，可以传入任意个参数，包括0个参数，有点意思奥,即便我们的传参是list或者tuple，也可以在参数前加 * ，使得list或者 tuple 变为可变参数传进去</p>
-</li>
-<li><p>关键字参数  </p>
-</li>
-</ol>
-<p>**ky<br>可变参数允许你传入0个或任意个参数，这些可变参数在函数调用时自动组装为一个tuple。而关键字参数允许你传入0个或任意个含参数名的参数，这些关键字参数在函数内部自动组装为一个dict。<br>关键字参数有什么用？它可以扩展函数的功能。比如，在person函数里，我们保证能接收到name和age这两个参数，但是，如果调用者愿意提供更多的参数，我们也能收到。试想你正在做一个用户注册的功能，除了用户名和年龄是必填项外，其他都是可选项，利用关键字参数来定义这个函数就能满足注册的需求  </p>
+<h3 id="pass关键字"><a href="#pass关键字" class="headerlink" title="pass关键字"></a>pass关键字</h3><p>pass语句啥都不做，就和0一样，用来占位的。让程序可以跑起来。可以理解为斗地主时，你的牌大不过上家的，你就可以大吼一声： pass/过，让单线程的斗地主可以走下去，而不至于卡在这里，让队友喷你</p>
+<h3 id="Python函数返回值"><a href="#Python函数返回值" class="headerlink" title="Python函数返回值"></a>Python函数返回值</h3><p>js函数没有return语句时，返回的是 undefined。Python返回的是 None，在存在返回多个值的情况下。Python返回的是tuple，一个tuple可以被好多个变量接收，具体场景参考ES6的解构赋值，一毛一样。</p>
+<h3 id="默认参数"><a href="#默认参数" class="headerlink" title="默认参数"></a>默认参数</h3><p>没啥好讲的，和ES6函数默认参数一毛一样，默认参数在后，必填参数在前</p>
+<h3 id="可变参数"><a href="#可变参数" class="headerlink" title="可变参数"></a>可变参数</h3><p>参数前面添加 * ，在函数内部，参数numbers接收到的是一个tuple，因此，函数代码完全不变。但是，调用该函数时，可以传入任意个参数，包括0个参数，有点意思奥,即便我们的传参是list或者tuple，也可以在参数前加 * ，使得list或者 tuple 变为可变参数传进去</p>
+<h3 id="关键字参数"><a href="#关键字参数" class="headerlink" title="关键字参数"></a>关键字参数</h3><p>**ky<br>可变参数允许你传入0个或任意个参数，这些可变参数在函数调用时自动组装为一个tuple。而关键字参数允许你传入0个或任意个含参数名的参数，这些关键字参数在函数内部自动组装为一个dict。<br>关键字参数有什么用？它可以扩展函数的功能。比如，在person函数里，我们保证能接收到name和age这两个参数，但是，如果调用者愿意提供更多的参数，我们也能收到。试想你正在做一个用户注册的功能，除了用户名和年龄是必填项外，其他都是可选项，利用关键字参数来定义这个函数就能满足注册的需求  </p>
 <pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">person</span><span class="params">(name, age, **kw)</span>:</span>
     <span class="keyword">if</span> <span class="string">'city'</span> <span class="keyword">in</span> kw:
         <span class="comment"># 有city参数</span>
@@ -446,22 +433,18 @@ my_abs(<span class="number">-1</span>)</code></pre>
 <p>参数定义的顺序必须是：必选参数、默认参数、可变参数、命名关键字参数和关键字参数。</p>
 <p>总结： *args是可变参数，args接收的是一个tuple；</p>
 <p>**kw是关键字参数，kw接收的是一个dict。  </p>
-<p>递归函数：  </p>
-<ol>
-<li>尾递归优化<pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">fact</span><span class="params">(n)</span>:</span>
- <span class="keyword">if</span> n==<span class="number">1</span>:
-     <span class="keyword">return</span> <span class="number">1</span>
- <span class="keyword">return</span> n * fact(n - <span class="number">1</span>)</code></pre>
-以上代码是Python的递归代码，额，可能耦合性较高，函数内部使用了当前函数的名字，这高度耦合，在js里面我们可以通过 arguments.callee解决调用自身的问题，减小耦合。以下是js代码：  <pre><code class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">fact</span>(<span class="params">n</span>) </span>{
- <span class="keyword">if</span>( n == <span class="number">1</span> ) {
-     <span class="keyword">return</span> <span class="number">1</span>
- }
- <span class="keyword">return</span> n * <span class="built_in">arguments</span>.callee(n<span class="number">-1</span>)
+<h2 id="递归函数："><a href="#递归函数：" class="headerlink" title="递归函数："></a>递归函数：</h2><h3 id="尾递归优化"><a href="#尾递归优化" class="headerlink" title="尾递归优化"></a>尾递归优化</h3><pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">fact</span><span class="params">(n)</span>:</span>
+    <span class="keyword">if</span> n==<span class="number">1</span>:
+        <span class="keyword">return</span> <span class="number">1</span>
+    <span class="keyword">return</span> n * fact(n - <span class="number">1</span>)</code></pre>
+<p>以上代码是Python的递归代码，额，可能耦合性较高，函数内部使用了当前函数的名字，这高度耦合，在js里面我们可以通过 arguments.callee解决调用自身的问题，减小耦合。以下是js代码：  </p>
+<pre><code class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">fact</span>(<span class="params">n</span>) </span>{
+    <span class="keyword">if</span>( n == <span class="number">1</span> ) {
+        <span class="keyword">return</span> <span class="number">1</span>
+    }
+    <span class="keyword">return</span> n * <span class="built_in">arguments</span>.callee(n<span class="number">-1</span>)
 }</code></pre>
-</li>
-</ol>
-<p>高级特性：   </p>
-<p>…持续更新…….</p>
+<h2 id="高级特性："><a href="#高级特性：" class="headerlink" title="高级特性："></a>高级特性：</h2><p>…持续更新…….</p>
 
           
         
