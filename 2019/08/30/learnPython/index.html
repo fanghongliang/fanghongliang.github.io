@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Python与JavaScript对照学习总结点Python： 廖雪峰-Python传送门： https://www.liaoxuefeng.com/wiki/1016959663602400begin：…..Go 命令行打开 .py 文件；Python交互环境，执行Python代码 缩进方式进行代码格式！！4格空格缩进大小写敏感 数据类型：  整数  浮点数  字符串 布尔值 =》 and, o">
+<meta name="keywords" content="IT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fanghongliang&#39;s blog">
+<meta property="og:url" content="http://yoursite.com/2019/08/30/learnPython/index.html">
+<meta property="og:site_name" content="Fanghongliang&#39;s blog">
+<meta property="og:description" content="Python与JavaScript对照学习总结点Python： 廖雪峰-Python传送门： https://www.liaoxuefeng.com/wiki/1016959663602400begin：…..Go 命令行打开 .py 文件；Python交互环境，执行Python代码 缩进方式进行代码格式！！4格空格缩进大小写敏感 数据类型：  整数  浮点数  字符串 布尔值 =》 and, o">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-30T08:57:46.748Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fanghongliang&#39;s blog">
+<meta name="twitter:description" content="Python与JavaScript对照学习总结点Python： 廖雪峰-Python传送门： https://www.liaoxuefeng.com/wiki/1016959663602400begin：…..Go 命令行打开 .py 文件；Python交互环境，执行Python代码 缩进方式进行代码格式！！4格空格缩进大小写敏感 数据类型：  整数  浮点数  字符串 布尔值 =》 and, o">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/08/30/learnPython/">
+
+
+
+
+
+  <title> | Fanghongliang's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fanghongliang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/30/learnPython/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fanghl">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fanghongliang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-30T16:54:46+08:00">
+                2019-08-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Python与JavaScript对照学习总结点"><a href="#Python与JavaScript对照学习总结点" class="headerlink" title="Python与JavaScript对照学习总结点"></a>Python与JavaScript对照学习总结点</h2><h3 id="Python：-廖雪峰-Python"><a href="#Python：-廖雪峰-Python" class="headerlink" title="Python： 廖雪峰-Python"></a>Python： 廖雪峰-Python</h3><h3 id="传送门：-https-www-liaoxuefeng-com-wiki-1016959663602400"><a href="#传送门：-https-www-liaoxuefeng-com-wiki-1016959663602400" class="headerlink" title="传送门： https://www.liaoxuefeng.com/wiki/1016959663602400"></a>传送门： <a href="https://www.liaoxuefeng.com/wiki/1016959663602400" target="_blank" rel="noopener">https://www.liaoxuefeng.com/wiki/1016959663602400</a></h3><p>begin：…..Go</p>
+<p>命令行打开 .py 文件；<br>Python交互环境，执行Python代码</p>
+<p>缩进方式进行代码格式！！4格空格缩进<br>大小写敏感</p>
+<p>数据类型：</p>
+<ol>
+<li>整数 </li>
+<li>浮点数 </li>
+<li>字符串</li>
+<li>布尔值 =》 and, or, not</li>
+<li>空值 None</li>
+<li>列表</li>
+<li>字典</li>
+</ol>
+<p>变量：<br>1.常量，即不能变的变量，指针指向不变 类const，常量一般为变量名全部大写</p>
+<p>除法：</p>
+<ol>
+<li>/   浮点数除法，即便是两个整数相除，结果也是浮点数</li>
+<li>//  地板除，两个整数的除法仍然是整数，结果只取整数  10 // 3 =》 3</li>
+<li>%  求模取余</li>
+</ol>
+<p>字符串编码：</p>
+<ol>
+<li>ord()  数获取字符的整数表示</li>
+<li>chr()  函数把编码转换为对应的字符<br>Python的字符串类型是str，在内存中以Unicode表示<br>Python对bytes类型的数据用带b前缀的单引号或双引号表示 x = b’abc’</li>
+<li>encode() 方法可以编码为指定的bytes</li>
+<li>decode() 方法 把bytes变为str<br>如果bytes中只有一小部分无效的字节，可以传入errors=’ignore’忽略错误的字节： b’\xe4\xb8\xad\xff’.decode(‘utf-8’, errors=’ignore’)</li>
+<li>len() 方法计算str的字符数<br>1个中文字符经过UTF-8编码占用3个字节，而1个英文字符只占用1个字节。</li>
+<li>坚持 utf-8 编码</li>
+<li>文件开头写上： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>格式化：  </p>
+<ol>
+<li>Python与C一致，都采用 % 实现<br>%运算符就是用来格式化字符串的。在字符串内部，%s表示用字符串替换，%d表示用整数替换<br><code>&#39;age: %s. nmae: %s&#39; %(25, fhl)</code>  </li>
+<li>format() 格式化，比较麻烦  </li>
+</ol>
+<p>list 和 tuple :</p>
+<ol>
+<li><p>list : 列表。类数组 Array<br><code>classmates = [&#39;xaioming&#39;, &#39;xiaohua&#39;, &#39;xiaoliu&#39;]</code><br>获取最后一个元素 classmates[len(classmates) - 1]  或者  classmates[-1]  </p>
+</li>
+<li><p>list 方法：<br>append(content) 末尾插入<br>insert(index, content)  插入指定位置<br>pop() 删除末尾元素<br>pop(index) 删除指定位置元素   </p>
+</li>
+<li><p>tuple 元组，有序列表<br>一旦初始化，不能更改。没有append、insert方法，其他和list一致<br>因为不能更改，故更为安全，能用tuple代替list就尽量用tuple！<br><code>t = (1,)</code><br><code>t = (&#39;str&#39;, 23, [&#39;a&#39;])</code>  </p>
+</li>
+</ol>
+<p>条件判断：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">if</span> age &gt;= <span class="number">18</span>:</span><br><span class="line">        print(<span class="string">'成年人'</span>)</span><br><span class="line">    <span class="keyword">elif</span> age &gt;= <span class="number">1</span>:</span><br><span class="line">        print(<span class="string">'幼儿期'</span>)</span><br><span class="line">    <span class="keyword">else</span>: </span><br><span class="line">        print(<span class="string">'婴儿期'</span>)</span><br><span class="line">```  </span><br><span class="line">int()  转化为整数函数</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">循环：  </span><br><span class="line"><span class="number">1.</span> <span class="keyword">for</span>...<span class="keyword">in</span>循环</span><br><span class="line"><span class="number">2.</span> <span class="keyword">while</span> 循环</span><br><span class="line"><span class="number">3.</span> range() 生成一个整数序列,再通过list()函数可以转换为list</span><br><span class="line"><span class="number">4.</span> <span class="keyword">break</span> 退出循环    配合<span class="keyword">if</span>使用</span><br><span class="line"><span class="number">5.</span> <span class="keyword">continue</span> 跳过循环   配合<span class="keyword">if</span>使用</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">使用dict和set：  </span><br><span class="line">dictionary字典，其他语言叫map，使用key-value存储，也就是js的对象。json的话，本质是字符串，也可以类比吧。</span><br><span class="line">` d = &#123;<span class="string">'name'</span>: <span class="string">'fhl'</span>, <span class="string">'age'</span>: <span class="number">22</span>, &#125; `  </span><br><span class="line">PS: 区别点： js的对象可以使用 . 方法调用，Python目前只能 d[<span class="string">'age'</span>]或者 d.get(<span class="string">'age'</span>,<span class="number">-1</span>)获取存储的值  </span><br><span class="line">删除一个key，可以用 pop(key)  </span><br><span class="line">dictionary是空间换时间的方法，list时间换空间  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set： </span><br><span class="line">同js中的key同根同源，存储key的集合,不存储value，且key不重复！！！  </span><br><span class="line">创建set，需要一个list作为输入集合  </span><br><span class="line"><span class="number">1.</span> add(key) 添加元素到set中，重复添加不会有效果   </span><br><span class="line"><span class="number">2.</span> remove(key) 删除元素</span><br><span class="line"><span class="number">3.</span> set可看做成无序、无重复元素的集合，因此，两个set可以做数学意义上的交集、并集等</span><br><span class="line">```python</span><br><span class="line">s1 = set([<span class="number">1</span>, <span class="number">3</span>, <span class="number">54</span>])</span><br><span class="line">s2 = set([<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line">s1 &amp; s2    <span class="comment"># 并 ，单个&amp; </span></span><br><span class="line">s1 | s2     <span class="comment"># | 或，单个|</span></span><br></pre></td></tr></table></figure>
+
+<p>函数：<br>自带函数（内置函数）： abs() 、max()<br>数据类型转换函数： int() float()  str() bool() 参考js的数据转换函数 String() Number()  Boolean()</p>
+<ol>
+<li><p>定义函数：<br>关键字： def, 依次写出函数名、括号、括号中的参数和冒号:,然后，在缩进块中编写函数体，函数的返回值用return语句返回<br>类比js: 关键字function ，后面都一致，然后把 冒号 换成 js中的 大括号 即可</p>
+<pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">my_abs</span><span class="params">(num)</span>:</span> 
+ <span class="keyword">if</span> x &gt;= <span class="number">10</span>: 
+     <span class="keyword">return</span> x
+ <span class="keyword">else</span>: 
+     <span class="keyword">return</span> -x</code></pre>
+<p>执行函数： 相比于Python，js的函数执行比较简单，定义完函数后，直接用函数名字加一堆小括号就可以调用当前函数，但Python貌似得先导入该函数，才可以调用</p>
+<pre><code class="python"><span class="keyword">from</span> test <span class="keyword">import</span> my_abs
+my_abs(<span class="number">-1</span>)</code></pre>
+</li>
+<li><p>pass关键字<br>pass语句啥都不做，就和0一样，用来占位的。让程序可以跑起来。可以理解为斗地主时，你的牌大不过上家的，你就可以大吼一声： pass/过，让单线程的斗地主可以走下去，而不至于卡在这里，让队友喷你</p>
+</li>
+<li><p>Python函数返回值<br>js函数没有return语句时，返回的是 undefined。Python返回的是 None，在存在返回多个值的情况下。Python返回的是tuple，一个tuple可以被好多个变量接收，具体场景参考ES6的解构赋值，一毛一样。</p>
+</li>
+<li><p>默认参数<br>没啥好讲的，和ES6函数默认参数一毛一样，默认参数在后，必填参数在前</p>
+</li>
+<li><p>可变参数<br>参数前面添加 * ，在函数内部，参数numbers接收到的是一个tuple，因此，函数代码完全不变。但是，调用该函数时，可以传入任意个参数，包括0个参数，有点意思奥,即便我们的传参是list或者tuple，也可以在参数前加 * ，使得list或者 tuple 变为可变参数传进去</p>
+</li>
+<li><p>关键字参数  </p>
+</li>
+</ol>
+<p>**ky<br>可变参数允许你传入0个或任意个参数，这些可变参数在函数调用时自动组装为一个tuple。而关键字参数允许你传入0个或任意个含参数名的参数，这些关键字参数在函数内部自动组装为一个dict。<br>关键字参数有什么用？它可以扩展函数的功能。比如，在person函数里，我们保证能接收到name和age这两个参数，但是，如果调用者愿意提供更多的参数，我们也能收到。试想你正在做一个用户注册的功能，除了用户名和年龄是必填项外，其他都是可选项，利用关键字参数来定义这个函数就能满足注册的需求  </p>
+<pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">person</span><span class="params">(name, age, **kw)</span>:</span>
+    <span class="keyword">if</span> <span class="string">'city'</span> <span class="keyword">in</span> kw:
+        <span class="comment"># 有city参数</span>
+        <span class="keyword">pass</span>
+    <span class="keyword">if</span> <span class="string">'job'</span> <span class="keyword">in</span> kw:
+        <span class="comment"># 有job参数</span>
+        <span class="keyword">pass</span>
+    print(<span class="string">'name:'</span>, name, <span class="string">'age:'</span>, age, <span class="string">'other:'</span>, kw)</code></pre>
+<p>参数定义的顺序必须是：必选参数、默认参数、可变参数、命名关键字参数和关键字参数。</p>
+<p>总结： *args是可变参数，args接收的是一个tuple；</p>
+<p>**kw是关键字参数，kw接收的是一个dict。  </p>
+<p>递归函数：  </p>
+<ol>
+<li>尾递归优化<pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">fact</span><span class="params">(n)</span>:</span>
+ <span class="keyword">if</span> n==<span class="number">1</span>:
+     <span class="keyword">return</span> <span class="number">1</span>
+ <span class="keyword">return</span> n * fact(n - <span class="number">1</span>)</code></pre>
+以上代码是Python的递归代码，额，可能耦合性较高，函数内部使用了当前函数的名字，这高度耦合，在js里面我们可以通过 arguments.callee解决调用自身的问题，减小耦合。以下是js代码：  <pre><code class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">fact</span>(<span class="params">n</span>) </span>{
+ <span class="keyword">if</span>( n == <span class="number">1</span> ) {
+     <span class="keyword">return</span> <span class="number">1</span>
+ }
+ <span class="keyword">return</span> n * <span class="built_in">arguments</span>.callee(n<span class="number">-1</span>)
+}</code></pre>
+</li>
+</ol>
+<p>高级特性：   </p>
+<p>…持续更新…….</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/27/summary201907/" rel="next" title>
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">fanghl</p>
+              <p class="site-description motion-element" itemprop="description">站在巨人的肩膀上</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Python与JavaScript对照学习总结点"><span class="nav-number">1.</span> <span class="nav-text">Python与JavaScript对照学习总结点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Python：-廖雪峰-Python"><span class="nav-number">1.1.</span> <span class="nav-text">Python： 廖雪峰-Python</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传送门：-https-www-liaoxuefeng-com-wiki-1016959663602400"><span class="nav-number">1.2.</span> <span class="nav-text">传送门： https://www.liaoxuefeng.com/wiki/1016959663602400</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fanghl</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
