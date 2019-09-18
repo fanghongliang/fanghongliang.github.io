@@ -20,12 +20,12 @@ tags:
 
 
 
-#### dist冲突：
+#### Vue-dist冲突：
 在分支上解决业务之后需要merge到master分支，master分支已经被人在其他分支写了业务并merge过了，我们此时merge到master上，git pull 拉下来最新的代码，在进行merge，必然会冲突。index.htlm 打包文件会冲突。  
 解决： 在master分支上，保留自己的 index.html 文件，提交。冲突的其他文件也一并提交，之后一定要再次 build master分支！！！！！，否则，你的index.html 打包文件是不包含别人的业务的。
 
 
-#### 文件大小写
+#### 修改文件大小写
 Windows对大小写不敏感，git对大小写不敏感，需要修改文件名的大小写，实际修改了git却不会生效的，解决：  
 1. 复制此文件到其他地方备份
 2. 删除项目中的该文件
@@ -51,4 +51,13 @@ Windows对大小写不敏感，git对大小写不敏感，需要修改文件名�
 
 保存，然后继续修改了该文件，此时再用 *git stash pop* 或 *git stash apply* 恢复之前的保存，可能会出现冲突。此时使用该命令会创建一个分支然后在创建的分支上把保存的记录恢复出来，避免冲突。
 
-PS ： *git stash* 保存的修改可以跨分支应用。例如：在 *develop*分支上做了修改， *git stash*保存，切换到 *master* 分支，使用 *pop* 或 *apply* 拉出来保存，这样就可以把 *develop* 分支上修改的内容迁移到 *master* 上，解决冲突可能会遇到。
+PS ： *git stash* 保存的修改可以跨分支应用。例如：在 *develop*分支上做了修改， *git stash*保存，切换到 *master* 分支，使用 *pop* 或 *apply* 拉出来保存，这样就可以把 *develop* 分支上修改的内容迁移到 *master* 上，解决冲突可能会遇到。  
+
+#### git 部分命令
+
+| 命令 | 作用说明 |  
+| ---- | ---- |
+| git reset HEAD | 放弃暂存区的修改（已经add,未commit） |
+| git checkout -- * | 放弃本地修改（未commit） |
+| git checkout -b dev | 创建dev分支 |
+| git branch -d dev | 删除dev分支 |
