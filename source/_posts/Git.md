@@ -59,5 +59,15 @@ PS ： *git stash* 保存的修改可以跨分支应用。例如：在 *develop*
 | ---- | ---- |
 | git reset HEAD | 放弃暂存区的修改（已经add,未commit） |
 | git checkout -- * | 放弃本地修改（未commit） |
+| git reset --soft HEAD^ | 撤销commit |
 | git checkout -b dev | 创建dev分支 |
 | git branch -d dev | 删除dev分支 |
+
+
+#### 撤销线上仓库的push
+
+适用于错误的push后没有他人再次push
+```
+$ git reset --soft <commitHash>
+$ git push --force 
+```
