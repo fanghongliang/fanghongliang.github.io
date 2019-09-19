@@ -2,6 +2,8 @@
 title: Charts
 date: 2019-09-17 10:33:17
 tags:
+categories: Antv-G2
+
 ---
 
 
