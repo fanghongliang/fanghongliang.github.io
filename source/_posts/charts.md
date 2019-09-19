@@ -1,7 +1,7 @@
 ---
 title: Charts
 date: 2019-09-17 10:33:17
-tags:
+tags: Programming
 categories: Antv-G2
 
 ---

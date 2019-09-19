@@ -1,7 +1,7 @@
 ---
 title: Python与JavaScript对照学习总结点
 date: 2019-08-28 16:16:41
-tags:
+tags: Programming
 categories: Python
 ---
 
