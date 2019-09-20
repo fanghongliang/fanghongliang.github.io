@@ -4,12 +4,12 @@
 
 # Site
 title: Fanghongliang's blog
-subtitle:
+subtitle: science && Truth
 description: 站在巨人的肩膀上
 keywords: IT
 author: fanghl
 language: zh-Hans
-timezone:
+timezone: 
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
