@@ -25,94 +25,96 @@ antv蚂蚁官网： <https://antv.alipay.com/zh-cn/index.html>
 3. 本地脚本：  
 `<script src="./g2.js"></script>`
 
-##### 实现方式
-Vue中有标签式、导入式。  
-1. 标签式
-```html
-<div>
-  <v-chart :forceFit="true" :height="height" :data="data777" :scale="scale">
-    <v-tooltip />
-    <v-axis />
-    <v-line position="year*value" />
-    <v-point position="year*value" shape="circle" />
-  </v-chart>
-</div>
-```
+
+##### G2封装实战
+一个G2实例只能创建一个图表,若需要多个图表，可以封装G2 实例:
 ```javascript
-const data777 = [
-  { year: '1991', value: 3 },
-  { year: '1992', value: 4 },
-  { year: '1993', value: 3.5 },
-  { year: '1994', value: 5 },
-  { year: '1995', value: 4.9 },
-  { year: '1996', value: 6 },
-  { year: '1997', value: 7 },
-  { year: '1998', value: 9 },
-  { year: '1999', value: 13 },
-];
-
-const scale = [{
-  dataKey: 'value',
-  min: 0,
-},{
-  dataKey: 'year',
-  min: 0,
-  max: 1,
-}]
-```
-
-2. 导入式  
-导入式图表由G2代码生成，挂载在容器上即可，G2代码一定写在 *mounted* 钩子内！
-
-```html 
-<!-- vue标签 -->
-<div id="c1"></div>
-```
-
-```javascript
-const chartData = [{
-    "month": "Jan",
-    "city": "Tokyo",
-    "temperature": 7
-}, {
-    "month": "Jan",
-    "city": "London",
-    "temperature": 3.9
-}, {
-    "month": "Feb",
-    "city": "Tokyo",
-    "temperature": 6.9
-}];
-
-// ......
-mounted() {
-  var chart = new G2.Chart({
-  container: 'c1',
-  forceFit: true,
-  height: 600
-});
-chart.source(chartData, {
-  month: {        
-    range: [0, 1]          //配置横轴的宽度范围
-  }
-});
-chart.tooltip({
-  crosshairs: {
-    type: 'line'
-  }
-});
-chart.axis('temperature', {
-  label: {
-    formatter: function formatter(val) {
-      return val + '°C';
+/**
+ * G2  
+ * charths函数
+ * warn:数据格式相同可复用一个函数,否则请重新另创图表函数
+ */
+// utils/charts.js
+export function chartInstance( point, chartData, config={} ) {
+  const [axisX, axisValue, axisY] = Object.keys(chartData[0])
+  const chart = new G2.Chart({
+    container: point,                         //point挂载点ID
+    forceFit: config.width ? false : true,    //表宽自适应配置
+    height: config.height || 600,
+    width: config.width || null,              //若配置forceFit，则width不生效
+  });
+  chart.source(chartData, {
+    axisX: {
+      range: [0, 1],
+      min: 0,
+      max: 100
     }
+  });
+  chart.tooltip({
+    crosshairs: {
+      type: 'line'
+    }
+  });
+  chart.axis(axisY, {
+    label: {
+      formatter: function formatter(val) {
+        return val + '￥';
+      }
+    },
+    title: {  
+      textStyle: {
+        fontSize: 12,               // 文本大小
+        textAlign: 'center',        // 文本对齐方式
+        fill: '#999',               // 文本颜色
+      }
+    },
+    line: {
+      lineDash: [3, 3]
+    }
+  });
+  chart.line().position(`${axisX}*${axisY}`).color(`${axisValue}`).shape('smooth');         //平滑曲线图
+  chart.point().position(`${axisX}*${axisY}`).color(`${axisValue}`).size(4).shape('circle').style({
+    stroke: '#fff',
+    lineWidth: 1
+  });
+  chart.render();
+  return chart
+}
+
+//showData.vue
+import { 
+  chartInstance
+} from '@/utils/charts'
+
+data() {
+  return{
+    chartIncome:'',
+    chartData2: [{}],
   }
-});
-chart.line().position('month*temperature').color('city');      //position('X轴*Y轴')
-chart.point().position('month*temperature').color('city').size(4).shape('circle').style({
-  stroke: '#fff',
-  lineWidth: 1
-});
-chart.render();
 },
+
+mounted() {
+  this.chartIncome = chartInstance('c1', this.chartData2)  //返回值很重要，关乎数据变动
+  this.chartRegister = chartInstance('c2', this.chartData2) 
+  this.chartActive = chartInstance('c3', this.chartData2) 
+},
+
+methods: {
+  //切换数据
+  onChangeIncome(e) {             
+      const dateChange = e.target.value
+      switch(dateChange) {
+        case 'a': 
+          this.chartIncome.changeData(this.chartData2)
+          break
+        case 'b':
+          this.chartIncome.changeData(this.chartData3)
+          break
+        case 'c':
+          this.chartIncome.changeData(this.chartData)
+          break
+      }
+    },
+}
 ```
+![chart.png](https://i.loli.net/2019/09/20/VJMN1IEkumCAaoe.png)
