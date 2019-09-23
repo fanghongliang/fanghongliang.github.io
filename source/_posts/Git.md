@@ -72,3 +72,31 @@ PS ： *git stash* 保存的修改可以跨分支应用。例如：在 *develop*
 $ git reset --soft <commitHash>
 $ git push --force 
 ```
+
+#### git reset / revert 
+git reset 本质即把指针 HEAD 指向某一个 commit   
+git revert 本质不算是回滚，是反做，反向操作commit。正常情况下，每一次操作文件后会让 Git 时间线往前走一步，revert反向操作某一个commit 记录，并生成一个新的  commit 来反做 
+
+#### 配置别名 
+懒，是人类进步的原动力！  
+长命令的别名配置
+```
+$ git config --global alias.st status
+```
+看一个丧心病狂的别名配置  
+```
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+```
+每个仓库的Git配置文件都放在.git/config文件中
+```
+$ cat .git/config 
+
+...
+[branch "master"]
+    remote = origin
+    merge = refs/heads/master
+[alias]
+    last = log -1       //命令作用区域
+
+```
+配置别名也可以直接修改这个文件↑
