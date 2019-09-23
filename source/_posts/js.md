@@ -1,5 +1,5 @@
 ---
-title: javascript内置对象
+title: javascript
 date: 2019-09-12 16:25:21
 tags: Programming
 categories: Javascript
