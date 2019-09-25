@@ -100,3 +100,34 @@ $ cat .git/config
 
 ```
 配置别名也可以直接修改这个文件↑
+
+#### 新建分支作业
+<https://www.cnblogs.com/aaron-agu/p/10454788.html>  
+修改bug、添加新功能等，在主分支上开一个新分支进行作业，待作业完成后，再合并回主分支，并删掉新开的分支。  
+方法一：  
+```
+master分支
+$ git checkout master 
+$ git checkout -b xqcircle origin/xqcircle     //创建新分支并关联在远程同名分支上
+$ git push origin HEAD                         //把该分支推送到远程，即可以在git仓库看到
+```
+方法二：  
+```
+$ git branch dev 
+$ git branch -a
+$ git push --set-upstream origin branch_name    //本地分支推送到远程同名分支，且本地分支会自动track该分支
+```
+远程存在分支，本地没有该分支，用以下命令拉下来
+```
+$ git checkout --track origin/branch_name 
+```
+删除远程分支
+```
+$ git branch -r -d origin/branch-name          
+$ git push origin :branch-name
+```
+删除本地分支
+```
+$ git branch -d branch_name
+$ git branch -D branch_name
+```
