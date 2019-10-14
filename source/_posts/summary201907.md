@@ -40,6 +40,28 @@ wepy属于类Vue写法，要在wepy中使用异步操作（async/await）需要�
   }
 ```
 
+## 生命周期:
+### 应用生命周期 
+
+| 属性  |  type |  描述  |  触发时机   |
+| ----- | ----- | ------ | ----------|
+|  onLaunch  | Function | 生命周期函数--监听小程序初始化 | 用户首次打开小程序，触发 onLaunch（全局只触发一次） |
+| onShow | Function | 生命周期函数--监听小程序显示 | 当小程序启动，或从后台进入前台显示，会触发 onShow |
+| onHide | Function | 	生命周期函数--监听小程序隐藏 | 当小程序从前台进入后台，会触发 onHide | 
+
+### 页面生命周期 
+
+| 属性  |  type |  描述  | 触发时机 |
+| ----- | ----- | ------ | ----- | 
+| onLoad | Function | 监听页面加载，一个页面只会调用一次 | 小程序注册完成后，加载页面，触发onLoad方法,参数可以获取wx.navigateTo和wx.redirectTo及<navigator/>中的 query参数 |
+| onReady | Function | 监听页面初次渲染完成,代表页面已经准备妥当，可以和视图层进行交互 | 首次显示页面，会触发onReady方法，渲染页面元素和样式，一个页面只会调用一次 |
+| onShow | Function | 监听页面显示,当redirectTo或navigateBack的时候调用 | 当小程序有后台进入到前台运行或重新进入页面时，触发onShow方法。 | 
+| onHide | Function | 监听页面隐藏,当navigateTo或底部tab切换时调用 | 当小程序后台运行或跳转到其他页面时，触发onHide方法 |
+| onUnload | Function | 监听页面卸载 | 当使用重定向方法wx.redirectTo(OBJECT)或关闭当前页返回上一页wx.navigateBack()，触发onUnload。 |
+
+
+
+## 版本更新
 版本更新代码，一般较为固定，直接复制在 *onLaunch* 生命周期内  
 
 ```javascript
@@ -70,8 +92,6 @@ wepy属于类Vue写法，要在wepy中使用异步操作（async/await）需要�
 
 ```
 
-
-## content目录
 ## 定时器
   页面业务逻辑有需要用到倒计时功能，如下图。  
 
