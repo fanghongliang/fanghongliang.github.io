@@ -112,6 +112,7 @@ $ git push origin HEAD                         //把该分支推送到远程，�
 ```
 $ git branch dev 
 $ git branch -a
+$ git branch -b branch_name                     //本地先创建该分支
 $ git push --set-upstream origin branch_name    //本地分支推送到远程同名分支，且本地分支会自动track该分支
 ```
 ##### 拉取分支
