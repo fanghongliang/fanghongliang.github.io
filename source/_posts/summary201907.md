@@ -502,6 +502,7 @@ pageScrollToBottom( msgLength ) {               //在页面需要进行变化时
 CSS持续补充中......  
 `word-break: break-all;    //换行文字，英文溢出`   
 `-webkit-overflow-scrolling: touch;  //ios端启用硬件加速，解决ios端滑动粘手`
+`catchtouchmove='true'    //模态框中添加，禁止页面滑动`
 ```CSS
  /* CSS 吸顶 */
 position: sticky;     
