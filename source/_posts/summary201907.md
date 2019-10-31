@@ -91,7 +91,25 @@ wepy属于类Vue写法，要在wepy中使用异步操作（async/await）需要�
   }
 
 ```
+## 组件
+### 组件复用
+说明： 组件复用，在 **同一个页面**，一个组件多次复用且每次传入不同的数据源，但是表现出来的数据源全部一致，其他的数据并没有渲染上  
+原因： 组件名一致导致wepy认为是一模一样的组件，如此数据源也不会变动  
+解决： 组件异名化
+```
+import CompA from 'path'
 
+components = {
+    CompB: CompA,
+    CompC: CompA,
+}
+```
+这样，既可以重复运用组件
+### 文字换行
+小程序文字换行：  
+```html
+<text>第一行\n第二行\n第三行\n</text>
+```
 ## 定时器
   页面业务逻辑有需要用到倒计时功能，如下图。  
 
@@ -503,6 +521,8 @@ CSS持续补充中......
 `word-break: break-all;    //换行文字，英文溢出`   
 `-webkit-overflow-scrolling: touch;  //ios端启用硬件加速，解决ios端滑动粘手`
 `catchtouchmove='true'    //模态框中添加，禁止页面滑动`
+`circleDynamic:last-of-type   //特定类circleDynamic中最后一个元素`
+`:nth-of-type(1/odd/even)  //选择特定元素下第几个元素`
 ```CSS
  /* CSS 吸顶 */
 position: sticky;     
