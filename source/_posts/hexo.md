@@ -169,3 +169,5 @@ local_search:
   top_n_per_article: 1
 ```
 ok 
+
+hugo博客框架： go语言编写。多线程编译。速度快

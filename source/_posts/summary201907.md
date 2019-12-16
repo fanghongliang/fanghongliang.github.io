@@ -560,6 +560,31 @@ getSystemInfo() {
 }
 ```
 
+## 分包
+微信小程序官方限制小程序代码大小不得超过 2M ，在业务逻辑较多的情况下，查过2M后，我们可以采用分包加载。
+```
+//app.wpy
+config = {
+    pages: [
+        'basePage1',
+        'basePage2',
+        'basePage3',
+    ],
+    subPackages: [
+        {
+            root: 'dirName',   //通常结构和
+            pages: [
+                'subPage1',
+                'subPage2',
+            ]
+        }
+    ]
+}
+
+//页面使用：
+this.nav(`/dirName/pages/subPage1`)
+```
+
 
 ***持续更新.......***
 
