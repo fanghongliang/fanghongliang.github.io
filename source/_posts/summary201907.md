@@ -516,6 +516,46 @@ pageScrollToBottom( msgLength ) {               //在页面需要进行变化时
 ```
 自己发送的消息数据可以直接压入本地数组 *talkContent* 内，Unshift()进入，得到“负负得正”效果，即数据反，布局反即可得到从底部排列的布局。对方的消息从服务器拉下来的时候，放入 *talkContent* 内前 *reverse()* 一下即可
 
+## 聊天页面input顶起页面相关
+聊天input点击后，默认为顶起页面，也可以关闭默认选择不顶起。但是不顶起页面其实是input脱离当前page，会出现键盘上方没有我们的输入框！因为键盘不顶起页面，故不会影响之前的布局，输入框一般都在页面最底部。  
+解决： wx.onKeyboardHeightChange 监听键盘高度，严重不推荐input自身函数bindkeyboardheightchange，因为bindkeyboardheightchange 在手势上划隐藏键盘时Android是不会被触发的！！！  
+思路： `adjust-position = "{{false}}"`设置不顶起页面，在手动把内容展示view 的高度减少键盘的高度！在键盘拉起时，内容高度减少键盘的高度，在键盘隐藏式，回复原高度。最后的效果和微信原生聊天一样！  
+效果： [![Screenshot-20200305-175417.jpg](https://i.postimg.cc/SN7CNt45/Screenshot-20200305-175417.jpg)](https://postimg.cc/Tp1pt0pq)  
+优化：在减少高度的同时，把内容页面滑到最底部，以展示最新消息！
+```html
+<input class="inputContent" 
+    type="text" 
+    value="{{userInputContent}}" 
+    bindinput = "InputBlur"
+    adjust-position = "{{false}}"
+    hold-keyboard = true
+    confirm-hold = true
+    confirm-type = 'done' 
+    @tap="onInpueChange"
+>
+```
+```javascript
+onInpueChange() {
+    const that = this
+    that.scrollBottom()
+    wx.onKeyboardHeightChange(res => {
+        that.log(res.height)
+        that.scrollView.height = res.height *2 + 20
+        that.$apply()
+    })
+}
+// 页面滚动到底部
+scrollBottom(){
+    const that = this;
+    that.scrollTopValue++;
+    setTimeout(function() {
+        that.scrollTop = that.scrollTopValue;
+        that.$apply()
+    }, 300);
+}
+```
+
+
 ## CSS注意点  
 CSS持续补充中......  
 `word-break: break-all;    //换行文字，英文溢出`   

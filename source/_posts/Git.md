@@ -135,3 +135,42 @@ $ git push origin :branch_name
 $ git branch -d branch_name
 $ git branch -D branch_name
 ```
+
+#### 标签tag
+一个版本上线定义一个版本标签，方便快速回退该版本。
+```
+git tag  //列出所有tag
+git tag -l 'v2.0.1'   //过滤tag
+```
+##### 新建tag 
+```
+git tag xqCircle-v2.0.0   
+```
+
+##### 查看tag，commit号
+```
+git show tagName 
+```
+
+##### 给某个commit打上tag
+```
+git tag -a v1.0.0 commitId -m 'my tag'
+```
+
+##### 推送tag到服务器
+```
+git push origin tagName    //推送某个具体tag
+git push origin --tags     //推送本地所有tags
+```
+
+##### 切换到某个tag
+跟分支一样，可以直接切换到某个tag去。这个时候不位于任何分支，处于游离状态
+```
+git checkout xqCircle-v2.0.1
+```
+
+#### 删除tag
+```
+git tag -d xqCircle-v2.0.1    //本地删除
+git push origin :refs/tags/xqCircle2.0.1   //远端删除
+```

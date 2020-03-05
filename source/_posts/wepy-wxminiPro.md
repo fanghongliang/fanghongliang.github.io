@@ -396,3 +396,96 @@ submit(e){
 },
 ```
 当用户的表单提交行为产生了 fromID 时， 统一进行本地存储，在用户沙雕该小程序时再统一提交全部fromid
+
+### 登录广播
+登录广播可以解决很多同步问题，在app内，执行登录获取token，在token还未拿到时，首页的接口不能去执行，需要等待后端返回token后才可执行，这里有两种方式实现：  
+method1： async/await   
+app内会执行登录，首页也onload内判断token是否存在，不存在则重新登录（同步），在登录成功后在执行业务。
+```javascript
+// APP
+onLaunch() {
+    this.getLogin()    
+}
+
+//index.wpy
+async onLoad() {
+    if(!wepy.getStorageSync('token)) {
+        await this.getLogin()
+    }
+    // 执行业务
+}
+```
+以上方法在有大量分享进入小程序的场景下很实用，但是不存在token的用户（新用户）通常会请求两次登录。优化如下：利用广播，广播页面告知APP内登录是否成功，成功后各页面再去执行业务。  
+```javascript
+//app
+import broadcast from './utils/broadcast'
+onLaunch() {
+    this.getLogin()
+}
+getLogin() {
+    //登录请求
+    broadcast.fire('login_success')
+}
+
+//业务页面 index.wpy
+onLoad() {
+    this.handleToken()
+    boradcast.on('login_success', function(res) => {this.handleToken()}.bind(this))
+}
+handleToken() {
+    if(!wepy.getStorageSync('token')) {
+        return 
+    }
+    //执行业务
+}
+```
+boradcast.js源码：  
+```javascript
+var broadcast = {
+    // 通过调用 broadcast.on 注册事件。其他页面都可以通过调用 broadcast.fire 触发该事件
+    // 参数说明：如果 isUniq 为 true，该注册事件将唯一存在；如果值为 false或者没有传值，每注册一个事件都将会被存储下来
+    on: function (name, fn, isUniq) {
+        this._on(name, fn, isUniq, false)
+    },
+    // 通过调用 broadcast.once 注册的事件，在触发一次之后就会被销毁
+    once: function (name, fn, isUniq) {
+        this._on(name, fn, isUniq, true)
+    },
+    _on: function (name, fn, isUniq, once) {
+        var eventData
+        eventData = broadcast.data
+        var fnObj = {
+            fn: fn,
+            once: once
+        }
+        if (!isUniq && eventData.hasOwnProperty(name)) {
+            eventData[name].push(fnObj)
+        } else {
+            eventData[name] = [fnObj]
+        }
+        return this
+    },
+    // 触发事件
+    // 参数说明：name 表示事件名，data 表示传递给事件的参数
+    fire: function (name, data, thisArg) {
+        console.log('[broadcast fire]: ' + name, data, thisArg)
+        var fn, fnList, i, len
+        thisArg = thisArg || null
+        fnList = broadcast.data[name] || []
+        if (fnList.length) {
+            for (i = 0, len = fnList.length; i < len; i++) {
+                fn = fnList[i].fn
+                fn.apply(thisArg, [data, name])
+                if (fnList[i].once) {
+                    fnList.splice(i, 1)
+                    i--
+                    len--
+                }
+            }
+        }
+        return this
+    },
+    data: {}
+}
+module.exports = broadcast
+```
