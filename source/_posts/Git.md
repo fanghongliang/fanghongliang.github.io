@@ -139,7 +139,8 @@ $ git branch -D branch_name
 #### 标签tag
 一个版本上线定义一个版本标签，方便快速回退该版本。
 ```
-git tag  //列出所有tag
+git tag               //列出所有tag
+git tag -r            //查看远端所有分支
 git tag -l 'v2.0.1'   //过滤tag
 ```
 ##### 新建tag 
@@ -167,6 +168,11 @@ git push origin --tags     //推送本地所有tags
 跟分支一样，可以直接切换到某个tag去。这个时候不位于任何分支，处于游离状态
 ```
 git checkout xqCircle-v2.0.1
+```
+
+##### 切换到某tag并新建分支
+```
+git checkout -b branchName tagName
 ```
 
 #### 删除tag
