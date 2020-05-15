@@ -357,7 +357,7 @@ test() {
 }
 ```
 
-### formid 
+### formid (已废弃)
 小程序给用户发送模板消息需要消耗 fromID， 新版的则是授权。这里记录一下fromID的处理。  
 发送一条模板消息需耗费一个 fromID  
 fromID的存储应该是用户本次使用完小程序，然后把收集到的fromID一次性发送到后端  
@@ -398,7 +398,7 @@ submit(e){
 ```
 当用户的表单提交行为产生了 fromID 时， 统一进行本地存储，在用户沙雕该小程序时再统一提交全部fromid
 
-### 登录广播
+### 小程序登录广播
 登录广播可以解决很多同步问题，在app内，执行登录获取token，在token还未拿到时，首页的接口不能去执行，需要等待后端返回token后才可执行，这里有两种方式实现：  
 method1： async/await   
 app内会执行登录，首页也onload内判断token是否存在，不存在则重新登录（同步），在登录成功后在执行业务。
@@ -416,77 +416,24 @@ async onLoad() {
     // 执行业务
 }
 ```
-以上方法在有大量分享进入小程序的场景下很实用，但是不存在token的用户（新用户）通常会请求两次登录。优化如下：利用广播，广播页面告知APP内登录是否成功，成功后各页面再去执行业务。  
-```javascript
-//app
-import broadcast from './utils/broadcast'
-onLaunch() {
-    this.getLogin()
-}
-getLogin() {
-    //登录请求
-    broadcast.fire('login_success')
-}
+以上方法在有大量新用户分享进入小程序的场景下很实用，但是不存在token的用户（新用户）通常会请求两次登录。优化如下：利用广播，广播页面告知APP内登录是否成功，成功后各页面再去执行业务。  
+code address:  https://github.com/fanghongliang/Tools/blob/master/broadcast.js
 
-//业务页面 index.wpy
-onLoad() {
-    this.handleToken()
-    boradcast.on('login_success', function(res) => {this.handleToken()}.bind(this))
-}
-handleToken() {
-    if(!wepy.getStorageSync('token')) {
-        return 
-    }
-    //执行业务
-}
-```
-boradcast.js源码：  
+### 小程序跳转路径携带对象参数Object
+小程序在跳转页面路径时会把query参数String化，也不能携带对象参数，当然我们可以通过localStorage、globalData来解决参数携带问题。但当不确定的对象参数需要传递到下一个页面时，可以使用对象参数传递，使用encodeURIComponent封装URL即可解决    
+code address:  https://github.com/fanghongliang/Tools/blob/master/urlHelper.js  
+
+### 小程序使用第三方UI库  
+当需要使用第三方UI库时，优先考虑第三方库的适配性。这里wepy 版本为 1.7.3 ，使用kai-ui 采坑经历如下：   
+kai-ui: https://www.npmjs.com/package/kai-ui/v/1.2.2  
+npm引入之后要确保项目  /dist/npm 目录下，存在 kai-ui 文件夹，如没有，删除dist目录，重新编译。  
+步骤一：在root目录app文件内，style中引入   `@import '../node_modules/kai-ui/src/less/index';`     
+步骤二：在页面中直接引入你需要的组件,
 ```javascript
-var broadcast = {
-    // 通过调用 broadcast.on 注册事件。其他页面都可以通过调用 broadcast.fire 触发该事件
-    // 参数说明：如果 isUniq 为 true，该注册事件将唯一存在；如果值为 false或者没有传值，每注册一个事件都将会被存储下来
-    on: function (name, fn, isUniq) {
-        this._on(name, fn, isUniq, false)
-    },
-    // 通过调用 broadcast.once 注册的事件，在触发一次之后就会被销毁
-    once: function (name, fn, isUniq) {
-        this._on(name, fn, isUniq, true)
-    },
-    _on: function (name, fn, isUniq, once) {
-        var eventData
-        eventData = broadcast.data
-        var fnObj = {
-            fn: fn,
-            once: once
-        }
-        if (!isUniq && eventData.hasOwnProperty(name)) {
-            eventData[name].push(fnObj)
-        } else {
-            eventData[name] = [fnObj]
-        }
-        return this
-    },
-    // 触发事件
-    // 参数说明：name 表示事件名，data 表示传递给事件的参数
-    fire: function (name, data, thisArg) {
-        console.log('[broadcast fire]: ' + name, data, thisArg)
-        var fn, fnList, i, len
-        thisArg = thisArg || null
-        fnList = broadcast.data[name] || []
-        if (fnList.length) {
-            for (i = 0, len = fnList.length; i < len; i++) {
-                fn = fnList[i].fn
-                fn.apply(thisArg, [data, name])
-                if (fnList[i].once) {
-                    fnList.splice(i, 1)
-                    i--
-                    len--
-                }
-            }
-        }
-        return this
-    },
-    data: {}
-}
-module.exports = broadcast
-```
+import loading from 'kai-ui/Loading'
+
+components = {
+    loading,
+} 
+```  
+之后就可以使用 <loading>组件了，此时！可能会出现  `[Error] TypeError: Cannot read property 'dir' of null` 报错！  解决方法： 直接引用，不要在 **components** 内注册，亲测有效（坑）  
