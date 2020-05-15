@@ -13,7 +13,8 @@ date: 2019-12-16 14:48:03
 ```javascript
 import wepy from 'wepy'
 import qiniuyun = from '@/utils/qiniuUploader'
-const baseUrl = 'https://xxxx'
+const dev = false
+const baseUrl = dev ? 'https://xxxx' : 'https://test/xxx'
 //上传图片： 
 const uploadImg = (imageURL, uptokenURL) {
     return new Promise((resolve, reject) => {
@@ -41,7 +42,7 @@ const wxRequest = async (params = {}, url, method,) => {
         header: Object.assign({
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': `XqCircleToken ${token}`
+            'Authorization': `str**Token ${token}`
         }, params.header || {})
     })
     return res
@@ -163,7 +164,7 @@ export default class commonMixins extends wepy.mixins {
             console.log(`[${new Date().Format("yyyy-MM-dd hh:mm:ss")}] `, ...arguments)
         }
     }
-    // 发送formid
+    // 发送formid(已废弃)
     postFormId(id){
         let arr = wepy.getStorageSync('form_ids') || [];
         arr.push(id);
@@ -269,7 +270,7 @@ module.export = {
 ```
 
 ### 分包
-小程序未超过2M大小，无需分包。超过2M，则采用分包，单包不超过2M，总计不超过8M。
+小程序未超过2M大小，无需分包。超过2M，则采用分包，单包不超过2M，总计不超过16M。
 
 
 ### 分享
