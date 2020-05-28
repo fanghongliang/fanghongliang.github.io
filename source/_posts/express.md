@@ -82,4 +82,131 @@ router.post('/add_msg', (req, res, next) => {
   }) 
 })
 ```
-至此，基本的sequlize就可以跑起来了。
+至此，基本的sequlize就可以跑起来了。   
+
+#### JWT（token验证）  
+jwt(jsonwebtoken)验证，前后端验证的一种方法。  
+express实现jwt验证  
+```javascript
+// 安装 express-jwt
+$ npm i express-jwt --save  
+
+/*
+* path: @/util/jwt.js
+* 封装分发token和验证token函数
+*/
+var jwt = require('jsonwebtoken');
+var signkey = 'secret123456';                   //随机串
+
+const setToken = function(userid){
+	return new Promise ((resolve, reject) => {
+		const token = jwt.sign({
+			_id: userid
+		}, signkey,{ expiresIn:'36h' });
+		resolve(token);
+	})
+}
+
+const verToken = function (token) {
+	return new Promise((resolve, reject) => {
+    var info = jwt.verify(token.split(' ')[1], signkey);
+    if(info) {
+      resolve(info);
+    } else {
+      reject(info)
+    }
+	})
+}
+
+module.exports = {
+  verToken,
+  setToken,
+}
+
+/**
+*  path: @/routes/index.js
+*  首先在login接口分发token
+*/
+
+var express = require('express');
+var router = express.Router();
+var {Message, User} = require('../models/test.js')
+const jwt = require('jsonwebtoken')
+const setToken = require('../utils/middwares/jwt.js')
+
+// 登录api
+router.post('/login', async (req, res, next) => {
+  const user = {}
+  let {account, password} = req.body   //小程序这里应接受code，去换取openID存储
+  let data = await User.findOne({
+    where: {
+      account: account,
+    }
+  })
+  // console.log('查询结果返回：', JSON.stringify(data, null, 2))
+  if(!data) {                          //不存在该用户，则创建用户
+    user.account = account
+    data = await User.create(user)
+  }
+  setToken.setToken(data.id).then(token => {
+    return res.json({data: {data, token}})
+  })
+})
+
+//请求内容
+router.get('/getOne', (req, res, next) => {
+  if(!req.data) {                      //验证token的中间件成功后，把验证结果放置在req.data中
+    return res.json({
+			msg:'token invalid',
+      errcode: 600,
+		})
+  }
+  Message.findAll().then(result => {
+    res.json({
+      errcode: 0,
+      result,
+    })
+  })
+})
+
+/**
+* path: @/app.js
+* 配置token验证中间件
+*/
+var jwt = require('jsonwebtoken');
+var verToken = require('./utils/middwares/jwt.js')
+
+app.use(function(req, res, next) {
+	var token = req.headers['authorization']
+	if(!token) {
+		return next();
+	} else {
+		verToken.verToken(token).then((data) => {
+			req.data = data;
+			return next();
+		}).catch((error)=>{
+			return next();
+    })
+    //上为封装方法,下为直接调用,都可以使用
+    // let info = jwt.verify(token.split(' ')[1], 'secret123456');
+    // req.data = info;
+    // next()
+	}
+})
+
+//过滤不需要token的路由
+app.use(expressJwt({
+  secret: 'secret123456'  // 签名的密钥 或 PublicKey
+}).unless({
+  path: ['/login',]      // 指定路径不经过 Token 解析
+}))
+
+//当token失效返回提示信息
+app.use(function(err, req, res, next) {
+	if (err.status == 401) {
+		return res.status(401).send({msg: 'token invalid'});
+	}
+});
+
+```
+至此，token验证就可以跑起来了。在发送http时，headers中配置 `Authorization: 'Bearer ${token}'`即可，当然还可以继续再次封装。
