@@ -42,21 +42,70 @@ var Message = sequelize.define('message', {
     }
 })
 
-Message.sync();     //创建表
+const User = sequelize.define('user', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    userName: {
+        type: Sequelize.STRING(32),
+    },
+    age: {
+        type: Sequelize.INTEGER
+    },
+    gender: {
+        type: Sequelize.INTEGER
+    },
+    address: {
+        type: Sequelize.STRING(32)
+    }
+})
 
-module.exports = Message;
+Message.sync();     //创建表
+User.sunc()
+
+module.exports = {Message, User};
 
 /*
 * path: @src/route/index.js
+* desc: 在路由中完成增删改查
 */
 var express = require('express');
 var router = express.Router();
 var Message = require('../models/message.js')
+const setToken = require('../utils/middwares/jwt.js')
 const {log} = console
 
 //REST API
-router.get('/get_msg', (req, res, next) => {
+//用户登录
+router.post('/login', async (req, res, next) => {
+  const user = {}
+  let {userName} = req.body
+  let data = await User.findOne({
+    where: {
+      userName: userName
+    }
+  })
+  // log('查询结果返回：', JSON.stringify(data, null, 2))
+  if(!data) {                                      //不存在用户则创建用户
+    user.userName = userName
+    data = await User.create(user)
+  }
+  setToken.setToken(data.id).then(token => {       //返回用户信息及token
+    return res.json({data: {data, token}})
+  })
+})
+
+//查找某内容
+router.get('/getOne', (req, res, next) => {
+  if(!req.data) {
+    return res.json({
+			msg:'token invalid'
+		})
+  }
   Message.findAll().then(data => {
+    log('查找数据res', JSON.stringify(data, null, 2))
     res.json({
       errcode: 0,
       data
@@ -64,22 +113,31 @@ router.get('/get_msg', (req, res, next) => {
   })
 })
 
-router.post('/add_msg', (req, res, next) => {
-  var {userName, content} = req.body
-  if(!userName || !content) {
-    res.json({errcode: 600, desc: '参数无效'})
-    return
+//删除一个用户
+router.get('/del_user', async (req, res, next) => {
+  let {userName} = req.query
+  let result = await User.findOne({
+    where: {userName,}
+  })
+  if(!result) {
+    return res.json({msg: '不存在该用户', errcode: 601})
   }
-  var message = {
-    userName: req.body.userName,
-    content: req.body.content,
-  }
-  Message.create(message).then(data => {
-    console.log('插入数返回res', data)
-    res.json({data})
-  }).catch(err => {
-    console.log('/add_msg报错err', err)
-  }) 
+  let data = await result.destroy()
+  return res.json({msg: '删除成功', errcode: 0})
+})
+
+//更新用户信息
+router.post('/rich_user_info', async (req, res, next) => {
+  let data = req.body
+  let result = await User.findOne({
+    where: {userName: data.userName}
+  })
+  //用数据表的result字段来匹配前端上传的字段！前端随便传参，我只过滤有用的
+  Object.keys(result.toJSON()).map(item => {   
+    data[item] ? result[item] = data[item] : ''
+  })
+  await result.save()
+  res.json({msg: 'succ', data: result})
 })
 ```
 至此，基本的sequlize就可以跑起来了。   
