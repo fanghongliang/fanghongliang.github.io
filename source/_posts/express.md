@@ -140,7 +140,77 @@ router.post('/rich_user_info', async (req, res, next) => {
   res.json({msg: 'succ', data: result})
 })
 ```
-至此，基本的sequlize就可以跑起来了。   
+至此，基本的sequlize就可以跑起来了。  
+
+#### 原生SQL方法  
+sequelize的确方便，但他的查询语句较为繁琐，这里我们还可以使用原生mysql语句。  
+```javascript
+/**
+* path: utils/dbConfig.js
+* 数据库配置
+*/
+mysql = {
+    host: 'localhost',
+    user: 'root',
+    password: '123456',
+    database: 'nodesql'
+}
+
+module.exports = mysql;
+
+/**
+* path: @/db.js
+* 手动连接数据库
+*/
+let mysql = require('mysql')
+let dbConfig = require('./utils/dbConfig')
+const {log} = console
+
+module.exports = {
+    query: function(sql, params, callback) {
+        let conn = mysql.createConnection(dbConfig)
+        conn.connect(function(err) {
+            if(err) {
+                log('数据库连接失败')
+                throw err
+            }
+            conn.query(sql, params, function(err, res, fields) {
+                if(err) {
+                    log('数据库操作失败')
+                    throw err
+                }
+                callback && callback(res);
+                conn.end(err => {
+                    if(err) {
+                        log('数据库关闭失败')
+                        throw err
+                    } 
+                })
+            })
+        })
+    }
+}
+
+/**
+* path: @/route/index.js
+* 路由使用
+*/
+router.get('/user', (req, res, next) => {
+  let {id} = req.query
+  const sql = `select * from user where id = ${id}`  //复杂SQL语句
+  db.query(sql, [], function(result, fields) {
+    let data = JSON.parse(JSON.stringify(result))
+    data1 = req.requestTime
+    res.json({
+      status: 0,
+      data,
+      data1
+    })
+  })
+})
+
+```
+ORM和原生SQL语句之间并不冲突，合理选择使用即可。两个一起用也可以
 
 #### JWT（token验证）  
 jwt(jsonwebtoken)验证，前后端验证的一种方法。  
