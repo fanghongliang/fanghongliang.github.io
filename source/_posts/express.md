@@ -210,3 +210,73 @@ app.use(function(err, req, res, next) {
 
 ```
 至此，token验证就可以跑起来了。在发送http时，headers中配置 `Authorization: 'Bearer ${token}'`即可，当然还可以继续再次封装。
+
+
+#### middare(中间件)  
+中间件用来处理后端服务，对前端的路由请求进行过滤处理。 
+express本来就是服务加中间件的集合，不同的中间件构成了完整的api逻辑处理。  
+应用级中间件绑定在APP内，路由中间件绑定在路由，除此之外，还有内置中间件，错误处理中间件等。  
+不带有路由限制的中间件是会被所有路由执行的，
+```javascript
+app.use(middareFun)                //所有请求都会触发
+app.use('/user/:id', middareFun)   ///user路径请求触发
+```
+
+这里我们优化了上面的 token 验证中间件。  
+```javascript
+/**
+* path: @/utils/middares/paramsVerify.js
+*/
+var verToken = require('./jwt.js')
+
+//请求时间
+const requestTime = function(req, res, next) {
+    req.requestTime = Date.now()
+    next()
+}
+
+//解析token
+const tokenVerify = function(req, res, next) {
+	var token = req.headers['authorization'];
+	if(!token){
+		return next();
+	} else {
+		verToken.verToken(token).then((data)=> {
+			req.data = data;
+			return next();
+		}).catch((error)=>{
+			return next();
+    })
+	}
+};
+
+//这里可以一个一个导出，也可以直接写在数组内，导出数组即可（二选一）。
+const middArr = [
+  requestTime = function() {},
+  tokenVerify = function() {},
+]
+module.exports = {
+  requestTime,
+  tokenVerify,
+  middArr,
+}
+
+/**
+* path: @/app.js
+* 两种注册方式二选一即可
+*/
+let paramsVerify = require('./utils/middwares/paramsVerify.js')
+
+//1.注册paramsVerify文件中所有的中间件（单个导出式）
+let middwareArr = []
+for(let i=0; i<Object.keys(paramsVerify).length; i++) {
+  let item = paramsVerify[Object.keys(paramsVerify)[i]]
+  middwareArr.push(item)                //干嘛不直接导出数组了？！en
+  //app.use(item)                       
+}
+app.use(middwareArr)
+
+//2.导出数组式
+app.use(paramsVerify.middArr)            //完事，
+```
+至此，中间的剥离优化完整。
