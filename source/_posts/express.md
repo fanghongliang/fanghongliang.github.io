@@ -408,3 +408,39 @@ app.use(middwareArr)
 app.use(paramsVerify.middArr)            //完事，
 ```
 至此，中间的剥离优化完整。
+
+#### 封装log  
+在调试中，可以封装一个log用来替代 `console.log`  
+
+```javascript
+/**
+* path: @/utils/log.js
+*
+*/
+Date.prototype.Format = function (fmt) {
+var o = {
+    "M+": this.getMonth() + 1,
+    "d+": this.getDate(),
+    "h+": this.getHours(),
+    "m+": this.getMinutes(),
+    "s+": this.getSeconds(),
+    "q+": Math.floor((this.getMonth() + 3) / 3),
+    "S": this.getMilliseconds()
+};
+if (/(y+)/.test(fmt))
+    fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt))
+    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+return fmt;
+}
+
+function log() {
+    const show = true        //也可以和开发环境挂钩控制日志输出
+    if (show) {
+        console.log(`[${new Date().Format("yyyy-MM-dd hh:mm:ss")}] `, ...arguments)
+    }
+}
+
+module.exports = log
+```
