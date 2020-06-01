@@ -4,7 +4,10 @@ tags: Programming
 categories: node
 date: 2020-05-22 14:19:11
 ---
-#### ORM(sequelize)  
+
+express文档  ： https://www.expressjs.com.cn/guide/using-middleware.html  
+sequelize文档:  https://github.com/demopark/sequelize-docs-Zh-CN/blob/master/Readme.md
+#### ORM(sequelize)   
 ORM（Object Relational Mapping）对象关系映射，减小操作层的代码量，直接方便的操作数据库。  
 使用前，确保sequelize已经安装  
 ```
@@ -344,7 +347,7 @@ app.use(function(err, req, res, next) {
 中间件用来处理后端服务，对前端的路由请求进行过滤处理。 
 express本来就是服务加中间件的集合，不同的中间件构成了完整的api逻辑处理。  
 应用级中间件绑定在APP内，路由中间件绑定在路由，除此之外，还有内置中间件，错误处理中间件等。  
-不带有路由限制的中间件是会被所有路由执行的，
+不带有路由限制的中间件是会被所有路由执行的。    
 ```javascript
 app.use(middareFun)                //所有请求都会触发
 app.use('/user/:id', middareFun)   ///user路径请求触发
