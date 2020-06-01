@@ -444,3 +444,24 @@ function log() {
 
 module.exports = log
 ```
+
+#### 跨域  
+在搭建完后端api后，需要在前端调试。无论是小程序还是vue的webapp,访问本地连接会出现跨域问题（小程序得在开发工具上关闭域名检测，小程序默认https），如图：  
+[![1590993807462-27-D534-BC-CF10-4f1f-B87-F-DE781-B20-BC22.png](https://i.postimg.cc/gjPgxG3j/1590993807462-27-D534-BC-CF10-4f1f-B87-F-DE781-B20-BC22.png)](https://postimg.cc/KkJPVSqh)  
+此时需要在app.js内加入允许跨域访问  
+```javascript
+/*
+* path: @/app.js
+*/
+//设置允许跨域访问该服务.
+app.all('*', function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  //Access-Control-Allow-Headers ,可根据浏览器的F12查看,把对应的粘贴在这里就行
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Methods', '*');
+  res.header('Content-Type', 'application/json;charset=utf-8');
+  next();
+})
+```
+此时，我们的vue前端就可以请求到服务端接口了   
+[![1590994213733-89-C343-C2-BFF0-44a3-988-C-1-D0-D9-E0875-CF.png](https://i.postimg.cc/5NJxVvQd/1590994213733-89-C343-C2-BFF0-44a3-988-C-1-D0-D9-E0875-CF.png)](https://postimg.cc/CdvyCR4m)
