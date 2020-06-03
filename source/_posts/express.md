@@ -489,3 +489,55 @@ app.use((req, res, next) => {
 ```
 此时，我们的vue前端使用axios携带token就可以请求到服务端接口了   
 [![1590994213733-89-C343-C2-BFF0-44a3-988-C-1-D0-D9-E0875-CF.png](https://i.postimg.cc/5NJxVvQd/1590994213733-89-C343-C2-BFF0-44a3-988-C-1-D0-D9-E0875-CF.png)](https://postimg.cc/CdvyCR4m)
+
+
+#### morgan日志  
+日志，记录服务器的操作行为，这里使用 morgan 把日志记录在本地文件保存。  
+
+```javascript
+/**
+* path: @/utils/morgan.js
+* desc: 封装一个morgan 
+*/
+
+var path = require('path');
+var fs = require('fs')
+var morgan = require('morgan');
+var FileStreamRotator = require('file-stream-rotator')
+
+var logDirectory = path.join(__dirname, 'log')
+
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+
+morgan.token('timeStamp', function(req, res){
+    let date = new Date()
+    let logHour = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours() 
+    let logMinute = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
+    let logSecond = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+    let logDate = `${logHour}:${logMinute}:${logSecond}`
+    return logDate
+});
+  
+  // 自定义format，其中包含自定义的token
+  morgan.format('joke', '[joke :timeStamp] :remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms');
+  
+  // create a rotating write stream
+  var accessLogStream = FileStreamRotator.getStream({
+    date_format: 'YYYYMMDD',
+    filename: path.join(logDirectory, 'access-%DATE%.log'),
+    frequency: 'daily',
+    verbose: false
+  })
+
+module.exports = {morgan, accessLogStream}
+
+/*
+* path: @/app
+* 引用这个日志系统
+*/
+
+app.use(morgan('joke'));                                   //服务器输入实时日志
+app.use(morgan('short', {stream: accessLogStream}));       //记录日志在文件中
+
+```  
+至此，我们可以在 `/utils` 路径下看到创建的 log 文件夹，日志已经根据 *file-stream-rotator* 插件做了分割，每一天的日志集约在一个文件。以防日志过多导致混乱。
