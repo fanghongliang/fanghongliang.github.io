@@ -454,9 +454,9 @@ module.exports = log
 此时需要在app.js内加入允许跨域访问  
 ```javascript
 /*
-* path: @/app.js
+* desc: 以下跨域代码未处理 OPTION 形式，在request不携带自定义参数如 token 等headers内的配置时，是可以跑起来的，一旦在request内设置headers内容，请求会被 OPTION 挂起，跨域失败！
 */
-//设置允许跨域访问该服务.
+//设置允许跨域访问该服务.（此代码为坑）
 app.all('*', function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   //Access-Control-Allow-Headers ,可根据浏览器的F12查看,把对应的粘贴在这里就行
@@ -465,6 +465,27 @@ app.all('*', function (req, res, next) {
   res.header('Content-Type', 'application/json;charset=utf-8');
   next();
 })
+
+/*
+* desc: 跨域
+* desc: 大胆copy
+* path: @/app.js
+*/
+app.use((req, res, next) => {
+  // 设置是否运行客户端设置 withCredentials
+  // 即在不同域名下发出的请求也可以携带 cookie
+  res.header("Access-Control-Allow-Credentials",true)
+  // 第二个参数表示允许跨域的域名，* 代表所有域名  
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, OPTIONS') // 允许的 http 请求的方法
+  // 允许前台获得的除 Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma 这几张基本响应头之外的响应头
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With')
+  if (req.method == 'OPTIONS') {
+      res.sendStatus(200)
+  } else {
+      next()
+  }
+})
 ```
-此时，我们的vue前端就可以请求到服务端接口了   
+此时，我们的vue前端使用axios携带token就可以请求到服务端接口了   
 [![1590994213733-89-C343-C2-BFF0-44a3-988-C-1-D0-D9-E0875-CF.png](https://i.postimg.cc/5NJxVvQd/1590994213733-89-C343-C2-BFF0-44a3-988-C-1-D0-D9-E0875-CF.png)](https://postimg.cc/CdvyCR4m)
