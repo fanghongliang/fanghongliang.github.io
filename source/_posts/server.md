@@ -59,6 +59,8 @@ date: 2020-06-09 11:28:31
 yum -y install nmap
 nmap 192.168.1.56
 
+#### telnet  
+检查我们的IP是否可以ping同 例如telnet 192.168.157.129 80
 
 #### 防火墙端口  
 express程序默认运行在 3000 端口，云服务器默认是没有开放 3000 端口的，需要我们手动开启 3000 端口，命令如下：   
@@ -66,6 +68,9 @@ express程序默认运行在 3000 端口，云服务器默认是没有开放 300
 `firewall-cmd --zone=public --add-port=3000/tcp --permanent`
 重启防火墙  
 `firewall-cmd --reload`  
+
+如报错FirewallD is not running,则开启防火墙  
+`systemctl start firewalld`
 
 使用nmap查看现在的端口情况，3000端口已经开启。 
 `nmap yourIpAddress`
@@ -103,5 +108,16 @@ npm install -g pm2
 2.13 重新启动进程/应用 pm2 restart www
 
 2.14 重新启动所有进程/应用 pm2 restart all
+
+#### nginx代理  
+
+安装nginx，链接： https://www.cnblogs.com/shiyuelp/p/11945882.html  
+路径： /usr/local/nginx/sbin  
+注意点： nginx默认在80端口，而服务器默认不开放80端口。需要手动打开80端口。  
+查看nginx是否启动成功：  ps aux|grep nginx;
+检查IP是否可以ping通： telnet 106.13.4.74 80；
+启动nginx： /usr/local/nginx/sbin/nginx  
+重启nginx： /usr/local/nginx/sbin/nginx -s reopen
+关闭nginx： /usr/local/nginx/sbin/nginx -s stop
 
 #### 域名映射
