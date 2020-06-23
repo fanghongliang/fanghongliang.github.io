@@ -109,15 +109,26 @@ npm install -g pm2
 
 2.14 重新启动所有进程/应用 pm2 restart all
 
+2.15 监听修改，自动重启 pm2 start xxx --watch
+
 #### nginx代理  
 
 安装nginx，链接： https://www.cnblogs.com/shiyuelp/p/11945882.html  
 路径： /usr/local/nginx/sbin  
+配置文件修改：/usr/local/nginx/config  
 注意点： nginx默认在80端口，而服务器默认不开放80端口。需要手动打开80端口。  
 查看nginx是否启动成功：  ps aux|grep nginx;
 检查IP是否可以ping通： telnet 106.13.4.74 80；
 启动nginx： /usr/local/nginx/sbin/nginx  
 重启nginx： /usr/local/nginx/sbin/nginx -s reopen
-关闭nginx： /usr/local/nginx/sbin/nginx -s stop
+关闭nginx： /usr/local/nginx/sbin/nginx -s stop  
 
-#### 域名映射
+配置文件可以自己修改  
+
+#### 域名映射  
+
+域名映射这块其实没必要单独再买一个域名，如果自己有域名的话，可以用一个二级域名来代替。这里以阿里云的域名为例。在阿里云的域名解析设置中，添加一个记录，主机记录那里就是填写我们
+二级域名的地方，记录值填写服务器的IP地址，添加完成后即可使用域名访问服务器了。可以直接在浏览器输入刚刚配置二级域名，看看是否有nginx欢迎页即可。  
+[![BA983203-9-F7-C-4c28-A895-5-FCEBD8699-E7.png](https://i.postimg.cc/1XrsSZ9P/BA983203-9-F7-C-4c28-A895-5-FCEBD8699-E7.png)](https://postimg.cc/QKCRgw9n)
+
+#### redis  
