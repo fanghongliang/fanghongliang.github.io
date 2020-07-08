@@ -1,4 +1,4 @@
-## hexo blog  
+## Hexo blog  
 
 当更换PC时，只需要在新的PC上安装hexo环境，把本项目clone至本地，则可以
 继续添加blog
