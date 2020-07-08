@@ -543,4 +543,5 @@ app.use(morgan('short', {stream: accessLogStream}));       //记录日志在文�
 至此，我们可以在 `/utils` 路径下看到创建的 log 文件夹，日志已经根据 *file-stream-rotator* 插件做了分割，每一天的日志集约在一个文件。以防日志过多导致混乱。  
 
 -----  
-> git： https://github.com/fanghongliang/NodeProject , **欢迎star**
+> * 本项目git地址在[**这里**](https://github.com/fanghongliang/NodeProject), **欢迎star**   
+> * 本项目部署服务器文档在[**这里**](http://fanghl.top/2020/06/09/server/#more)
