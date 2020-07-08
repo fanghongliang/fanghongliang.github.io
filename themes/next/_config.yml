@@ -243,7 +243,7 @@ wechat_subscriber:
   description: wechat account
 
 # Reward   打赏功能
-reward_comment: 提点意见就可以啦，不用赏
+reward_comment: 走过路过，留下买路财，壮士
 wechatpay: /images/wechatpay.png
 # alipay: /images/alipay.jpg
 #bitcoin: /images/bitcoin.png
