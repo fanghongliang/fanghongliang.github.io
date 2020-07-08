@@ -49,9 +49,22 @@ date: 2020-06-09 11:28:31
 
 ```  
 
+15. 重启mysql服务  service mysqld restart;  
+
 #### mysql异常集合  
 
-运行程序mysql报错 `(node:6280) UnhandledPromiseRejectionWarning: SequelizeDatabaseError: Illegal mix of collations (latin1_swedish_ci,IMPLICIT) and (utf8mb4_unicode_ci,COERCIBLE) for`，原因为sequelize创建的mysql默认字符集是 `latin1` 而不是 *utf8*，更改即可。  
+1. 运行程序mysql报错 `(node:6280) UnhandledPromiseRejectionWarning: SequelizeDatabaseError: Illegal mix of collations (latin1_swedish_ci,IMPLICIT) and (utf8mb4_unicode_ci,COERCIBLE) for`，原因为sequelize创建的mysql默认字符集是 `latin1` 而不是 *utf8*，更改即可。  
+
+2. root用户丢失  
+mysql.user里面，root用户由于未知原因不在了，重新建立root用户  
+* 忽略授权- vim etc/my.cnf    
+> skip-grant-tables  
+
+* 1396 报错  
+> flush privileges;
+> drop user 'dl'@'%';
+> create user 'dl'@'%' identified by '123';   
+
 
 #### nmap    
 使用该命令查看服务器开放的端口，查看3306端口是否防火墙中允许访问。  
