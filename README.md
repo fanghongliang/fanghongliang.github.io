@@ -9,6 +9,7 @@
 
 * install dependencies
 > npm install  
+> npm i hexo-cli -g  
 > npm install hexo-deployer-git --save
 
 * serve with hot reload at localhost:4000
