@@ -1,52 +1,81 @@
 ---
-title: python-Web框架之flask学习总结
-date: 2019-09-05 16:16:41
-tags: 
-  - Programming
+title: Python-flask
+date: 2020-06-05 16:36:31
+tags: Programming
 categories: Python
 ---
 
-# 序言
-## version： Python3.7.0
+#### 目录架构  
 
-# 内容
+flask没有标准的目录架构，这里的目录结构如下  
 
-## 环境    
-*Flask* 和 *Django* 目前是Python较为流行的Web框架。区别大致在与毛坯房和拎包入住型公寓，flask比较适用于后台管理系统，Django适合前端项目提供接口，这不是废话嘛，因为公司的后台就是这样用的（此处手动狗头.jpg）  
-Flask和node比较着学习，理解起来快且容易。  
-这里忽略安装Python和flask的步骤，具体请传送<https://dormousehole.readthedocs.io/en/latest/quickstart.html>  
+> project_name
+>> app
+>>>
 
-## 入门
-```python
-from flask import Flask
+#### 创建虚拟环境  
+ 
+> python -m venv env
+
+* 激活虚拟环境（win）
+> $ env\Scripts\activate
+> 然后在虚拟环境中安装flask等
+
+#### 依赖  
+
+* 生成依赖文件
+> pip freeze > requirements.txt  
+
+* 安装依赖
+> pip install -r requirements.txt
+
+#### flask_script  
+
+flaks_script通过命令的方式操作flask，跑起来开发版服务器、设置数据库，定时任务等。
+
+```python 
+# manage.py
+from flask_script import Manager
 app = Flask(__name__)
 
-@app.route('/')
-def hello_interface():
-    return {"status": 'ok', 'data': 'mockdata'}
-```
-上面的代码是最简单的Flask应用，运行后，通过postman测试localhost:5000端口，就可以拿到return里面的json数据，这点相比于node-Koa来说，返回的数据需要放在上下文（context）的body体中，有点简便啊  
-洋葱圈模型中返回数据代码顺便复习一下：
-```javascript
-const Router = require('koa-router')
-const router = new Router()
+manager = Manager(app)
 
-router.post('./v1/interface', (ctx, next) => {
-    const path    = ctx.params
-    const query   = ctx.request.query
-    const headers = ctx.request.header
-    const body    = ctx.request.body
+def hello(): 
+    pass
+manager.add_command('hello', hello())
 
-    if( body.length == 0 ) {
-        const error = new global.errs.ParameterException('错误',605)
-    }
-    if( query === 1 ) {
-        ctx.body = {
-            status: 'ok',
-            code: 601,
-            data: 'data'
-        }
-    }
-})
+# 装饰符命令
+@manager.command
+def hello(): 
+    pass
 ```
-Flask返回的数据模式相比Koa来说，太简略了吧，可能是一个get方法，一个post方法吧
+通过自定义方法操作flask，使用方法为：  
+> $ python manage.py hello
+
+#### Blueprint  
+
+蓝图模块，帮助我们对于整体项目的分割，利于后续的管理和拓展。主要分为设置蓝图，注册蓝图，路由使用蓝图三部分。  
+
+```python
+
+# @/api/user/controllers.py
+from flask import Blueprint 
+user = Blueprint('user', __name__)
+
+"""
+创建用户
+"""
+@user.route('/register', methods= ['get'])
+def user_register():
+    pass
+
+# @__init__.py  
+def create_app():
+    app = Falsk(__name__)
+    from om_core.api.user.controllers import user
+    app.register_blueprint(user, url_prefix='/api/users')
+```
+至此，URL使用 localhost:5000/api/users/register 就可以访问注册路由。 
+
+#### flask-SQLAlchemy  
+
