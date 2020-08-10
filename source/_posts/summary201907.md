@@ -1,5 +1,5 @@
 ---
-title: 七月份项目自我总结
+title: 小程序项目自我总结
 date: 2019-08-22 16:16:41
 tags: Programming
 categories: 工作总结
@@ -625,6 +625,145 @@ config = {
 this.nav(`/dirName/pages/subPage1`)
 ```
 
+## canvas生成海报
+
+小程序分享至朋友圈的海报制作过程，海报内容为动态获取，内容根据每个用户生成不同的海报  
+
+[![wx9fa47d9522cc0237-o6z-AJs4dg-UWPBIA6-I6-Ue-I2x-Dv-FC0-y-RUGs-RYHc-MF358fd1d3e53fca4c2ba42fe7422dee64d.png](https://i.postimg.cc/jjzZ6ZcZ/wx9fa47d9522cc0237-o6z-AJs4dg-UWPBIA6-I6-Ue-I2x-Dv-FC0-y-RUGs-RYHc-MF358fd1d3e53fca4c2ba42fe7422dee64d.png)](https://postimg.cc/d7V2wRzy)  
+
+如图，除了背景使用本地图片，其他的所有内容均为动态获取，且每次获取的不尽相同。  
+* 图片先从网络图片下载到本地才可以渲染，如果开发工具可以正常显示，而真机无法绘制，那么请先检查你的 downloadFile 域名。
+* 绘制圆角-直角图片  
+* 图片保存模糊
+```javascript
+//绘制文字
+    drawTxt(fontSize, color, content, x, y, bold=false) {
+        this.ctx.save()
+        this.ctx.setFontSize(fontSize)
+        this.ctx.setFillStyle(color)
+        this.ctx.fillText(content, x, y)
+        if (bold) {
+            this.ctx.fillText(content, x, y + 0.3)
+            this.ctx.fillText(content, x + 0.3, y)
+        }
+        this.ctx.setTextBaseline('middle')
+        this.ctx.restore()
+    }
+//绘制圆角图片(默认)-矩形图片
+    getRectWithRadius(ctx, x, y, w, h, r, c, borderArgs = []) {
+        // r > 0 则默认绘制圆角图片， r = 0 ,则绘制矩形
+        //绘制圆形 则 r = 1/2 w || 1/2h
+        //绘制任意直角 则 borderArgs = [leftTop, rightTop, rightBottom, leftBottom]控制
+        let rate = this.rate
+        let b = borderArgs
+        ctx.beginPath()
+        ctx.moveTo(x / rate, y / rate)
+        b && b[0] ? '' : ctx.arc((x + r) / rate, (y + r) / rate, r / rate, Math.PI, 1.5 * Math.PI)
+        b && b[1] ? ctx.lineTo((x + w) / rate, y / rate) : ctx.lineTo((x + w - r) / rate, y / rate)
+        b && b[1] ? '' : ctx.arc((x + w - r) / rate, (y + r) / rate, r / rate, 1.5 * Math.PI, 0)
+        b && b[2] ? ctx.lineTo((x + w) / rate, (y + h) / rate) : ctx.lineTo((x + w) / rate, (y + h - r) / rate)
+        b && b[2] ? '' : ctx.arc((x + w - r) / rate, (y + h - r) / rate, r / rate,  0, 0.5 * Math.PI)
+        b && b[3] ? ctx.lineTo((x) / rate, (y + h) / rate) : ctx.lineTo((x + r) / rate, (y + h) / rate)
+        b && b[3] ? '' : ctx.arc((x + r) / rate, (y + h - r) / rate, r / rate, 0.5 * Math.PI, Math.PI)
+        ctx.closePath()
+        if (c) {
+            ctx.fillStyle = c
+            ctx.fill()
+        }
+    }
+
+// 保存海报
+    savePosterToLocal() {
+        const that = this
+        // 获取用户是否开启用户授权相册
+        wx.getSetting({
+            success(res) {
+                // 如果没有则获取授权
+                if (!res.authSetting['scope.writePhotosAlbum']) {
+                    wx.authorize({
+                        scope: 'scope.writePhotosAlbum',
+                        success() {
+                            that.saveCanvas()
+                        },
+                        fail() {
+                            that.toast('右上角开启授权', 'none')
+                            wx.openSetting()
+                        }
+                    })
+                } else {
+                    that.saveCanvas()
+                }
+            }
+        })
+    }
+//canvas保存至相册
+    saveCanvas() {
+        // 1-把画布转化成临时文件
+        const that = this
+        wx.canvasToTempFilePath({
+            x: 0,
+            y: 0,
+            width: 560,    // 画布的宽
+            height: 996,   // 画布的高
+            destWidth: 1080 * 750 / wx.getSystemInfoSync().windowWidth,
+            destHeight: 1920 * 750 / wx.getSystemInfoSync().windowWidth,
+            canvasId: 'poster',
+            success(res) {
+                wepy.saveImageToPhotosAlbum({
+                    filePath: res.tempFilePath,
+                    success(res2) {
+                        that.toast('保存至相册成功', 'none')
+                    },
+                    fail() {
+                        that.toast('保存失败，稍后再试', 'none')
+                    }
+                })
+            },
+            fail() {
+                that.toast('保存失败，稍后再试', 'none')
+            }
+        })
+    }
+```
+* 多张图片下载
+网络图片下载成本地图片，且全部下载完全后才可以绘制canvas 
+
+```javascript
+let promise1 = new Promise(function(resolve,reject){
+            wx.getImageInfo({
+                src: that.posterData.matchmaker.qrcord,
+                success:function(res){
+                    imgResource.qrcord = res.path
+                    resolve(res);
+                },
+                fail:function(res){
+                    reject(res);
+                }
+            })
+        })
+let promise2 = new Promise(function(resolve,reject){
+    wx.getImageInfo({
+        src: that.posterData.matchmaker.qrcord,
+        success:function(res){
+            imgResource.qrcord = res.path
+            resolve(res);
+        },
+        fail:function(res){
+            reject(res);
+        }
+    })
+})
+Promise.all([promise1, promise2, promise3]).then(res => {
+    //开始绘制
+    const ctx = wx.createCanvasContext('poster')
+    that.ctx = ctx
+}
+```
+
+* 异常显示
+ 有时候Android手机会显示不完canvas，宽度异常，ios却没有该异常现象。其中一种可能就是设置canvas标签的宽高单位不一致，canvas内单位同一位 px ，把常用的 rpx 替换为 px  
+
+`<canvas canvas-id="poster" style="width: 280px; height: 498px;"></canvas>`
 
 ***持续更新.......***
 
