@@ -632,7 +632,7 @@ this.nav(`/dirName/pages/subPage1`)
 [![wx9fa47d9522cc0237-o6z-AJs4dg-UWPBIA6-I6-Ue-I2x-Dv-FC0-y-RUGs-RYHc-MF358fd1d3e53fca4c2ba42fe7422dee64d.png](https://i.postimg.cc/jjzZ6ZcZ/wx9fa47d9522cc0237-o6z-AJs4dg-UWPBIA6-I6-Ue-I2x-Dv-FC0-y-RUGs-RYHc-MF358fd1d3e53fca4c2ba42fe7422dee64d.png)](https://postimg.cc/d7V2wRzy)  
 
 如图，除了背景使用本地图片，其他的所有内容均为动态获取，且每次获取的不尽相同。  
-* 图片先从网络图片下载到本地才可以渲染，如果开发工具可以正常显示，而真机无法绘制，那么请先检查你的 downloadFile 域名。
+* 图片先从网络图片下载到本地才可以渲染，如果开发工具可以正常显示，而真机无法绘制，那么请先检查你的 downloadFile 域名!!!
 * 绘制圆角-直角图片  
 * 图片保存模糊
 ```javascript
@@ -763,7 +763,53 @@ Promise.all([promise1, promise2, promise3]).then(res => {
 * 异常显示
  有时候Android手机会显示不完canvas，宽度异常，ios却没有该异常现象。其中一种可能就是设置canvas标签的宽高单位不一致，canvas内单位同一位 px ，把常用的 rpx 替换为 px  
 
-`<canvas canvas-id="poster" style="width: 280px; height: 498px;"></canvas>`
+`<canvas canvas-id="poster" style="width: 280px; height: 498px;"></canvas>`  
+
+## touchmove/onPageScroll动画效果  
+
+[![CE5813-B3-D648-4ab1-9-FE9-AD907-FF05203.png](https://i.postimg.cc/kGzs6Jx4/CE5813-B3-D648-4ab1-9-FE9-AD907-FF05203.png)](https://postimg.cc/0KGDhqXR)  
+如图，右下角的按钮，一般会做这样的效果，当用户滑动列表时，该按钮向下滑动并隐藏，当用户停止滑动且页面亦停止滑动（非用户手指脱离屏幕）时，该按钮再从页面底部滑出。  
+
+* touchmove、 onPageScroll   
+
+思路1： 第一种想法是touchstart时， 触发下滑动画，touchend时触发上划动画  
+
+缺点： tap点击事件也会先触发start 和 end 事件，故点击屏幕也会触发动画，且屏幕抖动，pass
+
+思路2： touchmove 时触发动画，touchend时上划动画， 
+
+缺点：虽然避免了点击就触发动画，但效果不佳，手指离开屏幕，页面还在滑动，动画已触发。  
+
+> 最终解： 只用 touchmove 来判断用户滑动列表，再用 onPageScroll 配合 超时器 来处理页面停止滑动。
+
+代码：
+
+```javascript
+//template
+<view calss="{{isSlide ? 'down-slide-hide' : 'up-slide-hide'}}"></view>
+
+// data
+data: {
+    isSlide: false,
+    timer: null,
+}
+
+//methods
+touchmove(e) {
+    this.isSlide = true
+    this.$apply()
+},
+onPageScrool(e) {
+    const that = this
+    clearTimeout(that.timer)
+    that.timer = setTimeout(() => {
+        that.isSlide = false
+        that.$apply()
+    }, 400)
+}
+```
+页面一直处于滑动时，超时器不会生效，只有在页面停止滑动后，超时器才生效，程序执行
+
 
 ***持续更新.......***
 
