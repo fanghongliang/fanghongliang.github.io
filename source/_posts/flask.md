@@ -78,4 +78,21 @@ def create_app():
 至此，URL使用 localhost:5000/api/users/register 就可以访问注册路由。 
 
 #### flask-SQLAlchemy  
+  
 
+#### flask-插件
+
+##### flask_restplus  
+
+* pip install flask-restplus   
+* from flask_restplus import Api
+
+Flask-RESTPlus提供的主要创建对象就是资源。资源创建于Flask可插入视图（pluggable view）之上，使得我们可以通过在资源上定义方法来很容易地访问多个HTTP方法。
+
+
+#####  flask_cors 
+解决跨域
+
+* from flask_cors import CORS
+* if Config.FLASK_ENV == 'DEVELOPMENT':
+* CORS(app, supports_credentials=True)
