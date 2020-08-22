@@ -4,14 +4,16 @@ date: 2020-06-05 16:36:31
 tags: Programming
 categories: Python
 ---
+#### Base point
+pycharm中打开debug模式：在终端中设置：
+> set FLASK_ENV=development  (windows)
+> export FLASK_ENV=developm  (mac)
+开启debug会
+* 激活调试器。
 
-#### 目录架构  
+* 激活自动重载。
 
-flask没有标准的目录架构，这里的目录结构如下  
-
-> project_name
->> app
->>>
+* 打开 Flask 应用的调试模式。
 
 #### 创建虚拟环境  
  
@@ -78,8 +80,34 @@ def create_app():
 至此，URL使用 localhost:5000/api/users/register 就可以访问注册路由。 
 
 #### flask-SQLAlchemy  
-  
 
+* 查询结果  
+一般使用db.session.query()来查询结果，结果返回一个list，多条数据处理需要用到遍历，单挑数据则可以使用一下方式获得值并返回  
+> user = db.session.query(User).filter_by(name=''liming).all()
+
+
+* 数据接收  
+
+1. post json格式  
+
+> data = json.loads(request.get_data(as_text = True))
+
+
+2. get URL拼接  
+
+> param = request.args['param'] 
+
+* 新增数据并提交数据库
+
+> user = User(name="xxx", dender=0)
+> db.session.add(user)
+> db.session.commit()
+
+* 更新数据  
+
+> user = db.session.query(User).filter(name=param.get('name')).first()
+> user.attr = param.get('attr')
+> db.session.commit()
 #### flask-插件
 
 ##### flask_restplus  
