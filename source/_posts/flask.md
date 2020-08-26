@@ -8,6 +8,7 @@ categories: Python
 pycharm中打开debug模式：在终端中设置：
 > set FLASK_ENV=development  (windows)
 > export FLASK_ENV=developm  (mac)
+> flask run
 开启debug会
 * 激活调试器。
 
@@ -91,6 +92,7 @@ def create_app():
 1. post json格式  
 
 > data = json.loads(request.get_data(as_text = True))
+> name = data.get('name')
 
 
 2. get URL拼接  
@@ -108,9 +110,28 @@ def create_app():
 > user = db.session.query(User).filter(name=param.get('name')).first()
 > user.attr = param.get('attr')
 > db.session.commit()
-#### flask-插件
 
-##### flask_restplus  
+#### Faker  
+生成大量的模拟数据  
+
+> pip install Faker
+
+```python
+from faker import Faker
+faker = Faker('zh-CN')   # 默认美国
+
+for item in range(100): 
+    fname = faker.name()
+    faddress = faker.address()
+    fint = faker.pyint()
+    user = User(name=fname, address=faddress, xxx=fint)
+    db.session.add(user)
+try:
+    db.session.commit()
+except: 
+    db.session.rollback()
+```
+#### flask_restplus  
 
 * pip install flask-restplus   
 * from flask_restplus import Api
@@ -118,7 +139,7 @@ def create_app():
 Flask-RESTPlus提供的主要创建对象就是资源。资源创建于Flask可插入视图（pluggable view）之上，使得我们可以通过在资源上定义方法来很容易地访问多个HTTP方法。
 
 
-#####  flask_cors 
+####  flask_cors 
 解决跨域
 
 * from flask_cors import CORS
