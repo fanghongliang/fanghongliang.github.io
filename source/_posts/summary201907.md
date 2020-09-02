@@ -808,7 +808,117 @@ onPageScrool(e) {
     }, 400)
 }
 ```
-页面一直处于滑动时，超时器不会生效，只有在页面停止滑动后，超时器才生效，程序执行
+页面一直处于滑动时，超时器不会生效，只有在页面停止滑动后，超时器才生效，程序执行  
+
+## 录音  
+
+> 录音没有难度，上传语音采用七牛云服务，拿到临时路径经过七牛云拿到网络路径，在传给自己服务器。这里实现了一个圆环进度条（canvas），在录音时配合录音时长展示
+
+```javascript
+//绘制进度条圆环
+startRocord() {
+    ...
+    this.countInterval()
+}
+drawCircle(step) {
+    !this.ctx && this.ctx = wx.createCanvasContext('progressBar')
+    let ctx = this.ctx
+    // ctx.clearRect(0, 0, 120, 120)   //清除画布，（多次重复绘制需要。但绘制步伐过快会导致闪屏）
+    // ctx.draw()
+    ctx.setLineWidth(10)
+    ctx.setStrokeStyle('#FF5757')
+    ctx.setLineCap('round')
+    ctx.beginPath()
+    ctx.arc(60, 60, 55, -Math.PI/2, step*Math.PI - Math.PI/2, false)
+    ctx.stroke()
+    ctx.draw()
+}
+//进度绘制定时器
+countInterval() {
+    this.countTimer = setInterval(() => {
+        if (this.count <= 600) {      //绘制步伐，这里0.1秒绘制，很丝滑
+            this.drawCircle(this.count / (600/2))
+            this.count++
+            this.$apply()
+        } else {
+            clearInterval(this.countTimer)
+            this.count = 0
+        }
+    }, 1000 * 0.1);
+}
+
+
+//录音实例  
+initRecord() {
+    !this.RM && (this.RM = wx.getRecorderManager())
+    let RM = this.RM
+    RM.onStop(async res => {
+        //监听录音结束， res会返回录音信息（临时文件路径、时长、文件大小）
+        //七牛云上传临时路径
+        let result = await base.uploadImg(res.tempFilePath, wepy.$instance.globalData.qiniuToken)
+        ...
+    })
+    RM.start({
+        duration: 60*1000,
+        format: 'mp3',
+    })
+}
+```
+
+## 播音  
+
+> createInnerAudioContext  
+
+用来播放各个用户语音，可以随时切换不同用户的语音播放，安卓规规矩矩没问题
+
+> ios播放异常  
+
+ios用户切换语音时会播放第一个音频，但随后的语音却不会播放，实例已经销毁，但貌似对ios无效。解决：单例模式创建实例，在销毁实例后，在将变量手动清空，可以解决ios新建播音实例无效问题。  
+
+```javascript
+//data
+IAC: null,
+isAudition: false,
+
+/**
+* src: 音频  cubicle：播放开关 index: 用户索引(不同音频) currentUser：当前需要播放的用户  lastUser： 上一个播放的用户  isAuditionStatus： 播放状态（未播放，正在播放）
+* handleSound 监听新老用户播音，若IAC正在播音，此时继续点击同一用户，则暂停当前音频，若IAC未在播音，则播音当前用户。若点击不同用户，则暂停当前正在播音的用户，播放新用户录音。
+*/
+async handleSound(src, cubicle, index) {
+    if (this.currentUser !== index) {
+        this.lastUser = this.currentUser
+        this.currentUser = index 
+        this.changeUser = true
+    }
+    if (this.changeUser) {
+        this.IAC && this.IAC.destroy()
+        this.IAC = null  //ios这点不仅需要destroy实例，还要手动清空变量
+        this.lastUser != -1 && (this.recommUserList[this.lastUser].isAuditionStatus = 0)
+        !this.IAC && (this.IAC = wx.createInnerAudioContext())
+        let IAC = this.IAC
+        IAC.src = src
+        IAC.play()
+        IAC.onPlay(() => {
+            this.recommUserList[this.currentUser].isAuditionStatus = wepy.$instance.globalData.isPlaying = 1
+            this.$apply()
+        })
+        IAC.onStop(() => {
+            this.recommUserList[this.currentUser].isAuditionStatus = wepy.$instance.globalData.isPlaying = 0
+            this.$apply()
+        })
+        IAC.onEnded(() => {
+            this.recommUserList[this.currentUser].isAuditionStatus = wepy.$instance.globalData.isPlaying = 0
+            this.$apply()
+        })
+        this.changeUser = false
+        this.$apply()
+    } else {
+        cubicle ? this.IAC.play() : this.IAC.stop()
+    }
+}
+
+```
+> 不管是录音还是播音，在页面卸载（onUnload）的时候清除掉实例或者初始化,有canvas也要清除画布
 
 
 ***持续更新.......***
