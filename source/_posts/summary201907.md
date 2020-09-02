@@ -920,6 +920,14 @@ async handleSound(src, cubicle, index) {
 ```
 > 不管是录音还是播音，在页面卸载（onUnload）的时候清除掉实例或者初始化,有canvas也要清除画布
 
+## 华为-textarea-层级异常  
+
+华为部分机型，对小程序的textarea标签支出并不友好，其textarea的内容以及 placeholder 内容恨天高，无法通过程序控制，甚至小程序官方说 canvas 的层级是最高的，但也没高过textarea！  
+
+问题： 盖在textarea上面的弹框会被textarea的内容穿掉盖不住，并且点击事件直接穿透  
+
+解决：在拉起盖在textarea上面的弹框（或组件）时，用 view 标签重写模仿 textarea 样式，并把 textarea 关闭掉。
+
 
 ***持续更新.......***
 
