@@ -1,5 +1,5 @@
 ---
-title: 服务器部署
+title: 服务器部署-Node
 tags: Programming
 categories: server
 date: 2020-06-09 11:28:31
@@ -56,9 +56,33 @@ date: 2020-06-09 11:28:31
 1. 运行程序mysql报错 `(node:6280) UnhandledPromiseRejectionWarning: SequelizeDatabaseError: Illegal mix of collations (latin1_swedish_ci,IMPLICIT) and (utf8mb4_unicode_ci,COERCIBLE) for`，原因为sequelize创建的mysql默认字符集是 `latin1` 而不是 *utf8*，更改即可。  
 
 2. root用户丢失  
-mysql.user里面，root用户由于未知原因不在了，重新建立root用户  
-* 忽略授权- vim etc/my.cnf    
+表现: 输入密码页无法访问  
+mysql.user里面，root用户由于未知原因不在了，重新建立root用户   
+
+* 忽略密码登录- vim etc/my.cnf    
 > skip-grant-tables  
+
+* 创建root用户  
+> create user 'root'@'localhost' identified by '123456';
+
+此步骤可能会报以下错误: 没报错的跳过（直接到权限那一步），用以下方法解决：
+> ERROR 1290 (HY000): The MySQL server is running with the --skip-grant-tables option so it cannot execute this statement
+
+解决：  
+> flush privileges; 
+
+* 再次创建root用户  
+> create user 'root'@'localhost' identified by '123456';  
+
+由于可能存在root用户，导致会报错，删除用户在创建  
+
+> drop user 'root'@'localhost';
+> create user 'root'@'localhost' identified by '123456';
+
+赋予root用户全部权限
+
+> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456' 
+> flush privileges; 
 
 * 1396 报错  
 > flush privileges;
