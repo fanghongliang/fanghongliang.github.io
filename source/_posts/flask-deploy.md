@@ -107,4 +107,87 @@ bind = "0.0.0.0:5000"
 > kill -HUP pid  # 重启进程
 
 
-#### docker容器部署
+#### docker容器部署  
+
+* docker安装出现了报错 “Problem: package docker-ce-3:19.03.8-3.el7.x86_64 requires containerd.io >= 1.2.2-3, but none of the providers can be installed”
+解决办法 [在这里](https://blog.csdn.net/shana_8/article/details/105190368)
+
+* 启动docker  
+> service docker start 
+
+* 创建 Dockerfile 文件  
+```
+FROM python:3.6
+WORKDIR /project/PythonProject
+
+COPY requirements.txt ./
+RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+COPY . .
+
+CMD ["gunicorn", "ginger:app", "-c", "./gunicorn.conf.py"]
+
+```
+
+* 构建 docker 镜像 (时间较长)
+> docker build -t 'testflask' .
+
+* 完成镜像后，使用如下命令查看  
+> docker images
+
+会发现存在一个 ‘testflask’镜像存在  
+
+* 配置阿里云镜像仓库  
+1. 在阿里云dockerhub [点击这里](https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors) , 注册账号，他会生成一个阿里云镜像加速链接，（不适用国外的dockerhub，原因你懂的，网络问题）， 将这个 加速链接 配置在我们的服务器上  /etc/docker/daemon.json   
+[![FEBEDD93-76-CB-4422-9-BC2-7-B1-A31-B7-E44-D.png](https://i.postimg.cc/TPdxy960/FEBEDD93-76-CB-4422-9-BC2-7-B1-A31-B7-E44-D.png)](https://postimg.cc/9DnKKyzw)  
+
+注意： 不存在 /etc/docker/daemon.json 则创建该文件！并复制链接进去  
+
+```josn
+<!-- /etc/docker/daemon.json -->
+
+{
+    "registry-mirrors": ["https:********.liyuncs.com"]
+}
+
+```  
+2. 重新加载服务配置文件  
+> systemctl daemon-reload  
+
+3. 重启Docker  
+> systemctl restart docker  
+
+4. 查看本地镜像  
+> docker inages  
+
+5. 推送镜像到阿里云镜像仓库  
+> docker tag 70517a163731 registry.cn-hangzhou.aliyuncs.com/命名空间/仓库名称:[镜像版本号]
+> docker push registry.cn-hangzhou.aliyuncs.com/命名空间/仓库名称:[镜像版本号]
+
+6. 运行  
+testginger 使我们的 docker images，端口映射前面是容器的端口、后面是项目暴露处的端口，相当于一层代理。  
+> docker run -d -p 8080:5000 testginger  
+此时，使用 nmap your id address 查看服务器端接口占用，8080是开启的。  
+
+7. 日志   
+> docker logs [options]
+> docker logs --tail="10" CONTAINER ID
+
+8. 重新build
+> docker build -t ginger:test .
+
+9. 删除镜像  
+初次部署时，我们可能会创造多个镜像，待成功部署后，我们可以删除多有的无用镜像容器。  
+> docker rmi -f image_id   
+ 
+[![6666.png](https://i.postimg.cc/2jWBDzWh/6666.png)](https://postimg.cc/qgk7cHjv)
+
+10. 命令  
+ * 查看正在运行的镜像容器  
+ > docker ps  
+
+ * 查看所有存在的镜像容器
+ > docker ps -a 
+
+ * 停止镜像容器  
+ > docker stop image_id
