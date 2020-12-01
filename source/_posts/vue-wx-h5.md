@@ -1,7 +1,7 @@
 ---
 title: vue-wx-h5
 tags: Programming
-categories: Programming
+categories: Vue
 date: 2019-12-30 10:47:44
 ---
 
