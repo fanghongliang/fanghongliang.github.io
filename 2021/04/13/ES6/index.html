@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Fanghongliang&#39;s blog">
 <meta property="og:description" content="node版本管理不同项目交叉开发时，可能会出现node版本的冲突，常见有 nvm 插件来解决，但 nvm 并不是全自动，需要手动切换版本 nvm use …  ，这里采用社区提供的 avn (avn)[https://github.com/wbyoung/avn],思路为： 项目根目录下创建 .node-version文件，以 server 格式约定好 Node 版本，如： 9.8.0，在CD到项">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-05-10T11:38:49.027Z">
+<meta property="og:updated_time" content="2021-07-07T11:28:52.090Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ES6">
 <meta name="twitter:description" content="node版本管理不同项目交叉开发时，可能会出现node版本的冲突，常见有 nvm 插件来解决，但 nvm 并不是全自动，需要手动切换版本 nvm use …  ，这里采用社区提供的 avn (avn)[https://github.com/wbyoung/avn],思路为： 项目根目录下创建 .node-version文件，以 server 格式约定好 Node 版本，如： 9.8.0，在CD到项">
@@ -350,8 +350,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2021-05-10T19:38:49+08:00">
-                2021-05-10
+              <time title="更新于" itemprop="dateModified" datetime="2021-07-07T19:28:52+08:00">
+                2021-07-07
               </time>
             
           </span>
@@ -405,7 +405,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  387
+                  401
                 </span>
               
 
@@ -442,9 +442,9 @@
       
 
       
-        <h2 id="node版本管理"><a href="#node版本管理" class="headerlink" title="node版本管理"></a>node版本管理</h2><p>不同项目交叉开发时，可能会出现node版本的冲突，常见有 nvm 插件来解决，但 nvm 并不是全自动，需要手动切换版本 nvm use …  ，这里采用社区提供的 avn (avn)[<a href="https://github.com/wbyoung/avn],思路为：" target="_blank" rel="noopener">https://github.com/wbyoung/avn],思路为：</a> 项目根目录下创建 .node-version文件，以 server 格式约定好 Node 版本，如： 9.8.0，在CD到项目目录时，avn会自动切换到制定的Node版本。</p>
-<h3 id="n命令"><a href="#n命令" class="headerlink" title="n命令"></a>n命令</h3><p>n命令来管理node的不同版本，基本为 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">$ npm i -g n</span><br><span class="line">$ n ls-remote --all    // 查看所有可安装的版本</span><br><span class="line">$ n &lt;version&gt;          // 安装node，ex: n 10.15.0</span><br><span class="line">$ n ls                 // 本地已安装的版本</span><br><span class="line">sudo n run &lt;version&gt;      // 使用某个版本</span><br><span class="line">n                      // 直接n 也可以选择版本</span><br><span class="line"></span><br><span class="line">sudo n rm &lt;version&gt;    // 删除多余的版本</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">简单说下优缺点吧   </span><br><span class="line">优点： 方便，快速，相对avn来说， n命令安装方便，一条命令解决，avn则需要改IP地址或者科学上网等，   </span><br><span class="line">缺点： 这版本是全局且手动的，自己的项目可以用用，要是大型开发项目，建议用nvm编写 script 启动命令来控制版本，否则项目之间可能出现node版本冲突。  </span><br><span class="line">PS： n 命令大部分都需要使用 sudo 打开</span><br><span class="line"></span><br><span class="line">## 数组移除false类型</span><br><span class="line"></span><br><span class="line">```javascript</span><br><span class="line">const arr = [1, &quot;str&quot;, false, NaN, undefined, null]</span><br><span class="line">const res = arr.filter(Boolean)</span><br><span class="line"></span><br><span class="line">// React</span><br><span class="line">const hideSomething ?: boolean</span><br><span class="line">const options: any = [</span><br><span class="line">    hideSomething !== true &amp;&amp; &#123;</span><br><span class="line">        otherOption: &apos;test&apos;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        normalOptions: &apos;normal&apos;</span><br><span class="line">    &#125;,</span><br><span class="line">].filter(Boolean)</span><br></pre></td></tr></table></figure>
+        <h2 id="node版本管理"><a href="#node版本管理" class="headerlink" title="node版本管理"></a>node版本管理</h2><p>不同项目交叉开发时，可能会出现node版本的冲突，常见有 nvm 插件来解决，但 nvm 并不是全自动，需要手动切换版本 nvm use …  ，这里采用社区提供的 avn (avn)[<a href="https://github.com/wbyoung/avn],思路为：" target="_blank" rel="noopener">https://github.com/wbyoung/avn],思路为：</a> 项目根目录下创建 .node-version文件，以 server 格式约定好 Node 版本，如： 9.8.0，在CD到项目目录时，avn会自动切换到制定的Node版本。  </p>
+<h2 id="n命令"><a href="#n命令" class="headerlink" title="n命令"></a>n命令</h2><p>n命令来管理node的不同版本，基本为 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">$ npm i -g n</span><br><span class="line">$ n ls-remote --all    // 查看所有可安装的版本</span><br><span class="line">$ n &lt;version&gt;          // 安装node，ex: n 10.15.0</span><br><span class="line">$ n ls                 // 本地已安装的版本</span><br><span class="line">sudo n run &lt;version&gt;      // 使用某个版本</span><br><span class="line">n                      // 直接n 也可以选择版本</span><br><span class="line"></span><br><span class="line">sudo n rm &lt;version&gt;    // 删除多余的版本</span><br><span class="line"></span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">简单说下优缺点吧   </span><br><span class="line">优点： 方便，快速，相对avn来说， n命令安装方便，一条命令解决，avn则需要改IP地址或者科学上网等，   </span><br><span class="line">缺点： 这版本是全局且手动的，自己的项目可以用用，要是大型开发项目，建议用nvm编写 script 启动命令来控制版本，否则项目之间可能出现node版本冲突。  </span><br><span class="line">PS： n 命令大部分都需要使用 sudo 打开  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 数组移除false类型  </span><br><span class="line">简单记录一个数组的移除 false 方法  </span><br><span class="line">```javascript</span><br><span class="line">const arr = [1, &quot;str&quot;, false, NaN, undefined, null]</span><br><span class="line">const res = arr.filter(Boolean)</span><br><span class="line"></span><br><span class="line">// React</span><br><span class="line">const hideSomething ?: boolean</span><br><span class="line">const options: any = [</span><br><span class="line">    hideSomething !== true &amp;&amp; &#123;</span><br><span class="line">        otherOption: &apos;test&apos;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        normalOptions: &apos;normal&apos;</span><br><span class="line">    &#125;,</span><br><span class="line">].filter(Boolean)</span><br></pre></td></tr></table></figure>
 
 <h2 id="解构附值log"><a href="#解构附值log" class="headerlink" title="解构附值log"></a>解构附值log</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; log, warn &#125; = <span class="built_in">console</span></span><br><span class="line">log(<span class="string">'something'</span>)</span><br></pre></td></tr></table></figure>
       
@@ -528,6 +528,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2021/06/07/summary-meme/" rel="prev" title="meme-总结">
+                meme-总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -605,7 +609,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -616,7 +620,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -688,7 +692,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#node版本管理"><span class="nav-number">1.</span> <span class="nav-text">node版本管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#n命令"><span class="nav-number">1.1.</span> <span class="nav-text">n命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解构附值log"><span class="nav-number">2.</span> <span class="nav-text">解构附值log</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#node版本管理"><span class="nav-number">1.</span> <span class="nav-text">node版本管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#n命令"><span class="nav-number">2.</span> <span class="nav-text">n命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解构附值log"><span class="nav-number">3.</span> <span class="nav-text">解构附值log</span></a></li></ol></div>
             
 
           </div>
@@ -722,7 +726,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">28.4k</span>
+    <span title="Site words total count">31k</span>
   
 </div>
 
