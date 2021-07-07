@@ -5,6 +5,8 @@ categories: 默认
 date: 2020-09-17 11:57:54
 ---
 
+<meta name="referrer" content="no-referrer" />
+
 #### 前言  
 
 centos 系列的云服务器一般自带Python3.6，使用如下命令查看Python是否提前安装  
