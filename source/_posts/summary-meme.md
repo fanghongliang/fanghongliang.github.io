@@ -5,69 +5,68 @@ categories: Programming
 date: 2021-06-07 19:25:24
 ---
 
+## 序言
 
-## 序言  
+简单记录一下在么么直播遇到的问题以及解决办法，项目技术栈跨度比较大，有 6-7 年前 jquery 项目，也有 React + MST（mobx state tree） + SSR 项目，还有纯 React 项目，遇到的问题比较广泛，记录一下常见的问题，帮助学习。
 
-简单记录一下在么么直播遇到的问题以及解决办法，项目技术栈跨度比较大，有6-7年前jquery 项目，也有React + MST（mobx state tree） + SSR 项目，还有纯 React 项目，遇到的问题比较广泛，记录一下常见的问题，帮助学习。
+1. React 的更新机制
 
-1. React的更新机制  
+2. Ref 的一些用法
 
-2. Ref的一些用法 
-
-3. 受控组建和非受控组件 
+3. 受控组建和非受控组件
 
 4. 命名空间
 
-5. Canvas实现弹幕组件  
-    实现弹幕的核心是Canvas的 measureText()方法，该方法可以计算出画布上字体的宽度，由于弹幕的内容一般是由
-    相对固定的图片加未知长度的文案构成，渲染复杂的单条弹幕首先需要解决弹幕总长度，拿到了总长度，那么不管是总体的弹幕背景还是图片文案的未知都能
-    准确无误的渲染出来，React可以把功能做成一个组件，一次完成，多次复用，这里我简单列举两种弹幕的实现，一种是普通的弹幕，构成是背景色 + 用户头像 + 相对固定的文案（比如抽奖弹幕，头像 + XXX在 VVV活动中 抽中了 AAAA x 99次）， 一种是特殊弹幕，比如春节期间产品上线了祈福送礼需求，用户发送祝福语，然后立即在屏幕上弹幕形式出现，每条祝福语弹幕的背景样式不同，🈶️新春对联、燕子高飞、柳树纸条等，切每个用户输入的祝福语长度取决于用户自己，有时候一条弹幕就几个字，有的有几十字，知道每条弹幕的长度有两个用处，一是弹幕的背景位置渲染，而是弹幕采用四行并存的形式，那么弹幕插入哪一行也取决于哪一行的弹幕稀疏程度，话不多少，上图上代码：
+5. Canvas 实现弹幕组件  
+   实现弹幕的核心是 Canvas 的 measureText()方法，该方法可以计算出画布上字体的宽度，由于弹幕的内容一般是由
+   相对固定的图片加未知长度的文案构成，渲染复杂的单条弹幕首先需要解决弹幕总长度，拿到了总长度，那么不管是总体的弹幕背景还是图片文案的未知都能
+   准确无误的渲染出来，React 可以把功能做成一个组件，一次完成，多次复用，这里我简单列举两种弹幕的实现，一种是普通的弹幕，构成是背景色 + 用户头像 + 相对固定的文案（比如抽奖弹幕，头像 + XXX 在 VVV 活动中 抽中了 AAAA x 99 次）， 一种是特殊弹幕，比如春节期间产品上线了祈福送礼需求，用户发送祝福语，然后立即在屏幕上弹幕形式出现，每条祝福语弹幕的背景样式不同，🈶️ 新春对联、燕子高飞、柳树纸条等，切每个用户输入的祝福语长度取决于用户自己，有时候一条弹幕就几个字，有的有几十字，知道每条弹幕的长度有两个用处，一是弹幕的背景位置渲染，而是弹幕采用四行并存的形式，那么弹幕插入哪一行也取决于哪一行的弹幕稀疏程度，话不多少，上图上代码：
 
-    ```javascript
+   ```javascript
+   // common 弹幕的引用文件
 
-    // common 弹幕的引用文件
+   export function getDevicePixelRatio(): number {
+     // Fix fake window.devicePixelRatio on mobile Firefox
+     const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
 
-    export function getDevicePixelRatio(): number {
-    // Fix fake window.devicePixelRatio on mobile Firefox
-    const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+     if (window.devicePixelRatio !== undefined && !isFirefox) {
+       return window.devicePixelRatio
+     } else if (window.matchMedia) {
+       const mediaQuery = (v: string, ov: string) => {
+         return (
+           '(-webkit-min-device-pixel-ratio: ' +
+           v +
+           '),' +
+           '(min--moz-device-pixel-ratio: ' +
+           v +
+           '),' +
+           '(-o-min-device-pixel-ratio: ' +
+           ov +
+           '),' +
+           '(min-resolution: ' +
+           v +
+           'dppx)'
+         )
+       }
+       if (window.matchMedia(mediaQuery('1.5', '3/2')).matches) {
+         return 1.5
+       }
+       if (window.matchMedia(mediaQuery('2', '2/1')).matches) {
+         return 2
+       }
+       if (window.matchMedia(mediaQuery('0.75', '3/4')).matches) {
+         return 0.7
+       }
+     }
+     return 1
+   }
 
-    if (window.devicePixelRatio !== undefined && !isFirefox) {
-        return window.devicePixelRatio
-    } else if (window.matchMedia) {
-        const mediaQuery = (v: string, ov: string) => {
-        return (
-            '(-webkit-min-device-pixel-ratio: ' +
-            v +
-            '),' +
-            '(min--moz-device-pixel-ratio: ' +
-            v +
-            '),' +
-            '(-o-min-device-pixel-ratio: ' +
-            ov +
-            '),' +
-            '(min-resolution: ' +
-            v +
-            'dppx)'
-        )
-        }
-        if (window.matchMedia(mediaQuery('1.5', '3/2')).matches) {
-        return 1.5
-        }
-        if (window.matchMedia(mediaQuery('2', '2/1')).matches) {
-        return 2
-        }
-        if (window.matchMedia(mediaQuery('0.75', '3/4')).matches) {
-        return 0.7
-        }
-    }
-    return 1
-    }
+   // barrage-spring.tsx
 
-    // barrage-spring.tsx  
-
-    import { cancelAnimation } from '@utils/media'
-    import { getDevicePixelRatio } from '@core/client'
-    import { max } from '@utils/tool'
+   import { cancelAnimation } from '@utils/media'
+   import { getDevicePixelRatio } from '@core/client'
+   import { max } from '@utils/tool'
+   ```
 
 
     const roundRect = function (ctx, left, top, width, height, r) {
@@ -88,25 +87,25 @@ date: 2021-06-07 19:25:24
     ctx.closePath()
     ctx.clip();
     ctx.drawImage(img, l + 30, t - 3, d, d);
-    ctx.restore(); 
+    ctx.restore();
     }
 
     const leftBg = function (ctx, leftImg, left, top, width, height) {
     ctx.save()
     ctx.drawImage(leftImg, left, top, width, height)   // height 94
-    ctx.restore(); 
+    ctx.restore();
     }
 
     const middleBg = function (ctx, img, left, top, width, height) {
     ctx.save()
     ctx.drawImage(img, left+112, top, width, height)
-    ctx.restore(); 
+    ctx.restore();
     }
 
     const rightBg = function (ctx, img, left, top, width, height) {
     ctx.save()
     ctx.drawImage(img, left, top, width, height)
-    ctx.restore(); 
+    ctx.restore();
     }
 
 
@@ -117,7 +116,7 @@ date: 2021-06-07 19:25:24
     //   img.src = testLeft || url
     //   if (img.complete) {
     //     callback.call(img, x, y, w, h)
-    //     return 
+    //     return
     //   }
     //   img.onload = () => {
     //     callback.call(img, x, y, w, h)
@@ -196,7 +195,7 @@ date: 2021-06-07 19:25:24
         value,
         ellipsisT2,
         }
-        
+
         this.barrageList.push(barrage);
     }
 
@@ -218,7 +217,7 @@ date: 2021-06-07 19:25:24
 
             // 弹幕完全滚入屏幕，当前行可插入
             if (!barrage.rowFlag) {
-            if ((barrage.left + barrage.width[5]) < this.w - 45) {  // 
+            if ((barrage.left + barrage.width[5]) < this.w - 45) {  //
                 this.rowStatusList[barrage.row] = barrage.row;
                 barrage.rowFlag = true;
             }
@@ -260,7 +259,7 @@ date: 2021-06-07 19:25:24
         // this.ctx.fill();
 
         // -- 画左边背景
-        
+
         leftBg(this.ctx, sortArr[0], left , top, this.style.imgBgWidth, height)
         middleBg(this.ctx, sortArr[1], left , top, width[2]-width[1], height)
         rightBg(this.ctx, sortArr[2], left + width[5]- this.style.offsetRight , top, this.style.imgBgWidth, height )
@@ -269,11 +268,11 @@ date: 2021-06-07 19:25:24
         // 画头像
         // circleImg(this.ctx, img, left + width[0], top + (height - avatarWidth) / 2, avatarWidth/2)
         circleImg(this.ctx, sortArr[3], left + width[0], top + (height - avatarWidth) / 2, avatarWidth/2)
-    
+
         // 新的top偏移量  15
         const offsetYNew = -4
         const paddingTop = (height - fontSize) / 2 - 2
-    
+
         this.ctx.fillStyle = color;
         this.ctx.fillText(t1, left + width[1], top + fontSize + paddingTop + offsetYNew);
 
@@ -307,7 +306,7 @@ date: 2021-06-07 19:25:24
 
         const textArr = text.split('');//当前剩余的字符串
         for (let m = 1; m <= textArr.length; m++) {
-        if (this.ctx.measureText(textArr.slice(0, m)).width > maxWidth) {                        
+        if (this.ctx.measureText(textArr.slice(0, m)).width > maxWidth) {
             return textArr.slice(0, m).join('') + '...'
         }
         }
@@ -506,22 +505,22 @@ date: 2021-06-07 19:25:24
     ```
     抽空把这个弹幕写个 demo ，光干巴巴的文字是在难以理解啊
 
-6. Node的版本控制
+6. Node 的版本控制
 
-7. 移动端和H5的桥接通信
+7. 移动端和 H5 的桥接通信
 
 8. 直播礼物的动画播放队列实现
 
-9. Video播放mp4的注意点  
+9. Video 播放 mp4 的注意点
 
-    react中播放mp4格式，会有一些iOS机型的兼容问题，不如iOS不能自动播放等
+   react 中播放 mp4 格式，会有一些 iOS 机型的兼容问题，不如 iOS 不能自动播放等
 
 ```javascript
 //React中播放mp4的情况，一帮情况下播放GIF或者SVGA
 // 代码如下
 <div
-    className="video-box"
-    dangerouslySetInnerHTML={{
+  className="video-box"
+  dangerouslySetInnerHTML={{
     __html: `
         <video
         id="entry-video"
@@ -537,24 +536,129 @@ date: 2021-06-07 19:25:24
         <source src="https://img.sumeme.com/swf/Render6-16.mp4" type="video/mp4"> 
         </video>
         `,
-    }}
+  }}
 />
 ```
 
     poster属性可以在视频未加载完成前展示一张封面图片，视频加载后自动播放视频。
 
-10. hooks封装
+10. hooks 封装
 
-11. React中挂载滑动函数
+11. React 中挂载滑动函数
 
 12. 抽奖
 
-13. 一些CSS 
+13. 一些 CSS
 
     ```
     -webkit-tap-highlight-color: rgba(0,0,0,0)
     // 解决iOS和iPad设备上点击状态出现默认蓝色高亮，很常见
     ```
 
+## CSS 点九图
 
+最近年中和周年庆开始，铺天盖地的活动。UI 设计的风格和一往不太一样，举一个栗子： 在投票页面中，每个被投票的主播都是单独的一张特殊背景图包裹，该容器可能会根据被投票人的信息长短不一，不规则背景边框图也要自动适应。类似这样的需求，一般有这么几种方法实现：
 
+1. 三段图重复
+   就是把不规则的背景图切成三段。头部、中间部分、底部，中间部分利用背景图的 repeat 来自适应，缺点就是不灵活，需要找 UI 切图，里面内容的间距控制不精准
+
+2. 点九图
+   点九图是移动端的一种做法，就是一张图切四刀，四个角不伸缩，保持原图比例。四条边进行伸缩，中间的部分用来填充，一共九个部分，所以称点九图。CSS3 也可以实现点九图，且效果不错，举个例子：  
+   写一个业务组件，只用来做 wrap 包裹，用点九图，这样其他的同样式的组件都可以复用。
+
+```javascript
+import React from 'react'
+import styled from 'styled-components'
+
+import { StyledBaseWrap } from '../styled'
+
+type Props = {
+  children: any
+  title?: string
+  // title?: string
+  // headerType?: 'icon' | 'pureString'
+}
+
+export default (props: Props) => {
+  const { children, title = '' } = props
+
+  if (!children) {
+    return null
+  }
+
+  return (
+    <StyledBaseWrap>
+      <i className="bg" />
+      {
+        title && (
+          <div className="title-bg-box">
+            <i className="title-bg" />
+            {/* <p className="you-she">{title}</p> */}
+            <div className="you-she">{title}</div>
+          </div>
+        )
+      }
+      {children}
+    </StyledBaseWrap>
+  )
+}
+
+const StyledBaseWrap = styled.div`
+  position: relative;
+  width: 680px;
+  margin: 0 auto;
+  min-height: 320px;
+  & > * {
+    margin: 0 auto;
+  }
+  .bg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: block;
+    border-style: solid;
+    border-width: 130px 340px 190px 340px;
+    border-image-source: url(${require('./images/bg_wrap.png')});
+    border-image-slice: 130 340 190 340 fill;
+    border-image-width: 1;
+    border-image-repeat: repeat;
+  }
+  .title-bg-box {
+    position: absolute;
+    min-width: 380px;
+    top: -20px;
+    margin: 0 auto;
+    font-size: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0 100px;
+    box-sizing: border-box;
+    div {
+      position: relative;
+      height: 52px;
+      line-height: 52px;
+      white-space: nowrap;
+    }
+  }
+  .title-bg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: block;
+    border-style: solid;
+    border-width: 24px 172px 24px 172px;
+    border-image-source: url(${require('./images/title_bg.png')});
+    border-image-slice: 24 172 24 172 fill;
+    border-image-width: 1;
+    border-image-repeat: repeat;
+    margin: 0 auto;
+  }
+`
+```
+
+使用 'border-image-slice' 属性来完成点九图，它接受 4 个参数，分别在图片的上右下左切一刀，把图片分为 9 个部分，一中心，四个角，四个边。伸缩只会让边进行伸缩，所以需要调整切的位置，尽量在规则的地方下刀。此时，若父容器的宽高未给定，则完全由内容撑开宽高，
+上面栗子中，宽度做了限制，高度未限制，传入的 children 会撑开点九图组件的高度，做到每个子组件高度根据内容自适应，但整体的样式不会发生变化。
