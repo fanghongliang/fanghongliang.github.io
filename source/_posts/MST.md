@@ -18,6 +18,7 @@ ___
 MST (mobx-state-tree)，顾名思义是React用于管理状态的状态树结构，根据每个组件构建单独的状态树结构，一般建议状态树结构和接口或者推送保持一致的数据结构，便于更新维护。   
 在请求接口和推送时，只需要更新对应的state，其他的页面级别的渲染等交给 observer 监听的组件。简单使用流程如下⬇️
 
+
 ___
 
 ```javascript {.line-numbers}
@@ -196,6 +197,92 @@ const handle = (socket) => {
     setRoomInfo(res.data)
   })
 }
+```
+
+## 封装  
+
+以上的创造store，可以简单封装下逻辑，让程序员更专注于model的构建
+
+```javascript
+
+
+// utils/create-store.ts
+
+import { Instance } from 'mobx-state-tree'
+import { createContext, useContext } from 'react'
+
+const createStore = ( Model: any, initialState: any ) => {
+  type IStore = Instance<typeof Model>
+  const store = Model.create(initialState)
+
+  const StoreContext = createContext<null | IStore>(null)
+
+  if (typeof window !== 'undefined') {
+    if (window['__Act' + Model.name]) {
+      window['__Act' + Model.name + random(100000, 10000)] = store
+    } else {
+      window['__Act' + Model.name] = store
+    }
+  }
+
+  const useStore = ():IStore => {
+    const currentStore = useContext(StoreContext)
+    if (currentStore === null ) {
+      throw new Error(`${Model.name} Store cannot be null, please add a context provider`)
+    }
+    return currentStore;
+  }
+
+  return {
+    store,
+    Provider: StoreContext.Provider,
+    useStore,
+  }
+}
+
+export default createStore;
+
+
+//具体文件使用
+// **/store.tsx
+
+import { createStore } from '@utils/create-store'
+
+export const Model = types
+  .model('Model', {
+    currentTab: '',
+    list: [],
+  })
+  .action((self) => {
+    const setCurrTab = (tab: string) => {
+      self.currentTab = tab
+    }
+    return {
+      setCurrTab
+    }
+  })
+
+interface IModelSnapshotIn extend SnapshotIn<typeof Model>{}
+
+// const initState: IModelSnapshotIn = {}
+const initState = {
+  currentTab: 'home',
+  list: []
+}
+
+const { store, Provider, useStore } = createStore(Model, initState)
+
+export { store, Provider, useStore }
+
+
+
+// 页面引用store
+// **/index.tsx
+
+import { useStore } from './store'
+
+const { currentTab, setCurrTab } = useStore()
+
 ```
 
 ## 总结  
