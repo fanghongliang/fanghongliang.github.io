@@ -571,6 +571,18 @@ date: 2021-06-07 19:25:24
       counter-increment:sectioncounter;
     }
     //有序元素的符号替换展示
+
+    .gift-show-area[gift-id='7777'] {}
+    //可以这样查找元素
+
+    background-image: linear-gradient(135deg, red, blue);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    // 文字颜色渐变
+
+    ::-webkit-input-placeholder
+    // placeholder样式次修改
     ```
 
 ### 按需加载优化  
