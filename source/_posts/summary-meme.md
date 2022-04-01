@@ -1,5 +1,5 @@
 ---
-title: meme-总结
+title: 么么直播-总结
 tags: 默认
 categories: Programming
 date: 2021-06-07 19:25:24
@@ -559,7 +559,72 @@ date: 2021-06-07 19:25:24
     ```
     -webkit-tap-highlight-color: rgba(0,0,0,0)
     // 解决iOS和iPad设备上点击状态出现默认蓝色高亮，很常见
+
+    & + & {}
+    取巧，选择非第一个开始的所有同类型元素
+
+    font-size: 0;
+    父元素设置改属性可以有效解决行内元素的默认间距，例如span
+
+    padding-bottom: 6%;
+
+    ol li:before {
+      content:counter(sectioncounter) "、"; 
+      counter-increment:sectioncounter;
+    }
+    有序元素的符号替换展示
     ```
+
+14. 按需加载优化  
+
+项目已经很庞大的情况下，还要考虑hybrid的体验情况，需要进行项目优化，按需加载比较适合某些场景下，这里采用《react-intersection-observer》中的hooks useInView 来判断元素是否在可视窗口内。进而判断是否渲染该元素。  
+
+```javascript
+// 这里封装一个图片按需加载的公用组建
+import React from 'react'
+import { useInView, IntersectionOptions } from 'react-intersection-observer'
+import styled from 'styled-components' 
+
+const StyledImg = styled.div`
+  width: 100%;
+  height: 100%;
+`
+type Props = IntersectionOptions & {
+  src: string
+  title?: string
+  className?: string
+  children?: any
+}
+
+const LazyImg = (props: Props) => {
+  const { src, title, className, children, ...configProps } = props 
+  const [res, inView] = useInView({
+    triggerOnce: true,
+    rootMargin: '20px 0',
+    ...configProps,
+  })
+
+  return (
+    <StyledImg ref={ref} className={className} title={title}>
+      {children}
+      {inView && <img src={src}/>}
+    </StyledImg>
+  )
+}
+
+export default LazyImg
+
+
+```
+
+15. Modal封装
+不论是PC页面，还是hybrid原生页面，都需要大量形形色色的弹窗来通知用户处理业务逻辑，封装几种常见的Modal
+
+```javascript
+
+
+
+```
 
 ## CSS 点九图
 
