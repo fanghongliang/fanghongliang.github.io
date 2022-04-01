@@ -180,3 +180,14 @@ git checkout -b branchName tagName
 git tag -d xqCircle-v2.0.1    //本地删除
 git push origin :refs/tags/xqCircle2.0.1   //远端删除
 ```
+
+#### port 22 fail  
+
+“connect to host github.com port 22: Connection timed out fatal: Could not read from remote repository.”
+这个报错，优先解决本地是否正确的链接上线上仓库   
+
+```
+git remote set-url origin git@yourGitUrlHere
+```  
+
+git@yourGitUrlHere  为线上github的仓库访问地主
