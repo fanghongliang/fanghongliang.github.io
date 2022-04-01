@@ -570,7 +570,7 @@ date: 2021-06-07 19:25:24
       content:counter(sectioncounter) "、"; 
       counter-increment:sectioncounter;
     }
-    有序元素的符号替换展示
+    //有序元素的符号替换展示
     ```
 
 ### 按需加载优化  
@@ -725,3 +725,29 @@ const StyledBaseWrap = styled.div`
 
 使用 'border-image-slice' 属性来完成点九图，它接受 4 个参数，分别在图片的上右下左切一刀，把图片分为 9 个部分，一中心，四个角，四个边。伸缩只会让边进行伸缩，所以需要调整切的位置，尽量在规则的地方下刀。此时，若父容器的宽高未给定，则完全由内容撑开宽高，
 上面栗子中，宽度做了限制，高度未限制，传入的 children 会撑开点九图组件的高度，做到每个子组件高度根据内容自适应，但整体的样式不会发生变化。
+
+## Hybrid全面屏  
+
+H5页面在iOS和安卓应用，通常是移动端给了屏幕空间，用来展示H5页面，不包含顶部电池栏tab，新的沉浸式体验则需要H5页面也要控制电池区域，铺满整个移动端屏幕。
+
+每个手机设备的电池区域高度不尽相同，且设备的dpi也不一致，iOS是相对固定的22像素，安卓则是五花八门，这里需要桥接通信拿到移动端的“tab高度”和设备dpi，有这两个参数，H5页面则可以实现统一的全面屏幕沉浸式体验。
+
+dpi ：当前显示设备的物理像素分辨率与CSS像素分辨率之比，需要进行转化为H5的px单位，基本算法分为： 
+
+```javascript
+// res 为桥接通信移动端返回的数据
+// statusBarHeight为状态栏移动端高度
+
+if (res.data.statusBarHeight) {
+  if (client.instance.inIOsNative() ) {
+    statusBarHeight.setValue(res.data.statusBarHeight)
+  } else {
+    statusBarHeight.setValue(res.data.statusBarHeight / window.devicePixelRatio)
+  }
+}
+
+```  
+
+ iOS的高度不需要额外转换，一般iOS机型返回都是22px，安卓则需要除以dpi得到CSS像素。   
+
+ 拿到最终的状态栏高度，进行app-header的布局，基本tab栏高度一般为 88 像素，再加上状态栏（电池栏）的高度，如果整个头部整体需要fixed布局，则增加padding-top 取巧实现。整个H5页面总体分为两个区域，tab栏和content内容页，一般tab栏使用纯色背景，内容页则有时候会使用渐变色，此时，content的高度无法确定，则整体页面使用 flex布局，tab栏使用 shrink： 0 ； 禁止缩放，content则使用 flex: 1; 自动填充满视口，这样，内容页的渐变色则和tab页无缝衔接。
