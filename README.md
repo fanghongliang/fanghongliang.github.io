@@ -21,6 +21,7 @@
 
 * 本地未安装node.js  
 * 依赖是否全部已安装
+* node版本控制在  node/11.12.0 ，过高的node版本会构建错误！！！
 
 ### supplement  
 更多请见 https://blog.csdn.net/sinat_37781304/article/details/82729029 
