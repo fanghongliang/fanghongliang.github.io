@@ -739,7 +739,6 @@ const StyledBaseWrap = styled.div`
 上面栗子中，宽度做了限制，高度未限制，传入的 children 会撑开点九图组件的高度，做到每个子组件高度根据内容自适应，但整体的样式不会发生变化。
 
 ## Hybrid全面屏  
-
 H5页面在iOS和安卓应用，通常是移动端给了屏幕空间，用来展示H5页面，不包含顶部电池栏tab，新的沉浸式体验则需要H5页面也要控制电池区域，铺满整个移动端屏幕。
 
 每个手机设备的电池区域高度不尽相同，且设备的dpi也不一致，iOS是相对固定的22像素，安卓则是五花八门，这里需要桥接通信拿到移动端的“tab高度”和设备dpi，有这两个参数，H5页面则可以实现统一的全面屏幕沉浸式体验。
@@ -758,8 +757,29 @@ if (res.data.statusBarHeight) {
   }
 }
 
-```  
+// react
+<HeaderBar
+  style={{ paddingTop: `${statusBarHeight.value}px`, ...style }}
+  className={`${className} `}>
 
- iOS的高度不需要额外转换，一般iOS机型返回都是22px，安卓则需要除以dpi得到CSS像素。   
+```
 
- 拿到最终的状态栏高度，进行app-header的布局，基本tab栏高度一般为 88 像素，再加上状态栏（电池栏）的高度，如果整个头部整体需要fixed布局，则增加padding-top 取巧实现。整个H5页面总体分为两个区域，tab栏和content内容页，一般tab栏使用纯色背景，内容页则有时候会使用渐变色，此时，content的高度无法确定，则整体页面使用 flex布局，tab栏使用 shrink： 0 ； 禁止缩放，content则使用 flex: 1; 自动填充满视口，这样，内容页的渐变色则和tab页无缝衔接。
+iOS的高度不需要额外转换，一般iOS机型返回都是22px，安卓则需要除以dpi得到CSS像素。   
+
+拿到最终的状态栏高度，进行app-header的布局，基本tab栏高度一般为 88 像素，再加上状态栏（电池栏）的高度，如果整个头部整体需要fixed布局，全局则增加padding-top 取巧实现。整个H5页面总体分为两个区域，tab栏和content内容页，一般tab栏使用纯色背景，内容页则有时候会使用渐变色，此时，content的高度无法确定，则整体页面使用 flex布局，tab栏使用 shrink： 0 ； 禁止缩放，content则使用 flex: 1; 自动填充满视口，这样，内容页的渐变色则和tab页无缝衔接。
+
+
+## hybrid touch bar判断  
+js判断当前手机是否有touch bar，如果存在 touch bar ，则全局头部添加样式，后续业务只需根据对应CSS标识处理不同的样式
+
+```
+if (
+        // (browser.qq || dsbridge.inNative() || browser.memeNative) &&
+        /iphone/gi.test(navigator.userAgent) &&
+        window.devicePixelRatio &&
+        window.devicePixelRatio >= 2 &&
+        window.screen.height >= 812
+      ) {
+        document.querySelector('html').classList.add('fix-bottom');
+      }
+```
