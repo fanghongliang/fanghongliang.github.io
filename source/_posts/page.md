@@ -186,6 +186,9 @@ VapPlayer.play(options);
 
 使用 vap 在部分机型导致动画效果模糊锯齿的解决办法： Dom 容器的宽高扩大 400%，再缩小 ‘transform: scale(0.25);’ 缩小四倍。
 
+
+### Chrome不支持obs虚拟摄像头解决方法  
+直播平台一般都会有自己对应的开播工具，比如YY、虎牙助手、OBS等。采用OBS采集视频流，会使用虚拟摄像头，Chrome有时候会不支持虚拟摄像头，解决办法为： 浏览器默认未允许虚拟摄像头的使用，在出Chrome的设置中打开对应的隐私配置即可，具体步骤可以Google。
 ### IM 及时通讯消息
 
 待整理
@@ -195,3 +198,52 @@ VapPlayer.play(options);
 ### dsBridge 桥接通信
 
 ### socket 监听发布
+
+### CSS炫彩昵称  
+
+五颜六色的炫彩昵称CSS实现  
+
+
+
+
+```html
+<!-- html -->
+<WrapColorName>
+  <div className="name">用户昵称哇哈哈</div>
+</WrapColorName>
+```
+
+```css
+
+/* 这里使用 styled-components 写法，可以改成其他CSS框架写法，语法不变 */
+
+const maskedAnimation = keyframes`
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+`;
+
+const WrapColorName = styled.div`
+  background-image: -webkit-linear-gradient(
+    left,
+    #f70000,
+    #ff891c 14.3%,
+    #ffe719 28.6%,
+    #33e97c 43%,
+    #1dd5ff 57%,
+    #ec80ff 71.4%,
+    #ff43dc 86%,
+    #ff43cb 100%
+  );
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-background-size: 200% 100%;
+  -webkit-animation: ${maskedAnimation} 3s infinite linear;
+`
+```
+
+上面的demo 可以直接在本地跑，主要利用 webkit-background-size 的位置偏移和 webkit-animation 背景光束实现炫彩动画文案，上述案例可以直接在 [演示地址](https://test.2339.com/v2/example "点击这里") 查看
+

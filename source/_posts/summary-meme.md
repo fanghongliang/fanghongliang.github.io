@@ -1,6 +1,6 @@
 ---
 title: 么么直播-总结
-tags: 默认
+tags: 么么
 categories: Programming
 date: 2021-06-07 19:25:24
 ---
@@ -584,6 +584,10 @@ date: 2021-06-07 19:25:24
     ::-webkit-input-placeholder
     // placeholder样式次修改
     ```
+  1. 复杂表格项合并  
+     rowSpan   colspan 行列合并
+
+
 
 ### 按需加载优化  
 
@@ -770,16 +774,65 @@ iOS的高度不需要额外转换，一般iOS机型返回都是22px，安卓则�
 
 
 ## hybrid touch bar判断  
-js判断当前手机是否有touch bar，如果存在 touch bar ，则全局头部添加样式，后续业务只需根据对应CSS标识处理不同的样式
+js判断当前手机是否有touch bar，如果存在 touch bar ，则App全局头部添加样式类名，后续业务只需根据对应CSS标识处理不同的样式。  
 
-```
+解决： iOS 手机屏幕底部存在白线（操作栏），会遮挡页面的一部分，常见的页面底部会存在用户点击按钮或其他UI，操作栏会降低用户的体验。判断iOS存在 touch bar ，则增加全局样式，在对应子业务中修改样式即可避免。
+
+```javascript
+
+<!-- App全局样式（app.js） -->
 if (
-        // (browser.qq || dsbridge.inNative() || browser.memeNative) &&
-        /iphone/gi.test(navigator.userAgent) &&
-        window.devicePixelRatio &&
-        window.devicePixelRatio >= 2 &&
-        window.screen.height >= 812
-      ) {
-        document.querySelector('html').classList.add('fix-bottom');
-      }
+  /iphone/gi.test(navigator.userAgent) &&
+  window.devicePixelRatio &&
+  window.devicePixelRatio >= 2 &&
+  window.screen.height >= 812
+) {
+  document.querySelector('html').classList.add('fix-bottom');
+}
+
+<!-- 具体子业务 -->
+.fix-bottom & {
+  padding-bottom: 60px;
+}
 ```
+
+
+## iframe 跨域通信  
+
+在对接一些第三方的游戏时，采用 App客户端 嵌入 Hybrid H5前端，前端对接第三方。比如，抖音直播间火起来的弹幕游戏和其他趣味游戏，在直播间接入这些三方游戏，在关闭游戏、支付等方面，涉及三端跨域通信。  
+
+这里有一个案例，游戏是第三方的，但游戏内充值兑换货币的页面是我们的。游戏最终需要在客户端、Web端、桌面端（window app, 主要是开播工具）三端展示。这里页面互相嵌套，但本质就是子父页面通信。
+
+```javascript
+
+// 父页面监听单个事件
+window.addEventListener('message', _handleMsg)
+
+const _handleMsg = (event) => {
+  //  doSomeThing
+}
+
+
+// 子页面发送事件  
+
+// window.parent.postMessage('你的参数, '*')  第二个参数即解决跨域问题，也可填写父窗口的域名 window.parent.postMessage('你的参数, 'https://0.0.0.9200')
+// window.parent  返回父窗口
+// window.top     返回最顶层窗口，不一定是父窗口
+
+const closeWebView = () => {
+  window.parent.postMessage(
+    {
+      type: 'webViewEvent',
+      source: 'xxx',
+      event: 'close',
+    },
+    '*',
+  );
+};
+
+
+```  
+
+
+## 自定义hooks 
+ 在手写较多的 useEffect 的时候，就应该抽一个 hooks 出来。 React的官网原话也有： 如果你发现自己经常需要手动编写 Effect，那么这通常表明你需要为组件所依赖的通用行为提取一些 自定义 Hook。
