@@ -87,14 +87,10 @@
 <meta property="og:site_name" content="Fanghongliang&#39;s blog">
 <meta property="og:description" content="fontminfontmin 是一个基于Node.js的字体子集化工具，它可以将字体文件压缩为最小的子集，以便在Web应用程序中使用。它可以帮助减少字体文件的大小，提高页面加载速度，并减少带宽使用。 提取字体中指定字符集参考百度 fontmin / 介绍  如何使用 npm 命令进行安装  fontmin   1npm install fontmin   创建内容文件夹,命名最好是字体名称，例如：">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://img-photo.sumeme.com/54/6/1698660372790_7363_7363.png?v=1698660372790">
-<meta property="og:image" content="https://img-photo.sumeme.com/62/6/1698658776830_1761_1761.png?v=1698658776830">
-<meta property="og:image" content="https://img-photo.sumeme.com/45/5/1698659768557_9569_9569.png?v=1698659768557">
-<meta property="og:updated_time" content="2023-11-03T03:47:21.168Z">
+<meta property="og:updated_time" content="2023-11-03T03:49:43.392Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="字体子集化应用">
 <meta name="twitter:description" content="fontminfontmin 是一个基于Node.js的字体子集化工具，它可以将字体文件压缩为最小的子集，以便在Web应用程序中使用。它可以帮助减少字体文件的大小，提高页面加载速度，并减少带宽使用。 提取字体中指定字符集参考百度 fontmin / 介绍  如何使用 npm 命令进行安装  fontmin   1npm install fontmin   创建内容文件夹,命名最好是字体名称，例如：">
-<meta name="twitter:image" content="https://img-photo.sumeme.com/54/6/1698660372790_7363_7363.png?v=1698660372790">
 
 
 
@@ -354,7 +350,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2023-11-03T11:47:21+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2023-11-03T11:49:43+08:00">
                 2023-11-03
               </time>
             
@@ -459,7 +455,11 @@
 <li><p>文件夹下创建 content.txt  和 导入相关字体包文件， 格式 XXXX.ttf  这里我使用 禹卫书法行数简体 字体包，content.txt 中写入你需要应用字体的文字，例如： 信息技术标准</p>
 </li>
 </ol>
-<p><img src="https://img-photo.sumeme.com/54/6/1698660372790_7363_7363.png?v=1698660372790" alt="avatar"></p>
+<!-- ![avatar](https://img-photo.sumeme.com/54/6/1698660372790_7363_7363.png?v=1698660372790) -->
+
+
+
+
 <ol start="4">
 <li>【1】搭建环境、【2、3】准备物料。这一步我们编写脚具体脚本 如下代码： </li>
 </ol>
@@ -473,13 +473,17 @@
 <ol start="6">
 <li>执行完毕，可以看到在 dist 文件中输出了字体文件，这里我们使用 .ttf 文件即可。 </li>
 </ol>
-<p><img src="https://img-photo.sumeme.com/62/6/1698658776830_1761_1761.png?v=1698658776830" alt="avatar"></p>
+<!-- ![avatar](https://img-photo.sumeme.com/62/6/1698658776830_1761_1761.png?v=1698658776830) -->
+
+
 <ol start="7">
 <li>在第三方项目中引用，采用全局 CSS 样式引入</li>
 </ol>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 全局CSS样式 */</span></span><br><span class="line"><span class="comment">/* yuwei.ttf 即 dist 目录下 yuwei/font.ttf 改名,为区分其他字体 */</span></span><br><span class="line"></span><br><span class="line">@<span class="keyword">font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: yuwei;</span><br><span class="line">  src: url($&#123;require('@assets/styles/yuwei.ttf').default&#125;) format('truetype');</span><br><span class="line">  <span class="selector-tag">font-style</span>: <span class="selector-tag">normal</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.yu-wei</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: yuwei, Tahoma, Arial;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;div&gt;这里是普通字体&lt;/div&gt;</span><br><span class="line">&lt;div className="yu-wei"&gt;信息技术标准&lt;/div&gt;</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://img-photo.sumeme.com/45/5/1698659768557_9569_9569.png?v=1698659768557" alt="avatar"></p>
+<!-- ![avatar](https://img-photo.sumeme.com/45/5/1698659768557_9569_9569.png?v=1698659768557) -->
+
+
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>fontmin 优点在于节省了字体文件包，在多字体场景下，按需加载，减少字体文件的大小，提高页面加载速度，并减少带宽使用。且不在局限于让UI切图。不足之处： 按需加载需要每次新增<br>文字的时候都要更新 content.txt 文件，并重新执行脚本，导入新的 .ttf 字体包。总体来说，是很不错的一款字体子集化应用库， Fontmin.js 是一个非常有用的工具，可以帮助网站或应用程序减小字体文件大小，提高页面加载速度。但是，需要注意的是，它可能会影响字体的外观，并需要额外的处理步骤。</p>
 <p>试试AI对它的评价：<br>Fontmin.js 的优点包括：</p>
 <p>减小字体文件大小：Fontmin.js 可以将一个大型字体文件压缩为仅包含所需字符的小型字体文件，从而减小字体文件的大小，提高页面加载速度。<br>灵活性：Fontmin.js 提供了多种方法，可以根据需要选择使用，例如 Fontmin.glyph()、Fontmin.ttf2eot() 和 Fontmin.ttf2woff() 等方法。<br>易于使用：Fontmin.js 的 API 简单易用，只需要几行代码就可以完成字体子集化的操作。</p>
