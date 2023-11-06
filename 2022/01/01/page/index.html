@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Fanghongliang&#39;s blog">
 <meta property="og:description" content="序言直播间一些复杂功能的实现和总结，包括但不限于 IM 及时通讯消息、融云、融信 IM 私聊消息、推拉流、WebSocket 推送、Hybrid 与 H5 的桥接通信、mobx-state-tree | React 重构 远古 JQ 代码、 PC 直播间深度链接至移动端、用户极验证（验证非脚本或机器人）、进场特效、用户头像挂坠、炫彩昵称、用户财富、等级、身份标签组件化、拖拽等组件应用、 动画SVG">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-11-03T03:29:00.560Z">
+<meta property="og:updated_time" content="2023-11-06T09:50:09.766Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="直播相关Live【hybrid】">
 <meta name="twitter:description" content="序言直播间一些复杂功能的实现和总结，包括但不限于 IM 及时通讯消息、融云、融信 IM 私聊消息、推拉流、WebSocket 推送、Hybrid 与 H5 的桥接通信、mobx-state-tree | React 重构 远古 JQ 代码、 PC 直播间深度链接至移动端、用户极验证（验证非脚本或机器人）、进场特效、用户头像挂坠、炫彩昵称、用户财富、等级、身份标签组件化、拖拽等组件应用、 动画SVG">
@@ -350,8 +350,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2023-11-03T11:29:00+08:00">
-                2023-11-03
+              <time title="更新于" itemprop="dateModified" datetime="2023-11-06T17:50:09+08:00">
+                2023-11-06
               </time>
             
           </span>
@@ -405,7 +405,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.2k
+                  1.3k
                 </span>
               
 
@@ -457,7 +457,8 @@
 <p>使用 vap 在部分机型导致动画效果模糊锯齿的解决办法： Dom 容器的宽高扩大 400%，再缩小 ‘transform: scale(0.25);’ 缩小四倍。</p>
 <h3 id="Chrome不支持obs虚拟摄像头解决方法"><a href="#Chrome不支持obs虚拟摄像头解决方法" class="headerlink" title="Chrome不支持obs虚拟摄像头解决方法"></a>Chrome不支持obs虚拟摄像头解决方法</h3><p>直播平台一般都会有自己对应的开播工具，比如YY、虎牙助手、OBS等。采用OBS采集视频流，会使用虚拟摄像头，Chrome有时候会不支持虚拟摄像头，解决办法为： 浏览器默认未允许虚拟摄像头的使用，在出Chrome的设置中打开对应的隐私配置即可，具体步骤可以Google。</p>
 <h3 id="IM-及时通讯消息"><a href="#IM-及时通讯消息" class="headerlink" title="IM 及时通讯消息"></a>IM 及时通讯消息</h3><p>待整理</p>
-<h3 id="推拉流"><a href="#推拉流" class="headerlink" title="推拉流"></a>推拉流</h3><h3 id="dsBridge-桥接通信"><a href="#dsBridge-桥接通信" class="headerlink" title="dsBridge 桥接通信"></a>dsBridge 桥接通信</h3><h3 id="socket-监听发布"><a href="#socket-监听发布" class="headerlink" title="socket 监听发布"></a>socket 监听发布</h3><h3 id="CSS炫彩昵称"><a href="#CSS炫彩昵称" class="headerlink" title="CSS炫彩昵称"></a>CSS炫彩昵称</h3><p>五颜六色的炫彩昵称CSS实现  </p>
+<h3 id="推拉流"><a href="#推拉流" class="headerlink" title="推拉流"></a>推拉流</h3><h3 id="dsBridge-桥接通信"><a href="#dsBridge-桥接通信" class="headerlink" title="dsBridge 桥接通信"></a>dsBridge 桥接通信</h3><p>DSBridge 是一个三端易用的现代跨平台 Javascript bridge，通过它，你可以在 Javascript 和原生之间同步或异步的调用彼此的函数。它同时支持 Android、IOS、Javascript 三端易用，轻量且强大、安全且健壮。不仅支持异步调用，还支持同步调用（DSbridge 是唯一一个支持同步调用的 javascript bridge）。</p>
+<h3 id="socket-监听发布"><a href="#socket-监听发布" class="headerlink" title="socket 监听发布"></a>socket 监听发布</h3><h3 id="CSS炫彩昵称"><a href="#CSS炫彩昵称" class="headerlink" title="CSS炫彩昵称"></a>CSS炫彩昵称</h3><p>五颜六色的炫彩昵称CSS实现  </p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- html --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">WrapColorName</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">"name"</span>&gt;</span>用户昵称哇哈哈<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">WrapColorName</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/* 这里使用 styled-components 写法，可以改成其他CSS框架写法，语法不变 */</span></span><br><span class="line"></span><br><span class="line">const maskedAnimation = keyframes`</span><br><span class="line">  <span class="selector-tag">from</span> &#123;</span><br><span class="line">    <span class="attribute">background-position</span>: <span class="number">0</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="selector-tag">to</span> &#123;</span><br><span class="line">    <span class="attribute">background-position</span>: -<span class="number">200%</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">`;</span><br><span class="line"></span><br><span class="line">const WrapColorName = styled.div`</span><br><span class="line">  <span class="selector-tag">background-image</span>: <span class="selector-tag">-webkit-linear-gradient</span>(</span><br><span class="line">    <span class="selector-tag">left</span>,</span><br><span class="line">    <span class="selector-id">#f70000</span>,</span><br><span class="line">    <span class="selector-id">#ff891c</span> 14<span class="selector-class">.3</span>%,</span><br><span class="line">    <span class="selector-id">#ffe719</span> 28<span class="selector-class">.6</span>%,</span><br><span class="line">    <span class="selector-id">#33e97c</span> 43%,</span><br><span class="line">    <span class="selector-id">#1dd5ff</span> 57%,</span><br><span class="line">    <span class="selector-id">#ec80ff</span> 71<span class="selector-class">.4</span>%,</span><br><span class="line">    <span class="selector-id">#ff43dc</span> 86%,</span><br><span class="line">    <span class="selector-id">#ff43cb</span> 100%</span><br><span class="line">  );</span><br><span class="line">  <span class="selector-tag">-webkit-text-fill-color</span>: <span class="selector-tag">transparent</span>;</span><br><span class="line">  <span class="selector-tag">-webkit-background-clip</span>: <span class="selector-tag">text</span>;</span><br><span class="line">  <span class="selector-tag">-webkit-background-size</span>: 200% 100%;</span><br><span class="line">  -webkit-animation: $&#123;maskedAnimation&#125; 3s infinite linear;</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
@@ -626,7 +627,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -637,7 +638,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -743,7 +744,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">42.2k</span>
+    <span title="Site words total count">42.6k</span>
   
 </div>
 

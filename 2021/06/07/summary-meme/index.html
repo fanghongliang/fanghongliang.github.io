@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Fanghongliang&#39;s blog">
 <meta property="og:description" content="序言简单记录一下在么么直播遇到的问题以及解决办法，项目技术栈跨度比较大，有 6-7 年前 jquery 项目，也有 React + MST（mobx state tree） + SSR 项目，还有纯 React 项目，遇到的问题比较广泛，记录一下常见的问题，帮助学习。 React 的更新机制Ref 的一些用法受控组建和非受控组件命名空间Canvas 实现弹幕组件   实现弹幕的核心是 Canvas">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-11-03T03:29:00.561Z">
+<meta property="og:updated_time" content="2023-11-03T10:24:47.637Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="么么直播-总结">
 <meta name="twitter:description" content="序言简单记录一下在么么直播遇到的问题以及解决办法，项目技术栈跨度比较大，有 6-7 年前 jquery 项目，也有 React + MST（mobx state tree） + SSR 项目，还有纯 React 项目，遇到的问题比较广泛，记录一下常见的问题，帮助学习。 React 的更新机制Ref 的一些用法受控组建和非受控组件命名空间Canvas 实现弹幕组件   实现弹幕的核心是 Canvas">
@@ -350,7 +350,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2023-11-03T11:29:00+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2023-11-03T18:24:47+08:00">
                 2023-11-03
               </time>
             
@@ -405,7 +405,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4.8k
+                  4.9k
                 </span>
               
 
@@ -480,7 +480,7 @@
 <p>解决： iOS 手机屏幕底部存在白线（操作栏），会遮挡页面的一部分，常见的页面底部会存在用户点击按钮或其他UI，操作栏会降低用户的体验。判断iOS存在 touch bar ，则增加全局样式，在对应子业务中修改样式即可避免。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!-- App全局样式（app.js） --&gt;</span><br><span class="line"><span class="keyword">if</span> (</span><br><span class="line">  /iphone/gi.test(navigator.userAgent) &amp;&amp;</span><br><span class="line">  <span class="built_in">window</span>.devicePixelRatio &amp;&amp;</span><br><span class="line">  <span class="built_in">window</span>.devicePixelRatio &gt;= <span class="number">2</span> &amp;&amp;</span><br><span class="line">  <span class="built_in">window</span>.screen.height &gt;= <span class="number">812</span></span><br><span class="line">) &#123;</span><br><span class="line">  <span class="built_in">document</span>.querySelector(<span class="string">'html'</span>).classList.add(<span class="string">'fix-bottom'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;!-- 具体子业务 --&gt;</span><br><span class="line">.fix-bottom &amp; &#123;</span><br><span class="line">  padding-bottom: <span class="number">60</span>px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="iframe-跨域通信"><a href="#iframe-跨域通信" class="headerlink" title="iframe 跨域通信"></a>iframe 跨域通信</h2><p>在对接一些第三方的游戏时，采用 App客户端 嵌入 Hybrid H5前端，前端对接第三方。比如，抖音直播间火起来的弹幕游戏和其他趣味游戏，在直播间接入这些三方游戏，在关闭游戏、支付等方面，涉及三端跨域通信。  </p>
+<h2 id="对接三方游戏-iframe-跨域通信"><a href="#对接三方游戏-iframe-跨域通信" class="headerlink" title="对接三方游戏-iframe 跨域通信"></a>对接三方游戏-iframe 跨域通信</h2><p>在对接一些第三方的游戏时，采用 App客户端 嵌入 Hybrid H5前端，前端对接第三方。比如，抖音直播间火起来的弹幕游戏和其他趣味游戏，在直播间接入这些三方游戏，在关闭游戏、支付等方面，涉及三端跨域通信。  </p>
 <p>这里有一个案例，游戏是第三方的，但游戏内充值兑换货币的页面是我们的。游戏最终需要在客户端、Web端、桌面端（window app, 主要是开播工具）三端展示。这里页面互相嵌套，但本质就是子父页面通信。</p>
 <pre><code class="javascript">
 <span class="comment">// 父页面监听单个事件</span>
@@ -673,7 +673,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -684,7 +684,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -756,7 +756,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-的更新机制"><span class="nav-number">2.</span> <span class="nav-text">React 的更新机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ref-的一些用法"><span class="nav-number">3.</span> <span class="nav-text">Ref 的一些用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#受控组建和非受控组件"><span class="nav-number">4.</span> <span class="nav-text">受控组建和非受控组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命名空间"><span class="nav-number">5.</span> <span class="nav-text">命名空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Canvas-实现弹幕组件"><span class="nav-number">6.</span> <span class="nav-text">Canvas 实现弹幕组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-的版本控制"><span class="nav-number">7.</span> <span class="nav-text">Node 的版本控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移动端和-H5-的桥接通信"><span class="nav-number">8.</span> <span class="nav-text">移动端和 H5 的桥接通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直播礼物的动画播放队列实现"><span class="nav-number">9.</span> <span class="nav-text">直播礼物的动画播放队列实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Video-播放-mp4-的注意点"><span class="nav-number">10.</span> <span class="nav-text">Video 播放 mp4 的注意点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hooks-封装"><span class="nav-number">11.</span> <span class="nav-text">hooks 封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-中挂载滑动函数"><span class="nav-number">12.</span> <span class="nav-text">React 中挂载滑动函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽奖"><span class="nav-number">13.</span> <span class="nav-text">抽奖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些-CSS"><span class="nav-number">14.</span> <span class="nav-text">一些 CSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按需加载优化"><span class="nav-number">15.</span> <span class="nav-text">按需加载优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Modal封装"><span class="nav-number">16.</span> <span class="nav-text">Modal封装</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS-点九图"><span class="nav-number"></span> <span class="nav-text">CSS 点九图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hybrid全面屏"><span class="nav-number"></span> <span class="nav-text">Hybrid全面屏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hybrid-touch-bar判断"><span class="nav-number"></span> <span class="nav-text">hybrid touch bar判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iframe-跨域通信"><span class="nav-number"></span> <span class="nav-text">iframe 跨域通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义hooks"><span class="nav-number"></span> <span class="nav-text">自定义hooks</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-的更新机制"><span class="nav-number">2.</span> <span class="nav-text">React 的更新机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ref-的一些用法"><span class="nav-number">3.</span> <span class="nav-text">Ref 的一些用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#受控组建和非受控组件"><span class="nav-number">4.</span> <span class="nav-text">受控组建和非受控组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命名空间"><span class="nav-number">5.</span> <span class="nav-text">命名空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Canvas-实现弹幕组件"><span class="nav-number">6.</span> <span class="nav-text">Canvas 实现弹幕组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-的版本控制"><span class="nav-number">7.</span> <span class="nav-text">Node 的版本控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移动端和-H5-的桥接通信"><span class="nav-number">8.</span> <span class="nav-text">移动端和 H5 的桥接通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直播礼物的动画播放队列实现"><span class="nav-number">9.</span> <span class="nav-text">直播礼物的动画播放队列实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Video-播放-mp4-的注意点"><span class="nav-number">10.</span> <span class="nav-text">Video 播放 mp4 的注意点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hooks-封装"><span class="nav-number">11.</span> <span class="nav-text">hooks 封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-中挂载滑动函数"><span class="nav-number">12.</span> <span class="nav-text">React 中挂载滑动函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽奖"><span class="nav-number">13.</span> <span class="nav-text">抽奖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些-CSS"><span class="nav-number">14.</span> <span class="nav-text">一些 CSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按需加载优化"><span class="nav-number">15.</span> <span class="nav-text">按需加载优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Modal封装"><span class="nav-number">16.</span> <span class="nav-text">Modal封装</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS-点九图"><span class="nav-number"></span> <span class="nav-text">CSS 点九图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hybrid全面屏"><span class="nav-number"></span> <span class="nav-text">Hybrid全面屏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hybrid-touch-bar判断"><span class="nav-number"></span> <span class="nav-text">hybrid touch bar判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对接三方游戏-iframe-跨域通信"><span class="nav-number"></span> <span class="nav-text">对接三方游戏-iframe 跨域通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义hooks"><span class="nav-number"></span> <span class="nav-text">自定义hooks</span></a></li></div>
             
 
           </div>
@@ -790,7 +790,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">42.2k</span>
+    <span title="Site words total count">42.6k</span>
   
 </div>
 

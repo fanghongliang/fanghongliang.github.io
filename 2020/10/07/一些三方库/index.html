@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Fanghongliang&#39;s blog">
 <meta property="og:description" content="粘贴复制clipboard.js  现代化的拷贝文字，不依赖 flash, 不依赖其他框架，gzip 压缩后只有 3kb 大小   12yarn add clipboard npm install clipboard --save  123456789101112131415161718import ClipboardJS from &apos;lib/clipboard.min&apos;;useEffect(()">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-11-03T03:35:02.534Z">
+<meta property="og:updated_time" content="2023-11-03T10:16:04.026Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一些三方库">
 <meta name="twitter:description" content="粘贴复制clipboard.js  现代化的拷贝文字，不依赖 flash, 不依赖其他框架，gzip 压缩后只有 3kb 大小   12yarn add clipboard npm install clipboard --save  123456789101112131415161718import ClipboardJS from &apos;lib/clipboard.min&apos;;useEffect(()">
@@ -350,7 +350,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2023-11-03T11:35:02+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2023-11-03T18:16:04+08:00">
                 2023-11-03
               </time>
             
@@ -405,7 +405,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  96
+                  99
                 </span>
               
 
@@ -447,7 +447,7 @@
 
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ClipboardJS <span class="keyword">from</span> <span class="string">'lib/clipboard.min'</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> clipboard = <span class="keyword">new</span> ClipboardJS(<span class="string">'id'</span>);</span><br><span class="line">  clipboard.on(<span class="string">'success'</span>, (e) =&gt; &#123;</span><br><span class="line">    UiToast.text(<span class="string">'复制成功'</span>);</span><br><span class="line">    e.clearSelection();</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  clipboard.on(<span class="string">'error'</span>, (e) =&gt; &#123;</span><br><span class="line">    UiToast.fail(<span class="string">'复制失败'</span>);</span><br><span class="line">    # doSomeThing()</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    clipboard.destroy();</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;, [codeStr.value]);</span><br></pre></td></tr></table></figure>
 
-<h3 id="React-拖拽"><a href="#React-拖拽" class="headerlink" title="React 拖拽"></a>React 拖拽</h3>
+<h3 id="React-拖拽"><a href="#React-拖拽" class="headerlink" title="React 拖拽"></a>React 拖拽</h3><h3 id="即验证"><a href="#即验证" class="headerlink" title="即验证"></a>即验证</h3>
       
     </div>
     
@@ -610,7 +610,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -621,7 +621,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -693,7 +693,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#粘贴复制"><span class="nav-number">1.</span> <span class="nav-text">粘贴复制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-拖拽"><span class="nav-number">2.</span> <span class="nav-text">React 拖拽</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#粘贴复制"><span class="nav-number">1.</span> <span class="nav-text">粘贴复制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-拖拽"><span class="nav-number">2.</span> <span class="nav-text">React 拖拽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#即验证"><span class="nav-number">3.</span> <span class="nav-text">即验证</span></a></li></ol></div>
             
 
           </div>
@@ -727,7 +727,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">42.2k</span>
+    <span title="Site words total count">42.6k</span>
   
 </div>
 
