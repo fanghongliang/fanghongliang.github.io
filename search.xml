@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[统一公共资源的思考实现]]></title>
-    <url>%2F2023%2F11%2F07%2F%E9%A1%B9%E7%9B%AE%E7%BB%9F%E4%B8%80%E8%B5%84%E6%BA%90%E7%9A%84%E6%80%9D%E8%80%83%2F</url>
-    <content type="text"><![CDATA[背景项目属于直播秀场类，界面UI高度定制化，且衍生的活动以及 hybrid H5页面非常多，Hybrid H5 采用了 React + next.js + Mobx-State-Tree + style-components 实现，开发已经摆脱了项目最开始的 jQuery 模式，原有老的JQ模块也陆续重构回 React，再解决了代码层框架的问题后，页面高度定制和重复使用的模块越来越多。比如： 表情模块Emoji、主播用户财富等级、称号等级、靓号、明星等级图标资源、以及特殊字体、全局主题样式等。这些模块在业务中高频率使用，单独整合它们不仅降低了维护成本，也会提升其他业务的开发效率 具体思路 定制化字体在Hybrid H5开发中，定制化的字体很常见，这里少量特殊字体使用UI切图即可解决，但是UI形成统一风格的字体，不可能每次通过切图来实现，这里我才用 fontmin 字体子集化来实现按需加在字体，解决字体繁杂的问题，详情见 字体子集化应用 图标Icon 动态图标充斥着整个应用，后续衍生的 Hybrid H5 以及驻]]></content>
-      <categories>
-        <category>统一公共资源</category>
-      </categories>
-      <tags>
-        <tag>React</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[字体子集化应用]]></title>
     <url>%2F2023%2F10%2F30%2F%E5%AD%97%E4%BD%93%E5%AD%90%E9%9B%86%E5%8C%96%2F</url>
     <content type="text"><![CDATA[fontminfontmin 是一个基于Node.js的字体子集化工具，它可以将字体文件压缩为最小的子集，以便在Web应用程序中使用。它可以帮助减少字体文件的大小，提高页面加载速度，并减少带宽使用。 提取字体中指定字符集参考百度 fontmin / 介绍 如何使用 npm 命令进行安装 fontmin 1npm install fontmin 创建内容文件夹,命名最好是字体名称，例如： DINPro \ youshebiaotihei \ yuwei【禹卫书法行数简体】 文件夹下创建 content.txt 和 导入相关字体包文件， 格式 XXXX.ttf 这里我使用 禹卫书法行数简体 字体包，content.txt 中写入你需要应用字体的文字，例如： 信息技术标准 【1】搭建环境、【2、3】准备物料。这一步我们编写脚具体脚本 如下代码： 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960&lt;!-- convert.js --&gt;/** * * * 使用方式 * npm run font yuwei * * */let Fontmin = require('fontmin')let path = require('path')let fs = require('fs')let fontName = process.argv[2] // node 命令，后面会介绍不止一种字体时的解决办法，主要是拿到 【1】中的字体目录名称let srcPath = path.resolve('act-font/'+fontName) // act-font 是我的项目一级目录。自己根据目录位置查找即可，主要是拿到 【1】 目录位置即可。let srcFontPath = srcPath + '/font.ttf' // 获取具体字体文件资源，这里拿到了 yuwei 的字体包路径let contentPath = srcPath + '/content.txt' // 同理，获取你需要处理的文字 【3】let distPath = path.resolve('act-font/dist/' + fontName) // 打包输出的文件位置，最终的输出文件存在这里console.log('------ convert start ------')console.log('srcFontPath:', srcFontPath)console.log('contentPath:', contentPath)console.log('distPath:', distPath)let content = fs.readFileSync(contentPath,'utf8').toString()console.log('content:', content)let fontmin = new Fontmin().src(srcFontPath).dest(distPath)console.log('srcFontPath:', srcFontPath)fontmin .use(Fontmin.glyph(&#123; text: content, hinting: false // keep ttf hint info (fpgm, prep, cvt). default = true &#125;)) .use(Fontmin.ttf2eot()) .use(Fontmin.ttf2svg()) .use(Fontmin.ttf2woff(&#123; deflate: true // deflate woff. default = false &#125;)) .use(Fontmin.css(&#123; fontPath: './', // location of font file base64: true, // inject base64 data:application/x-font-ttf; (gzip font with css). // default = false glyph: false, // generate class for each glyph. default = false iconPrefix: 'my-icon', // class prefix, only work when glyph is `true`. default to "icon" fontFamily: fontName, // custom fontFamily, default to filename or get from analysed ttf file asFileName: false, // rewrite fontFamily as filename force. default = false local: true // boolean to add local font. default = false &#125;)) .run((err, files, stream) =&gt; &#123; if (err) &#123; throw err; &#125; console.log('distPath:', distPath) console.log('------ convert success ------') &#125;) 脚本编写完毕，可以直接使用 node 执行 convert.js 脚本，这里我们在 scripts 中封装一下命令，方便后续使用 123456789// package.json "scripts": &#123; "font": "node convert-font.js"&#125;// 执行 `npm run font &#123;字体名&#125;`// eg: npm run font yuwei 执行完毕，可以看到在 dist 文件中输出了字体文件，这里我们使用 .ttf 文件即可。 在第三方项目中引用，采用全局 CSS 样式引入 12345678910111213141516/* 全局CSS样式 *//* yuwei.ttf 即 dist 目录下 yuwei/font.ttf 改名,为区分其他字体 */@font-face &#123; font-family: yuwei; src: url($&#123;require('@assets/styles/yuwei.ttf').default&#125;) format('truetype'); font-style: normal;&#125;.yu-wei &#123; font-family: yuwei, Tahoma, Arial;&#125;&lt;div&gt;这里是普通字体&lt;/div&gt;&lt;div className="yu-wei"&gt;信息技术标准&lt;/div&gt; 总结fontmin 优点在于节省了字体文件包，在多字体场景下，按需加载，减少字体文件的大小，提高页面加载速度，并减少带宽使用。且不在局限于让UI切图。不足之处： 按需加载需要每次新增文字的时候都要更新 content.txt 文件，并重新执行脚本，导入新的 .ttf 字体包。总体来说，是很不错的一款字体子集化应用库， Fontmin.js 是一个非常有用的工具，可以帮助网站或应用程序减小字体文件大小，提高页面加载速度。但是，需要注意的是，它可能会影响字体的外观，并需要额外的处理步骤。 试试AI对它的评价：Fontmin.js 的优点包括： 减小字体文件大小：Fontmin.js 可以将一个大型字体文件压缩为仅包含所需字符的小型字体文件，从而减小字体文件的大小，提高页面加载速度。灵活性：Fontmin.js 提供了多种方法，可以根据需要选择使用，例如 Fontmin.glyph()、Fontmin.ttf2eot() 和 Fontmin.ttf2woff() 等方法。易于使用：Fontmin.js 的 API 简单易用，只需要几行代码就可以完成字体子集化的操作。 Fontmin.js 的缺点包括： 无法完全保留字体的外观：由于 Fontmin.js 只保留所需字符，因此可能会影响字体的外观，特别是对于一些复杂的字体。需要额外的处理步骤：Fontmin.js 生成的字体文件需要额外的处理步骤，例如将其添加到 CSS 文件中，并确保在不同浏览器和设备上都能正常显示。 总的来说，Fontmin.js 是一个非常有用的工具，可以帮助网站或应用程序减小字体文件大小，提高页面加载速度。但是，需要注意的是，它可能会影响字体的外观，并需要额外的处理步骤。]]></content>
@@ -31,6 +20,17 @@
       </categories>
       <tags>
         <tag>electron</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[统一公共资源的思考实现]]></title>
+    <url>%2F2022%2F11%2F07%2F%E9%A1%B9%E7%9B%AE%E7%BB%9F%E4%B8%80%E8%B5%84%E6%BA%90%E7%9A%84%E6%80%9D%E8%80%83%2F</url>
+    <content type="text"><![CDATA[背景项目属于直播秀场类，界面UI高度定制化，且衍生的活动以及 hybrid H5页面非常多，Hybrid H5 采用了 React + next.js + Mobx-State-Tree + style-components 实现，开发已经摆脱了项目最开始的 jQuery 模式，原有老的JQ模块也陆续重构回 React，再解决了代码层框架的问题后，页面高度定制和重复使用的模块越来越多。比如： 表情模块Emoji、主播用户财富等级、称号等级、靓号、明星等级图标资源、以及特殊字体、全局主题样式等。这些模块在业务中高频率使用，单独整合它们不仅降低了维护成本，也会提升其他业务的开发效率 具体思路 定制化字体在Hybrid H5开发中，定制化的字体很常见，这里少量特殊字体使用UI切图即可解决，但是UI形成统一风格的字体，不可能每次通过切图来实现，这里我才用 fontmin 字体子集化来实现按需加在字体，解决字体繁杂的问题，详情见 字体子集化应用 图标Icon 动态图标充斥着整个应用，后续衍生的 Hybrid H5 以及驻]]></content>
+      <categories>
+        <category>统一公共资源</category>
+      </categories>
+      <tags>
+        <tag>React</tag>
       </tags>
   </entry>
   <entry>
