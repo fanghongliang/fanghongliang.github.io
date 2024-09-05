@@ -1,7 +1,7 @@
 ---
 title: 服务器部署-flask
-tags: 默认
-categories: 默认
+tags: Programming
+categories: Python
 date: 2020-09-17 11:57:54
 ---
 

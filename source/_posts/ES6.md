@@ -1,7 +1,7 @@
 ---
 title: ES6
-tags: 默认
-categories: 默认
+tags: Javascript
+categories: Javascript
 date: 2021-04-13 19:18:29
 ---
 

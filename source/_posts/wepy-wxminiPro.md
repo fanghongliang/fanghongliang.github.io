@@ -1,7 +1,7 @@
 ---
 title: wepy-封装 
 tags: Programming
-categories: wepy框架封装
+categories: 小程序
 date: 2019-12-16 14:48:03
 ---
 

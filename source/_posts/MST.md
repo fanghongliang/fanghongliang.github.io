@@ -1,7 +1,7 @@
 ---
 title: MST
 tags: 么么直播
-categories: 默认
+categories: 状态存储
 date: 2021-07-13 14:42:57
 ---
 

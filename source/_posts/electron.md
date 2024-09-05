@@ -1,7 +1,7 @@
 ---
 title: electron
 tags: electron
-categories: code 
+categories: Javascript
 date: 2023-02-13 14:13:23
 ---
 

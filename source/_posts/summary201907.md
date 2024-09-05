@@ -2,7 +2,7 @@
 title: 小程序项目自我总结
 date: 2019-08-22 16:16:41
 tags: Programming
-categories: 工作总结
+categories: 小程序
 ---
 
 # 序言

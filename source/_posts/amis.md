@@ -1,7 +1,7 @@
 ---
 title: Amis
-tags: 默认
-categories: 默认
+tags: Javascript
+categories: Javascript
 date: 2021-02-24 20:11:31
 ---
 
