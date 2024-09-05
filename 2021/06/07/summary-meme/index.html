@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="么么直播,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="序言简单记录一下在么么直播遇到的问题以及解决办法，项目技术栈跨度比较大，有 6-7 年前 jquery 项目，也有 React + MST（mobx state tree） + SSR 项目，还有纯 React 项目，遇到的问题比较广泛，记录一下常见的问题，帮助学习。 React 的更新机制Ref 的一些用法受控组建和非受控组件命名空间Canvas 实现弹幕组件   实现弹幕的核心是 Canvas">
+<meta name="keywords" content="么么直播">
+<meta property="og:type" content="article">
+<meta property="og:title" content="么么直播-总结">
+<meta property="og:url" content="http://fanghl.top/2021/06/07/summary-meme/index.html">
+<meta property="og:site_name" content="Fanghongliang&#39;s blog">
+<meta property="og:description" content="序言简单记录一下在么么直播遇到的问题以及解决办法，项目技术栈跨度比较大，有 6-7 年前 jquery 项目，也有 React + MST（mobx state tree） + SSR 项目，还有纯 React 项目，遇到的问题比较广泛，记录一下常见的问题，帮助学习。 React 的更新机制Ref 的一些用法受控组建和非受控组件命名空间Canvas 实现弹幕组件   实现弹幕的核心是 Canvas">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-05-14T03:38:56.820Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="么么直播-总结">
+<meta name="twitter:description" content="序言简单记录一下在么么直播遇到的问题以及解决办法，项目技术栈跨度比较大，有 6-7 年前 jquery 项目，也有 React + MST（mobx state tree） + SSR 项目，还有纯 React 项目，遇到的问题比较广泛，记录一下常见的问题，帮助学习。 React 的更新机制Ref 的一些用法受控组建和非受控组件命名空间Canvas 实现弹幕组件   实现弹幕的核心是 Canvas">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fanghl.top/2021/06/07/summary-meme/">
+
+
+
+
+
+  <title>么么直播-总结 | Fanghongliang's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fanghongliang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Science && Truth</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fanghl.top/2021/06/07/summary-meme/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fanghl">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/tibet.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fanghongliang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">么么直播-总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-06-07T19:25:24+08:00">
+                2021-06-07
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2024-05-14T11:38:56+08:00">
+                2024-05-14
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Programming/" itemprop="url" rel="index">
+                    <span itemprop="name">Programming</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4.8k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  23
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h3><p>简单记录一下在么么直播遇到的问题以及解决办法，项目技术栈跨度比较大，有 6-7 年前 jquery 项目，也有 React + MST（mobx state tree） + SSR 项目，还有纯 React 项目，遇到的问题比较广泛，记录一下常见的问题，帮助学习。</p>
+<h3 id="React-的更新机制"><a href="#React-的更新机制" class="headerlink" title="React 的更新机制"></a>React 的更新机制</h3><h3 id="Ref-的一些用法"><a href="#Ref-的一些用法" class="headerlink" title="Ref 的一些用法"></a>Ref 的一些用法</h3><h3 id="受控组建和非受控组件"><a href="#受控组建和非受控组件" class="headerlink" title="受控组建和非受控组件"></a>受控组建和非受控组件</h3><h3 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h3><h3 id="Canvas-实现弹幕组件"><a href="#Canvas-实现弹幕组件" class="headerlink" title="Canvas 实现弹幕组件"></a>Canvas 实现弹幕组件</h3><p>   实现弹幕的核心是 Canvas 的 measureText()方法，该方法可以计算出画布上字体的宽度，由于弹幕的内容一般是由<br>   相对固定的图片加未知长度的文案构成，渲染复杂的单条弹幕首先需要解决弹幕总长度，拿到了总长度，那么不管是总体的弹幕背景还是图片文案的未知都能<br>   准确无误的渲染出来，React 可以把功能做成一个组件，一次完成，多次复用，这里我简单列举两种弹幕的实现，一种是普通的弹幕，构成是背景色 + 用户头像 + 相对固定的文案（比如抽奖弹幕，头像 + XXX 在 VVV 活动中 抽中了 AAAA x 99 次）， 一种是特殊弹幕，比如春节期间产品上线了祈福送礼需求，用户发送祝福语，然后立即在屏幕上弹幕形式出现，每条祝福语弹幕的背景样式不同，🈶️ 新春对联、燕子高飞、柳树纸条等，切每个用户输入的祝福语长度取决于用户自己，有时候一条弹幕就几个字，有的有几十字，知道每条弹幕的长度有两个用处，一是弹幕的背景位置渲染，而是弹幕采用四行并存的形式，那么弹幕插入哪一行也取决于哪一行的弹幕稀疏程度，话不多少，上图上代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// common 弹幕的引用文件</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">getDevicePixelRatio</span>(<span class="params"></span>): <span class="title">number</span> </span>&#123;</span><br><span class="line">  <span class="comment">// Fix fake window.devicePixelRatio on mobile Firefox</span></span><br><span class="line">  <span class="keyword">const</span> isFirefox = navigator.userAgent.toLowerCase().indexOf(<span class="string">'firefox'</span>) &gt; <span class="number">-1</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">window</span>.devicePixelRatio !== <span class="literal">undefined</span> &amp;&amp; !isFirefox) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">window</span>.devicePixelRatio</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">window</span>.matchMedia) &#123;</span><br><span class="line">    <span class="keyword">const</span> mediaQuery = <span class="function">(<span class="params">v: string, ov: string</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> (</span><br><span class="line">        <span class="string">'(-webkit-min-device-pixel-ratio: '</span> +</span><br><span class="line">        v +</span><br><span class="line">        <span class="string">'),'</span> +</span><br><span class="line">        <span class="string">'(min--moz-device-pixel-ratio: '</span> +</span><br><span class="line">        v +</span><br><span class="line">        <span class="string">'),'</span> +</span><br><span class="line">        <span class="string">'(-o-min-device-pixel-ratio: '</span> +</span><br><span class="line">        ov +</span><br><span class="line">        <span class="string">'),'</span> +</span><br><span class="line">        <span class="string">'(min-resolution: '</span> +</span><br><span class="line">        v +</span><br><span class="line">        <span class="string">'dppx)'</span></span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.matchMedia(mediaQuery(<span class="string">'1.5'</span>, <span class="string">'3/2'</span>)).matches) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">1.5</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.matchMedia(mediaQuery(<span class="string">'2'</span>, <span class="string">'2/1'</span>)).matches) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.matchMedia(mediaQuery(<span class="string">'0.75'</span>, <span class="string">'3/4'</span>)).matches) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0.7</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// barrage-spring.tsx</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; cancelAnimation &#125; <span class="keyword">from</span> <span class="string">'@utils/media'</span></span><br><span class="line"><span class="keyword">import</span> &#123; getDevicePixelRatio &#125; <span class="keyword">from</span> <span class="string">'@core/client'</span></span><br><span class="line"><span class="keyword">import</span> &#123; max &#125; <span class="keyword">from</span> <span class="string">'@utils/tool'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="keyword">const</span> roundRect = <span class="function"><span class="keyword">function</span> (<span class="params">ctx, left, top, width, height, r</span>) </span>&#123;</span><br><span class="line"> <span class="keyword">const</span> pi = <span class="built_in">Math</span>.PI;</span><br><span class="line"> ctx.beginPath();</span><br><span class="line"> ctx.arc(left + r, top + r, r, -pi, -pi / <span class="number">2</span>);</span><br><span class="line"> ctx.arc(left + width - r, top + r, r, -pi / <span class="number">2</span>, <span class="number">0</span>);</span><br><span class="line"> ctx.arc(left + width - r, top + height - r, r, <span class="number">0</span>, pi / <span class="number">2</span>);</span><br><span class="line"> ctx.arc(left + r, top + height - r, r, pi / <span class="number">2</span>, pi);</span><br><span class="line"> ctx.closePath();</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">const</span> circleImg = <span class="function"><span class="keyword">function</span> (<span class="params">ctx, img, l, t, r</span>)</span>&#123;</span><br><span class="line"> <span class="keyword">const</span> d = <span class="number">2</span> * r</span><br><span class="line"> ctx.save();</span><br><span class="line"> ctx.beginPath()</span><br><span class="line"> ctx.arc(l + r + <span class="number">30</span>, t + r - <span class="number">3</span>, r, <span class="number">0</span>, <span class="number">2</span> * <span class="built_in">Math</span>.PI)</span><br><span class="line"> ctx.closePath()</span><br><span class="line"> ctx.clip();</span><br><span class="line"> ctx.drawImage(img, l + <span class="number">30</span>, t - <span class="number">3</span>, d, d);</span><br><span class="line"> ctx.restore();</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">const</span> leftBg = <span class="function"><span class="keyword">function</span> (<span class="params">ctx, leftImg, left, top, width, height</span>) </span>&#123;</span><br><span class="line"> ctx.save()</span><br><span class="line"> ctx.drawImage(leftImg, left, top, width, height)   <span class="comment">// height 94</span></span><br><span class="line"> ctx.restore();</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">const</span> middleBg = <span class="function"><span class="keyword">function</span> (<span class="params">ctx, img, left, top, width, height</span>) </span>&#123;</span><br><span class="line"> ctx.save()</span><br><span class="line"> ctx.drawImage(img, left+<span class="number">112</span>, top, width, height)</span><br><span class="line"> ctx.restore();</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">const</span> rightBg = <span class="function"><span class="keyword">function</span> (<span class="params">ctx, img, left, top, width, height</span>) </span>&#123;</span><br><span class="line"> ctx.save()</span><br><span class="line"> ctx.drawImage(img, left, top, width, height)</span><br><span class="line"> ctx.restore();</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="comment">// const preImg = (url, callback, options) =&gt; &#123;</span></span><br><span class="line"> <span class="comment">//   const &#123;x, y, w, h&#125; = options</span></span><br><span class="line"> <span class="comment">//   const img = new Image()</span></span><br><span class="line"> <span class="comment">//   img.src = testLeft || url</span></span><br><span class="line"> <span class="comment">//   if (img.complete) &#123;</span></span><br><span class="line"> <span class="comment">//     callback.call(img, x, y, w, h)</span></span><br><span class="line"> <span class="comment">//     return</span></span><br><span class="line"> <span class="comment">//   &#125;</span></span><br><span class="line"> <span class="comment">//   img.onload = () =&gt; &#123;</span></span><br><span class="line"> <span class="comment">//     callback.call(img, x, y, w, h)</span></span><br><span class="line"> <span class="comment">//   &#125;</span></span><br><span class="line"> <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="keyword">const</span> getPxRatio = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line"> <span class="keyword">const</span> c = <span class="built_in">document</span>.createElement(<span class="string">"canvas"</span>),</span><br><span class="line">     ctx = c.getContext(<span class="string">"2d"</span>),</span><br><span class="line">     dpr = getDevicePixelRatio() || <span class="number">1</span>,</span><br><span class="line">     bsr = ctx[<span class="string">'webkitBackingStorePixelRatio'</span>] ||</span><br><span class="line">     ctx[<span class="string">'mozBackingStorePixelRatio'</span>] ||</span><br><span class="line">     ctx[<span class="string">'msBackingStorePixelRatio'</span>] ||</span><br><span class="line">     ctx[<span class="string">'oBackingStorePixelRatio'</span>] ||</span><br><span class="line">     ctx[<span class="string">'backingStorePixelRatio'</span>] || <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">return</span> dpr / bsr;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">Barrage</span> </span>&#123;</span><br><span class="line"> <span class="keyword">constructor</span>(option) &#123;</span><br><span class="line">     <span class="keyword">const</span> &#123; canvasId, onPalyFinish &#125; = option</span><br><span class="line">     <span class="keyword">const</span> pixelRatio = max([getPxRatio(), <span class="number">2</span>])</span><br><span class="line">     <span class="keyword">this</span>.pxRatio = pixelRatio;  <span class="comment">// 缩放倍数，1会糊</span></span><br><span class="line">     <span class="keyword">this</span>.canvas = <span class="built_in">document</span>.getElementById(canvasId);</span><br><span class="line">     <span class="keyword">this</span>.canvas.width = <span class="keyword">this</span>.w = <span class="keyword">this</span>.canvas.width * pixelRatio;</span><br><span class="line">     <span class="keyword">this</span>.canvas.height = <span class="keyword">this</span>.h = <span class="keyword">this</span>.canvas.height * pixelRatio;</span><br><span class="line">     <span class="keyword">this</span>.drawing = <span class="literal">true</span></span><br><span class="line">     <span class="keyword">this</span>.finishCount = <span class="number">0</span></span><br><span class="line">     <span class="keyword">this</span>.ctx = <span class="keyword">this</span>.canvas.getContext(<span class="string">'2d'</span>);</span><br><span class="line">     <span class="keyword">this</span>.style = &#123; <span class="comment">// 弹幕样式</span></span><br><span class="line">     height: <span class="number">47</span> * pixelRatio,  <span class="comment">// 弹幕高度   // 旧版高度29</span></span><br><span class="line">     imgBgWidth: <span class="number">56</span> * pixelRatio,  <span class="comment">// 背景图片的宽度(左、右)</span></span><br><span class="line">     fontSize: <span class="number">12</span> * pixelRatio,  <span class="comment">// 字体大小</span></span><br><span class="line">     marginBottom: <span class="number">20</span> * pixelRatio,  <span class="comment">// 弹幕 margin-bottom</span></span><br><span class="line">     paddingX: <span class="number">15</span> * pixelRatio,  <span class="comment">// 弹幕 padding x</span></span><br><span class="line">     avatarWidth: <span class="number">20</span> * pixelRatio,  <span class="comment">// 头像宽度</span></span><br><span class="line">     ellipsisMaxWidth: <span class="number">100</span> * pixelRatio,</span><br><span class="line">     offsetRight: <span class="number">56</span> * pixelRatio   <span class="comment">// 右背景偏移量</span></span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">this</span>.ctx.font = <span class="keyword">this</span>.style.fontSize + <span class="string">'px PingFangSC-Regular'</span>;</span><br><span class="line">     <span class="keyword">this</span>.onPalyFinish = onPalyFinish</span><br><span class="line"></span><br><span class="line">     <span class="keyword">this</span>.barrageList = [];  <span class="comment">// 弹幕列表</span></span><br><span class="line">     <span class="keyword">this</span>.rowStatusList = [];  <span class="comment">// 记录每行是否可插入，防止重叠。 行号为可插入 false为不可插入</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">let</span> rowLength = <span class="built_in">Math</span>.floor(<span class="keyword">this</span>.h / (<span class="keyword">this</span>.style.height + <span class="keyword">this</span>.style.marginBottom));</span><br><span class="line">     <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; rowLength; i++) &#123;</span><br><span class="line">     <span class="keyword">this</span>.rowStatusList.push(i)</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> shoot(value) &#123;</span><br><span class="line">     <span class="keyword">const</span> &#123; height, avatarWidth, fontSize, marginBottom, paddingX, ellipsisMaxWidth &#125; = <span class="keyword">this</span>.style;</span><br><span class="line">     <span class="keyword">const</span> &#123; img, sortArr, t1, t2, t3, t4 &#125; = value;</span><br><span class="line">     <span class="keyword">const</span> ellipsisT2 = <span class="keyword">this</span>.getEllipsisText(t2)</span><br><span class="line">     <span class="keyword">let</span> row = <span class="keyword">this</span>.getRow();</span><br><span class="line">     <span class="keyword">let</span> color = <span class="string">'#7C0102'</span>;</span><br><span class="line">     <span class="keyword">let</span> offset = <span class="keyword">this</span>.pxRatio;</span><br><span class="line">     <span class="keyword">let</span> offsetNew = <span class="number">30</span></span><br><span class="line">     <span class="keyword">let</span> w_0 = paddingX;  <span class="comment">// 头像开始位置</span></span><br><span class="line">     <span class="keyword">let</span> w_1 = w_0 + avatarWidth + <span class="number">8</span> + offsetNew + <span class="number">10</span>;  <span class="comment">// t1文字开始位置</span></span><br><span class="line">     <span class="keyword">let</span> w_2 = w_1 + <span class="built_in">Math</span>.ceil(<span class="keyword">this</span>.ctx.measureText(t1).width) + <span class="number">8</span>;  <span class="comment">// t2文字开始位置</span></span><br><span class="line">     <span class="keyword">let</span> w_3 = w_2 +  <span class="built_in">Math</span>.ceil(<span class="keyword">this</span>.ctx.measureText(ellipsisT2).width) + <span class="number">8</span>;  <span class="comment">// t3文字开始位置</span></span><br><span class="line">     <span class="keyword">let</span> w_4 = w_3 + <span class="built_in">Math</span>.ceil(<span class="keyword">this</span>.ctx.measureText(t3).width) + <span class="number">8</span>;  <span class="comment">// t4文字开始位置</span></span><br><span class="line">     <span class="keyword">let</span> w_5 = w_4 + <span class="built_in">Math</span>.ceil(<span class="keyword">this</span>.ctx.measureText(t4).width) + paddingX + <span class="number">8</span>;  <span class="comment">// 弹幕总长度</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">let</span> barrage = &#123;</span><br><span class="line">     color,</span><br><span class="line">     row,</span><br><span class="line">     offset,</span><br><span class="line">     top: row * (height + marginBottom),</span><br><span class="line">     left: <span class="keyword">this</span>.w,</span><br><span class="line">     width: [w_0, w_1, w_2, w_3, w_4, w_5],</span><br><span class="line">     value,</span><br><span class="line">     ellipsisT2,</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">this</span>.barrageList.push(barrage);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> draw() &#123;</span><br><span class="line">     <span class="keyword">if</span> (!<span class="keyword">this</span>.drawing) &#123;</span><br><span class="line">     <span class="keyword">return</span></span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span> (!!<span class="keyword">this</span>.barrageList.length) &#123;</span><br><span class="line">     <span class="keyword">this</span>.ctx.clearRect(<span class="number">0</span>, <span class="number">0</span>, <span class="keyword">this</span>.w, <span class="keyword">this</span>.h);</span><br><span class="line">     <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>, barrage; barrage = <span class="keyword">this</span>.barrageList[i]; i++) &#123;</span><br><span class="line">         <span class="comment">// 弹幕滚出屏幕，从数组中移除</span></span><br><span class="line">         <span class="keyword">if</span> (barrage.left + barrage.width[<span class="number">5</span>] &lt;= <span class="number">-25</span>) &#123;</span><br><span class="line">         <span class="keyword">this</span>.barrageList.splice(i, <span class="number">1</span>);</span><br><span class="line">         <span class="keyword">this</span>.finishCount ++;</span><br><span class="line">         i--;</span><br><span class="line">         <span class="keyword">continue</span>;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="comment">// 弹幕完全滚入屏幕，当前行可插入</span></span><br><span class="line">         <span class="keyword">if</span> (!barrage.rowFlag) &#123;</span><br><span class="line">         <span class="keyword">if</span> ((barrage.left + barrage.width[<span class="number">5</span>]) &lt; <span class="keyword">this</span>.w - <span class="number">45</span>) &#123;  <span class="comment">//</span></span><br><span class="line">             <span class="keyword">this</span>.rowStatusList[barrage.row] = barrage.row;</span><br><span class="line">             barrage.rowFlag = <span class="literal">true</span>;</span><br><span class="line">         &#125;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         barrage.left -= barrage.offset;</span><br><span class="line">         <span class="keyword">this</span>.drawBarrage(barrage);</span><br><span class="line">     &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">this</span>.reqAnimeId = requestAnimationFrame(<span class="keyword">this</span>.draw.bind(<span class="keyword">this</span>));</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> restartDraw() &#123;</span><br><span class="line">     <span class="keyword">this</span>.drawing = <span class="literal">true</span>;</span><br><span class="line">     <span class="keyword">this</span>.draw()</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> clearDraw() &#123;</span><br><span class="line">     <span class="keyword">this</span>.drawing = <span class="literal">false</span></span><br><span class="line">     cancelAnimation(<span class="keyword">this</span>.reqAnimeId)</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> drawBarrage(barrage) &#123;</span><br><span class="line">     <span class="keyword">const</span> &#123; height, avatarWidth, fontSize, ellipsisMaxWidth &#125; = <span class="keyword">this</span>.style;</span><br><span class="line">     <span class="keyword">const</span> &#123;</span><br><span class="line">     value: &#123; img, sortArr, t1, t3, t4,&#125;,</span><br><span class="line">     ellipsisT2,</span><br><span class="line">     color,</span><br><span class="line">     row,</span><br><span class="line">     left,</span><br><span class="line">     top,</span><br><span class="line">     offset,</span><br><span class="line">     width,</span><br><span class="line">     &#125; = barrage;</span><br><span class="line"></span><br><span class="line">     <span class="comment">// 画框子</span></span><br><span class="line">     <span class="comment">// roundRect(this.ctx, left, top, width[5], height, height / 2, avatarWidth)</span></span><br><span class="line">     <span class="comment">// this.ctx.fillStyle = 'rgba(0,0,0,0.45)';</span></span><br><span class="line">     <span class="comment">// this.ctx.fill();</span></span><br><span class="line"></span><br><span class="line">     <span class="comment">// -- 画左边背景</span></span><br><span class="line"></span><br><span class="line">     leftBg(<span class="keyword">this</span>.ctx, sortArr[<span class="number">0</span>], left , top, <span class="keyword">this</span>.style.imgBgWidth, height)</span><br><span class="line">     middleBg(<span class="keyword">this</span>.ctx, sortArr[<span class="number">1</span>], left , top, width[<span class="number">2</span>]-width[<span class="number">1</span>], height)</span><br><span class="line">     rightBg(<span class="keyword">this</span>.ctx, sortArr[<span class="number">2</span>], left + width[<span class="number">5</span>]- <span class="keyword">this</span>.style.offsetRight , top, <span class="keyword">this</span>.style.imgBgWidth, height )</span><br><span class="line">     <span class="comment">// left, top, width[1], height</span></span><br><span class="line"></span><br><span class="line">     <span class="comment">// 画头像</span></span><br><span class="line">     <span class="comment">// circleImg(this.ctx, img, left + width[0], top + (height - avatarWidth) / 2, avatarWidth/2)</span></span><br><span class="line">     circleImg(<span class="keyword">this</span>.ctx, sortArr[<span class="number">3</span>], left + width[<span class="number">0</span>], top + (height - avatarWidth) / <span class="number">2</span>, avatarWidth/<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">     <span class="comment">// 新的top偏移量  15</span></span><br><span class="line">     <span class="keyword">const</span> offsetYNew = <span class="number">-4</span></span><br><span class="line">     <span class="keyword">const</span> paddingTop = (height - fontSize) / <span class="number">2</span> - <span class="number">2</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">this</span>.ctx.fillStyle = color;</span><br><span class="line">     <span class="keyword">this</span>.ctx.fillText(t1, left + width[<span class="number">1</span>], top + fontSize + paddingTop + offsetYNew);</span><br><span class="line"></span><br><span class="line">     <span class="keyword">this</span>.ctx.fillStyle = <span class="string">'#CFFCFC'</span>;</span><br><span class="line">     <span class="keyword">this</span>.ctx.fillText(ellipsisT2, left + width[<span class="number">2</span>], top + fontSize + paddingTop);</span><br><span class="line"></span><br><span class="line">     <span class="keyword">this</span>.ctx.fillStyle = color;</span><br><span class="line">     <span class="keyword">this</span>.ctx.fillText(t3, left + width[<span class="number">3</span>], top + fontSize + paddingTop);</span><br><span class="line"></span><br><span class="line">     <span class="keyword">this</span>.ctx.fillStyle = <span class="string">'#FFFF33'</span>;</span><br><span class="line">     <span class="keyword">this</span>.ctx.fillText(t4, left + width[<span class="number">4</span>], top + fontSize + paddingTop);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> getRow() &#123;</span><br><span class="line">     <span class="keyword">let</span> emptyRowList = <span class="keyword">this</span>.rowStatusList.filter(<span class="function"><span class="params">d</span> =&gt;</span> <span class="regexp">/\d/</span>.test(d));  <span class="comment">// 找出可插入行</span></span><br><span class="line">     <span class="keyword">let</span> row = emptyRowList[<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * emptyRowList.length)];  <span class="comment">// 随机选一行</span></span><br><span class="line">     <span class="keyword">this</span>.rowStatusList[row] = <span class="literal">false</span>;</span><br><span class="line">     <span class="keyword">return</span> row;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> haveEmptyRow() &#123;</span><br><span class="line">     <span class="keyword">let</span> emptyRowList = <span class="keyword">this</span>.rowStatusList.filter(<span class="function"><span class="params">d</span> =&gt;</span> <span class="regexp">/\d/</span>.test(d));  <span class="comment">// 找出可插入行</span></span><br><span class="line">     <span class="keyword">return</span> !!emptyRowList.length;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> getEllipsisText(text) &#123;</span><br><span class="line">     <span class="keyword">const</span> &#123; <span class="attr">ellipsisMaxWidth</span>: maxWidth  &#125; = <span class="keyword">this</span>.style</span><br><span class="line">     <span class="keyword">if</span> (<span class="keyword">this</span>.ctx.measureText(text).width &lt;= maxWidth) &#123;</span><br><span class="line">         <span class="keyword">return</span> text</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">const</span> textArr = text.split(<span class="string">''</span>);<span class="comment">//当前剩余的字符串</span></span><br><span class="line">     <span class="keyword">for</span> (<span class="keyword">let</span> m = <span class="number">1</span>; m &lt;= textArr.length; m++) &#123;</span><br><span class="line">     <span class="keyword">if</span> (<span class="keyword">this</span>.ctx.measureText(textArr.slice(<span class="number">0</span>, m)).width &gt; maxWidth) &#123;</span><br><span class="line">         <span class="keyword">return</span> textArr.slice(<span class="number">0</span>, m).join(<span class="string">''</span>) + <span class="string">'...'</span></span><br><span class="line">     &#125;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// danmu.tsx   弹幕组件，可以直接调用 &lt;danmu /&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">import</span> React, &#123; useEffect, useRef &#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"> <span class="keyword">import</span> styled <span class="keyword">from</span> <span class="string">'styled-components'</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">import</span> &#123; defAvatarNew &#125; <span class="keyword">from</span> <span class="string">'@constants'</span></span><br><span class="line"> <span class="keyword">import</span> request <span class="keyword">from</span> <span class="string">'@core/request'</span></span><br><span class="line"> <span class="comment">// import &#123; Barrage &#125; from '@utils/barrage'</span></span><br><span class="line"> <span class="keyword">import</span> &#123; Barrage &#125; <span class="keyword">from</span> <span class="string">'@pages/act_spring_festival/barrage-spring'</span></span><br><span class="line"> <span class="keyword">import</span> &#123; choice &#125; <span class="keyword">from</span> <span class="string">'@utils/tool'</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">import</span> &#123; actions &#125; <span class="keyword">from</span> <span class="string">'./config'</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">export</span> <span class="keyword">default</span> (props: any) =&gt; &#123;</span><br><span class="line"> <span class="keyword">const</span> storeRef = useRef&lt;any&gt;(&#123;</span><br><span class="line">     timer: <span class="number">0</span>,</span><br><span class="line">     finishCount: <span class="number">0</span>,</span><br><span class="line">     barrage: <span class="literal">null</span>,</span><br><span class="line"> &#125;)</span><br><span class="line"></span><br><span class="line"> useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">     fetchData()</span><br><span class="line"> &#125;, [])</span><br><span class="line"></span><br><span class="line"> useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">     <span class="keyword">const</span> barrage = <span class="keyword">new</span> Barrage(&#123; <span class="attr">canvasId</span>: <span class="string">'act-spring-barrage'</span> &#125;)</span><br><span class="line">     barrage.draw()</span><br><span class="line">     storeRef.current.barrage = barrage</span><br><span class="line"></span><br><span class="line">     <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">     barrage.clearDraw()</span><br><span class="line">     clearTimeout(storeRef.current.timer)</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;, [])</span><br><span class="line"></span><br><span class="line"> <span class="keyword">const</span> fetchData = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">     request(actions.wishList).then(<span class="function">(<span class="params">resData</span>) =&gt;</span> &#123;</span><br><span class="line">     <span class="keyword">const</span> items = resData || []</span><br><span class="line">     <span class="keyword">if</span> (items &amp;&amp; items[<span class="number">0</span>]) &#123;</span><br><span class="line">         shootBarrage(items[<span class="number">0</span>])</span><br><span class="line">         setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> shootBarrage(items[<span class="number">1</span>]), <span class="number">500</span>)</span><br><span class="line">         startBarrage(<span class="number">2</span>, items)</span><br><span class="line">     &#125;</span><br><span class="line">     &#125;)</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">const</span> startBarrage = <span class="function">(<span class="params">activeIndex: number, source: any[]</span>) =&gt;</span> &#123;</span><br><span class="line">     <span class="keyword">const</span> &#123; timer, barrage &#125; = storeRef.current</span><br><span class="line">     clearTimeout(timer)</span><br><span class="line"></span><br><span class="line">     storeRef.current.timer = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">     <span class="keyword">let</span> flag = <span class="literal">false</span></span><br><span class="line">     <span class="keyword">if</span> (source[activeIndex]) &#123;</span><br><span class="line">         flag = shootBarrage(source[activeIndex])</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">if</span> (barrage.finishCount &amp;&amp; barrage.finishCount &gt;= source.length - <span class="number">3</span>) &#123;</span><br><span class="line">         barrage.finishCount = <span class="number">0</span></span><br><span class="line">         fetchData()</span><br><span class="line">     &#125;</span><br><span class="line">     startBarrage(!flag ? activeIndex : activeIndex + <span class="number">1</span>, source)</span><br><span class="line">     &#125;, choice([<span class="number">1000</span>, <span class="number">1800</span>]))</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">const</span> shootBarrage = <span class="function">(<span class="params">currentItem: any</span>) =&gt;</span> &#123;</span><br><span class="line">     <span class="keyword">const</span> barrage = storeRef.current.barrage</span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span> (!barrage.haveEmptyRow() || !currentItem) &#123;</span><br><span class="line">     <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">const</span> &#123; pic = defAvatarNew, wish = <span class="string">''</span> &#125; = currentItem</span><br><span class="line"></span><br><span class="line">     <span class="keyword">const</span> data = &#123;</span><br><span class="line">     t1: wish,</span><br><span class="line">     t2: <span class="string">''</span>,</span><br><span class="line">     t3: <span class="string">''</span>,</span><br><span class="line">     t4: <span class="string">''</span>,</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="comment">// --一起初始化背景图</span></span><br><span class="line">     <span class="keyword">const</span> imgConf1 = [</span><br><span class="line">     <span class="string">'https://img.sumeme.com/28/4/1612232722204.png'</span>,</span><br><span class="line">     <span class="string">'https://img.sumeme.com/8/0/1612232705544.png'</span>,</span><br><span class="line">     <span class="string">'https://img.sumeme.com/14/6/1612232681614.png'</span>,</span><br><span class="line">     pic,</span><br><span class="line">     ]</span><br><span class="line"></span><br><span class="line">     <span class="keyword">const</span> imgConf2 = [</span><br><span class="line">     <span class="string">'https://img.sumeme.com/32/0/1612232775520.png'</span>,</span><br><span class="line">     <span class="string">'https://img.sumeme.com/32/0/1612232762208.png'</span>,</span><br><span class="line">     <span class="string">'https://img.sumeme.com/54/6/1612232743414.png'</span>,</span><br><span class="line">     pic,</span><br><span class="line">     ]</span><br><span class="line"></span><br><span class="line">     <span class="keyword">const</span> imgConf3 = [</span><br><span class="line">     <span class="string">'https://img.sumeme.com/27/3/1612232818395.png'</span>,</span><br><span class="line">     <span class="string">'https://img.sumeme.com/48/0/1612232804656.png'</span>,</span><br><span class="line">     <span class="string">'https://img.sumeme.com/32/0/1612232789280.png'</span>,</span><br><span class="line">     pic,</span><br><span class="line">     ]</span><br><span class="line"></span><br><span class="line">     <span class="comment">// const imgConf4 = [</span></span><br><span class="line">     <span class="comment">//   'https://img.sumeme.com/25/1/1612232866777.png',</span></span><br><span class="line">     <span class="comment">//   'https://img.sumeme.com/32/0/1612232846432.png',</span></span><br><span class="line">     <span class="comment">//   'https://img.sumeme.com/33/1/1612232833441.png',</span></span><br><span class="line">     <span class="comment">//   pic,</span></span><br><span class="line">     <span class="comment">// ]</span></span><br><span class="line"></span><br><span class="line">     <span class="keyword">const</span> imgConfAll = [imgConf1, imgConf2, imgConf3]</span><br><span class="line"></span><br><span class="line">     <span class="keyword">const</span> imgArray = choice(imgConfAll)</span><br><span class="line"></span><br><span class="line">     <span class="keyword">const</span> receiveArray: any[] = []</span><br><span class="line">     <span class="comment">// let $myContent = document.getElementById("myContent");</span></span><br><span class="line">     <span class="comment">// let [imgW, imgH] = [300, 300];</span></span><br><span class="line"></span><br><span class="line">     <span class="comment">// let Canvas = document.createElement('canvas');</span></span><br><span class="line">     <span class="comment">// let ctx = Canvas.getContext("2d");</span></span><br><span class="line">     <span class="comment">// let scaleBy = 2;</span></span><br><span class="line">     <span class="comment">// Canvas.width = imgW * scaleBy;</span></span><br><span class="line">     <span class="comment">// Canvas.height = imgH * scaleBy;</span></span><br><span class="line">     imgArray.forEach(<span class="function">(<span class="params">e: any, idx: number</span>) =&gt;</span> &#123;</span><br><span class="line">     <span class="keyword">const</span> img = <span class="keyword">new</span> Image()</span><br><span class="line">     img.src = e</span><br><span class="line">     img.setAttribute(<span class="string">'crossOrigin'</span>, <span class="string">'Anonymous'</span>)</span><br><span class="line">     img.addEventListener(<span class="string">'load'</span>, () =&gt; &#123;</span><br><span class="line">         <span class="comment">// ctx.drawImage(img, 0, 0, imgW * scaleBy, imgH * scaleBy);</span></span><br><span class="line">         img.id = <span class="string">'img'</span> + idx</span><br><span class="line">         receiveArray.push(img) <span class="comment">// 将绘制的img节点收集到数组里，这里的顺序可能和imgArray的顺序不一样</span></span><br><span class="line">         <span class="keyword">if</span> (receiveArray.length === imgArray.length) &#123;</span><br><span class="line">         <span class="comment">// 所有图片load并绘制完成</span></span><br><span class="line">         <span class="keyword">const</span> sortArr = <span class="keyword">new</span> <span class="built_in">Array</span>()</span><br><span class="line">         receiveArray.forEach(<span class="function">(<span class="params">ex</span>) =&gt;</span> &#123;</span><br><span class="line">             <span class="comment">// 将所有绘制图片按imgArray顺序排序</span></span><br><span class="line">             sortArr[ex.id.split(<span class="string">'img'</span>)[<span class="number">1</span>]] = ex</span><br><span class="line">         &#125;)</span><br><span class="line">         barrage.shoot(&#123;</span><br><span class="line">             sortArr,</span><br><span class="line">             ...data,</span><br><span class="line">         &#125;)</span><br><span class="line">         <span class="comment">// sortArr.forEach(ex2 =&gt; &#123;</span></span><br><span class="line">         <span class="comment">//     $myContent.appendChild(ex2)</span></span><br><span class="line">         <span class="comment">// &#125;)</span></span><br><span class="line">         &#125;</span><br><span class="line">     &#125;)</span><br><span class="line">     &#125;)</span><br><span class="line"></span><br><span class="line">     <span class="comment">// const img = new Image()</span></span><br><span class="line">     <span class="comment">// img.setAttribute('crossOrigin', 'anonymous')</span></span><br><span class="line">     <span class="comment">// const data = &#123;</span></span><br><span class="line">     <span class="comment">//   t1: wish,</span></span><br><span class="line">     <span class="comment">//   t2: '',</span></span><br><span class="line">     <span class="comment">//   t3: '',</span></span><br><span class="line">     <span class="comment">//   t4: '',</span></span><br><span class="line">     <span class="comment">// &#125;</span></span><br><span class="line">     <span class="comment">// img.onload = () =&gt; &#123;</span></span><br><span class="line">     <span class="comment">//   barrage.shoot(&#123;</span></span><br><span class="line">     <span class="comment">//     img,</span></span><br><span class="line">     <span class="comment">//     ...data,</span></span><br><span class="line">     <span class="comment">//   &#125;)</span></span><br><span class="line">     <span class="comment">// &#125;</span></span><br><span class="line">     <span class="comment">// img.onerror = () =&gt; &#123;</span></span><br><span class="line">     <span class="comment">//   barrage.finishCount++</span></span><br><span class="line">     <span class="comment">// &#125;</span></span><br><span class="line">     <span class="comment">// let pic1 = 'https://img.sumeme.com/27/3/1611904142299.png'</span></span><br><span class="line">     <span class="comment">// console.log('---', pic)</span></span><br><span class="line">     <span class="comment">// img.src = pic1</span></span><br><span class="line">     <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">return</span> (</span><br><span class="line">     &lt;StyledBarrage&gt;</span><br><span class="line">     &lt;canvas id=<span class="string">"act-spring-barrage"</span> height=<span class="string">"250px"</span> /&gt;</span><br><span class="line">     &lt;<span class="regexp">/StyledBarrage&gt;</span></span><br><span class="line"><span class="regexp"> )</span></span><br><span class="line"><span class="regexp"> &#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp"> export const StyledBarrage = styled.div`</span></span><br><span class="line"><span class="regexp"> position: absolute;</span></span><br><span class="line"><span class="regexp"> bottom: -120px;</span></span><br><span class="line"><span class="regexp"> width: 750px;</span></span><br><span class="line"><span class="regexp"> height: 550px;</span></span><br><span class="line"><span class="regexp"> /</span>* z-index: <span class="number">99999</span>; *<span class="regexp">/</span></span><br><span class="line"><span class="regexp"> canvas &#123;</span></span><br><span class="line"><span class="regexp">     width: 100%;</span></span><br><span class="line"><span class="regexp">     height: 100%;</span></span><br><span class="line"><span class="regexp"> &#125;</span></span><br><span class="line"><span class="regexp"> `</span></span><br></pre></td></tr></table></figure>
+
+<p>抽空把这个弹幕写个 demo ，光干巴巴的文字是在难以理解啊</p>
+<h3 id="Node-的版本控制"><a href="#Node-的版本控制" class="headerlink" title="Node 的版本控制"></a>Node 的版本控制</h3><p>   这个一般使用 nvm 或者 n 命令</p>
+<h3 id="移动端和-H5-的桥接通信"><a href="#移动端和-H5-的桥接通信" class="headerlink" title="移动端和 H5 的桥接通信"></a>移动端和 H5 的桥接通信</h3><p>   使用 jsBridge 进行 H5 和移动端的通信。具体后面整理一下。</p>
+<h3 id="直播礼物的动画播放队列实现"><a href="#直播礼物的动画播放队列实现" class="headerlink" title="直播礼物的动画播放队列实现"></a>直播礼物的动画播放队列实现</h3><h3 id="Video-播放-mp4-的注意点"><a href="#Video-播放-mp4-的注意点" class="headerlink" title="Video 播放 mp4 的注意点"></a>Video 播放 mp4 的注意点</h3><p>   react 中播放 mp4 格式，会有一些 iOS 机型的兼容问题，不如 iOS 不能自动播放等</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//React中播放mp4的情况，一帮情况下播放GIF或者SVGA</span></span><br><span class="line"><span class="comment">// 代码如下</span></span><br><span class="line">&lt;div</span><br><span class="line">  className=<span class="string">"video-box"</span></span><br><span class="line">  dangerouslySetInnerHTML=&#123;&#123;</span><br><span class="line">    __html: <span class="string">`</span></span><br><span class="line"><span class="string">        &lt;video</span></span><br><span class="line"><span class="string">        id="entry-video"</span></span><br><span class="line"><span class="string">        poster="https://img.sumeme.com/16/0/1624613307152.png"</span></span><br><span class="line"><span class="string">        autoPlay</span></span><br><span class="line"><span class="string">        x-webkit-airplay="allow"</span></span><br><span class="line"><span class="string">        x5-video-player-type="h5"</span></span><br><span class="line"><span class="string">        webkit-playsinline</span></span><br><span class="line"><span class="string">        playsinline</span></span><br><span class="line"><span class="string">        muted</span></span><br><span class="line"><span class="string">        style="object-fit:fill"</span></span><br><span class="line"><span class="string">        &gt;</span></span><br><span class="line"><span class="string">        &lt;source src="https://img.sumeme.com/swf/Render6-16.mp4" type="video/mp4"&gt; </span></span><br><span class="line"><span class="string">        &lt;/video&gt;</span></span><br><span class="line"><span class="string">        `</span>,</span><br><span class="line">  &#125;&#125;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
+
+<pre><code>poster属性可以在视频未加载完成前展示一张封面图片，视频加载后自动播放视频。</code></pre><h3 id="hooks-封装"><a href="#hooks-封装" class="headerlink" title="hooks 封装"></a>hooks 封装</h3><pre><code>其实相比自己封装有针对性的 hooks 外，阿里的 ahooks3.0 也可以使用，功能还是值得期待的</code></pre><h3 id="React-中挂载滑动函数"><a href="#React-中挂载滑动函数" class="headerlink" title="React 中挂载滑动函数"></a>React 中挂载滑动函数</h3><h3 id="抽奖"><a href="#抽奖" class="headerlink" title="抽奖"></a>抽奖</h3><h3 id="一些-CSS"><a href="#一些-CSS" class="headerlink" title="一些 CSS"></a>一些 CSS</h3><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">-webkit-tap-highlight-color: rgba(0,0,0,0)</span><br><span class="line">// 解决iOS和iPad设备上点击状态出现默认蓝色高亮，很常见</span><br><span class="line"></span><br><span class="line">&amp; + &amp; &#123;&#125;</span><br><span class="line">取巧，选择非第一个开始的所有同类型元素</span><br><span class="line"></span><br><span class="line">font-size: 0;</span><br><span class="line">父元素设置改属性可以有效解决行内元素的默认间距，例如span</span><br><span class="line"></span><br><span class="line">padding-bottom: 6%;</span><br><span class="line"></span><br><span class="line">ol li:before &#123;</span><br><span class="line">  content:counter(sectioncounter) &quot;、&quot;; </span><br><span class="line">  counter-increment:sectioncounter;</span><br><span class="line">&#125;</span><br><span class="line">//有序元素的符号替换展示</span><br><span class="line"></span><br><span class="line">.gift-show-area[gift-id=&apos;7777&apos;] &#123;&#125;</span><br><span class="line">//可以这样查找元素</span><br><span class="line"></span><br><span class="line">background-image: linear-gradient(135deg, red, blue);</span><br><span class="line">background-clip: text;</span><br><span class="line">-webkit-background-clip: text;</span><br><span class="line">color: transparent;</span><br><span class="line">// 文字颜色渐变</span><br><span class="line"></span><br><span class="line">::-webkit-input-placeholder</span><br><span class="line">// placeholder样式次修改</span><br></pre></td></tr></table></figure></code></pre><ol>
+<li>复杂表格项合并<br>rowSpan   colspan 行列合并</li>
+</ol>
+<h3 id="按需加载优化"><a href="#按需加载优化" class="headerlink" title="按需加载优化"></a>按需加载优化</h3><p>项目已经很庞大的情况下，还要考虑hybrid的体验情况，需要进行项目优化，按需加载比较适合某些场景下，这里采用《react-intersection-observer》中的hooks useInView 来判断元素是否在可视窗口内。进而判断是否渲染该元素。  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里封装一个图片按需加载的公用组建</span></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> &#123; useInView, IntersectionOptions &#125; <span class="keyword">from</span> <span class="string">'react-intersection-observer'</span></span><br><span class="line"><span class="keyword">import</span> styled <span class="keyword">from</span> <span class="string">'styled-components'</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> StyledImg = styled.div<span class="string">`</span></span><br><span class="line"><span class="string">  width: 100%;</span></span><br><span class="line"><span class="string">  height: 100%;</span></span><br><span class="line"><span class="string">`</span></span><br><span class="line">type Props = IntersectionOptions &amp; &#123;</span><br><span class="line">  src: string</span><br><span class="line">  title?: string</span><br><span class="line">  className?: string</span><br><span class="line">  children?: any</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> LazyImg = <span class="function">(<span class="params">props: Props</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; src, title, className, children, ...configProps &#125; = props </span><br><span class="line">  <span class="keyword">const</span> [res, inView] = useInView(&#123;</span><br><span class="line">    triggerOnce: <span class="literal">true</span>,</span><br><span class="line">    rootMargin: <span class="string">'20px 0'</span>,</span><br><span class="line">    ...configProps,</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;StyledImg ref=&#123;ref&#125; className=&#123;className&#125; title=&#123;title&#125;&gt;</span><br><span class="line">      &#123;children&#125;</span><br><span class="line">      &#123;inView &amp;&amp; <span class="xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#123;src&#125;/</span>&gt;</span>&#125;</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">StyledImg</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> LazyImg</span><br></pre></td></tr></table></figure>
+
+<h3 id="Modal封装"><a href="#Modal封装" class="headerlink" title="Modal封装"></a>Modal封装</h3><p>不论是PC页面，还是hybrid原生页面，都需要大量形形色色的弹窗来通知用户处理业务逻辑，封装几种常见的Modal</p>
+<h2 id="CSS-点九图"><a href="#CSS-点九图" class="headerlink" title="CSS 点九图"></a>CSS 点九图</h2><p>最近年中和周年庆开始，铺天盖地的活动。UI 设计的风格和一往不太一样，举一个栗子： 在投票页面中，每个被投票的主播都是单独的一张特殊背景图包裹，该容器可能会根据被投票人的信息长短不一，不规则背景边框图也要自动适应。类似这样的需求，一般有这么几种方法实现：</p>
+<ol>
+<li><p>三段图重复<br>就是把不规则的背景图切成三段。头部、中间部分、底部，中间部分利用背景图的 repeat 来自适应，缺点就是不灵活，需要找 UI 切图，里面内容的间距控制不精准</p>
+</li>
+<li><p>点九图<br>点九图是移动端的一种做法，就是一张图切四刀，四个角不伸缩，保持原图比例。四条边进行伸缩，中间的部分用来填充，一共九个部分，所以称点九图。CSS3 也可以实现点九图，且效果不错，举个例子：<br>写一个业务组件，只用来做 wrap 包裹，用点九图，这样其他的同样式的组件都可以复用。</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> styled <span class="keyword">from</span> <span class="string">'styled-components'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; StyledBaseWrap &#125; <span class="keyword">from</span> <span class="string">'../styled'</span></span><br><span class="line"></span><br><span class="line">type Props = &#123;</span><br><span class="line">  children: any</span><br><span class="line">  title?: string</span><br><span class="line">  <span class="comment">// title?: string</span></span><br><span class="line">  <span class="comment">// headerType?: 'icon' | 'pureString'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> (props: Props) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; children, title = <span class="string">''</span> &#125; = props</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!children) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;StyledBaseWrap&gt;</span><br><span class="line">      &lt;i className=<span class="string">"bg"</span> /&gt;</span><br><span class="line">      &#123;</span><br><span class="line">        title &amp;&amp; (</span><br><span class="line">          &lt;div className=<span class="string">"title-bg-box"</span>&gt;</span><br><span class="line">            &lt;i className=<span class="string">"title-bg"</span> /&gt;</span><br><span class="line">            &#123;<span class="comment">/* &lt;p className="you-she"&gt;&#123;title&#125;&lt;/p&gt; */</span>&#125;</span><br><span class="line">            &lt;div className=<span class="string">"you-she"</span>&gt;&#123;title&#125;&lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">          &lt;/</span>div&gt;</span><br><span class="line">        )</span><br><span class="line">      &#125;</span><br><span class="line">      &#123;children&#125;</span><br><span class="line">    &lt;<span class="regexp">/StyledBaseWrap&gt;</span></span><br><span class="line"><span class="regexp">  )</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">const StyledBaseWrap = styled.div`</span></span><br><span class="line"><span class="regexp">  position: relative;</span></span><br><span class="line"><span class="regexp">  width: 680px;</span></span><br><span class="line"><span class="regexp">  margin: 0 auto;</span></span><br><span class="line"><span class="regexp">  min-height: 320px;</span></span><br><span class="line"><span class="regexp">  &amp; &gt; * &#123;</span></span><br><span class="line"><span class="regexp">    margin: 0 auto;</span></span><br><span class="line"><span class="regexp">  &#125;</span></span><br><span class="line"><span class="regexp">  .bg &#123;</span></span><br><span class="line"><span class="regexp">    position: absolute;</span></span><br><span class="line"><span class="regexp">    left: 0;</span></span><br><span class="line"><span class="regexp">    right: 0;</span></span><br><span class="line"><span class="regexp">    top: 0;</span></span><br><span class="line"><span class="regexp">    bottom: 0;</span></span><br><span class="line"><span class="regexp">    display: block;</span></span><br><span class="line"><span class="regexp">    border-style: solid;</span></span><br><span class="line"><span class="regexp">    border-width: 130px 340px 190px 340px;</span></span><br><span class="line"><span class="regexp">    border-image-source: url($&#123;require('./im</span>ages/bg_wrap.png<span class="string">')&#125;);</span></span><br><span class="line"><span class="string">    border-image-slice: 130 340 190 340 fill;</span></span><br><span class="line"><span class="string">    border-image-width: 1;</span></span><br><span class="line"><span class="string">    border-image-repeat: repeat;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  .title-bg-box &#123;</span></span><br><span class="line"><span class="string">    position: absolute;</span></span><br><span class="line"><span class="string">    min-width: 380px;</span></span><br><span class="line"><span class="string">    top: -20px;</span></span><br><span class="line"><span class="string">    margin: 0 auto;</span></span><br><span class="line"><span class="string">    font-size: 32px;</span></span><br><span class="line"><span class="string">    left: 50%;</span></span><br><span class="line"><span class="string">    transform: translateX(-50%);</span></span><br><span class="line"><span class="string">    padding: 0 100px;</span></span><br><span class="line"><span class="string">    box-sizing: border-box;</span></span><br><span class="line"><span class="string">    div &#123;</span></span><br><span class="line"><span class="string">      position: relative;</span></span><br><span class="line"><span class="string">      height: 52px;</span></span><br><span class="line"><span class="string">      line-height: 52px;</span></span><br><span class="line"><span class="string">      white-space: nowrap;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">  .title-bg &#123;</span></span><br><span class="line"><span class="string">    position: absolute;</span></span><br><span class="line"><span class="string">    left: 0;</span></span><br><span class="line"><span class="string">    right: 0;</span></span><br><span class="line"><span class="string">    top: 0;</span></span><br><span class="line"><span class="string">    bottom: 0;</span></span><br><span class="line"><span class="string">    display: block;</span></span><br><span class="line"><span class="string">    border-style: solid;</span></span><br><span class="line"><span class="string">    border-width: 24px 172px 24px 172px;</span></span><br><span class="line"><span class="string">    border-image-source: url($&#123;require('</span>./images/title_bg.png<span class="string">')&#125;);</span></span><br><span class="line"><span class="string">    border-image-slice: 24 172 24 172 fill;</span></span><br><span class="line"><span class="string">    border-image-width: 1;</span></span><br><span class="line"><span class="string">    border-image-repeat: repeat;</span></span><br><span class="line"><span class="string">    margin: 0 auto;</span></span><br><span class="line"><span class="string">  &#125;</span></span><br><span class="line"><span class="string">`</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 ‘border-image-slice’ 属性来完成点九图，它接受 4 个参数，分别在图片的上右下左切一刀，把图片分为 9 个部分，一中心，四个角，四个边。伸缩只会让边进行伸缩，所以需要调整切的位置，尽量在规则的地方下刀。此时，若父容器的宽高未给定，则完全由内容撑开宽高，<br>上面栗子中，宽度做了限制，高度未限制，传入的 children 会撑开点九图组件的高度，做到每个子组件高度根据内容自适应，但整体的样式不会发生变化。</p>
+<h2 id="Hybrid全面屏"><a href="#Hybrid全面屏" class="headerlink" title="Hybrid全面屏"></a>Hybrid全面屏</h2><p>H5页面在iOS和安卓应用，通常是移动端给了屏幕空间，用来展示H5页面，不包含顶部电池栏tab，新的沉浸式体验则需要H5页面也要控制电池区域，铺满整个移动端屏幕。</p>
+<p>每个手机设备的电池区域高度不尽相同，且设备的dpi也不一致，iOS是相对固定的22像素，安卓则是五花八门，这里需要桥接通信拿到移动端的“tab高度”和设备dpi，有这两个参数，H5页面则可以实现统一的全面屏幕沉浸式体验。</p>
+<p>dpi ：当前显示设备的物理像素分辨率与CSS像素分辨率之比，需要进行转化为H5的px单位，基本算法分为： </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// res 为桥接通信移动端返回的数据</span></span><br><span class="line"><span class="comment">// statusBarHeight为状态栏移动端高度</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (res.data.statusBarHeight) &#123;</span><br><span class="line">  <span class="keyword">if</span> (client.instance.inIOsNative() ) &#123;</span><br><span class="line">    statusBarHeight.setValue(res.data.statusBarHeight)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    statusBarHeight.setValue(res.data.statusBarHeight / <span class="built_in">window</span>.devicePixelRatio)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// react</span></span><br><span class="line">&lt;HeaderBar</span><br><span class="line">  style=&#123;&#123; <span class="attr">paddingTop</span>: <span class="string">`<span class="subst">$&#123;statusBarHeight.value&#125;</span>px`</span>, ...style &#125;&#125;</span><br><span class="line">  className=&#123;<span class="string">`<span class="subst">$&#123;className&#125;</span> `</span>&#125;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>iOS的高度不需要额外转换，一般iOS机型返回都是22px，安卓则需要除以dpi得到CSS像素。   </p>
+<p>拿到最终的状态栏高度，进行app-header的布局，基本tab栏高度一般为 88 像素，再加上状态栏（电池栏）的高度，如果整个头部整体需要fixed布局，全局则增加padding-top 取巧实现。整个H5页面总体分为两个区域，tab栏和content内容页，一般tab栏使用纯色背景，内容页则有时候会使用渐变色，此时，content的高度无法确定，则整体页面使用 flex布局，tab栏使用 shrink： 0 ； 禁止缩放，content则使用 flex: 1; 自动填充满视口，这样，内容页的渐变色则和tab页无缝衔接。</p>
+<h2 id="hybrid-touch-bar判断"><a href="#hybrid-touch-bar判断" class="headerlink" title="hybrid touch bar判断"></a>hybrid touch bar判断</h2><p>js判断当前手机是否有touch bar，如果存在 touch bar ，则App全局头部添加样式类名，后续业务只需根据对应CSS标识处理不同的样式。  </p>
+<p>解决： iOS 手机屏幕底部存在白线（操作栏），会遮挡页面的一部分，常见的页面底部会存在用户点击按钮或其他UI，操作栏会降低用户的体验。判断iOS存在 touch bar ，则增加全局样式，在对应子业务中修改样式即可避免。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!-- App全局样式（app.js） --&gt;</span><br><span class="line"><span class="keyword">if</span> (</span><br><span class="line">  /iphone/gi.test(navigator.userAgent) &amp;&amp;</span><br><span class="line">  <span class="built_in">window</span>.devicePixelRatio &amp;&amp;</span><br><span class="line">  <span class="built_in">window</span>.devicePixelRatio &gt;= <span class="number">2</span> &amp;&amp;</span><br><span class="line">  <span class="built_in">window</span>.screen.height &gt;= <span class="number">812</span></span><br><span class="line">) &#123;</span><br><span class="line">  <span class="built_in">document</span>.querySelector(<span class="string">'html'</span>).classList.add(<span class="string">'fix-bottom'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&lt;!-- 具体子业务 --&gt;</span><br><span class="line">.fix-bottom &amp; &#123;</span><br><span class="line">  padding-bottom: <span class="number">60</span>px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="iframe-跨域通信"><a href="#iframe-跨域通信" class="headerlink" title="iframe 跨域通信"></a>iframe 跨域通信</h2><p>在对接一些第三方的游戏时，采用 App客户端 嵌入 Hybrid H5前端，前端对接第三方。比如，抖音直播间火起来的弹幕游戏和其他趣味游戏，在直播间接入这些三方游戏，在关闭游戏、支付等方面，涉及三端跨域通信。  </p>
+<p>这里有一个案例，游戏是第三方的，但游戏内充值兑换货币的页面是我们的。游戏最终需要在客户端、Web端、桌面端（window app, 主要是开播工具）三端展示。这里页面互相嵌套，但本质就是子父页面通信。</p>
+<pre><code class="javascript">
+<span class="comment">// 父页面监听单个事件</span>
+<span class="built_in">window</span>.addEventListener(<span class="string">'message'</span>, _handleMsg)
+
+<span class="keyword">const</span> _handleMsg = <span class="function">(<span class="params">event</span>) =&gt;</span> {
+  <span class="comment">//  doSomeThing</span>
+}
+
+
+<span class="comment">// 子页面发送事件  </span>
+
+<span class="comment">// window.parent.postMessage('你的参数, '*')  第二个参数即解决跨域问题，也可填写父窗口的域名 window.parent.postMessage('你的参数, 'https://0.0.0.9200')</span>
+<span class="comment">// window.parent  返回父窗口</span>
+<span class="comment">// window.top     返回最顶层窗口，不一定是父窗口</span>
+
+<span class="keyword">const</span> closeWebView = <span class="function"><span class="params">()</span> =&gt;</span> {
+  <span class="built_in">window</span>.parent.postMessage(
+    {
+      type: <span class="string">'webViewEvent'</span>,
+      source: <span class="string">'xxx'</span>,
+      event: <span class="string">'close'</span>,
+    },
+    <span class="string">'*'</span>,
+  );
+};
+
+</code></pre>
+<h2 id="自定义hooks"><a href="#自定义hooks" class="headerlink" title="自定义hooks"></a>自定义hooks</h2><p> 在手写较多的 useEffect 的时候，就应该抽一个 hooks 出来。 React的官网原话也有： 如果你发现自己经常需要手动编写 Effect，那么这通常表明你需要为组件所依赖的通用行为提取一些 自定义 Hook。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>走过路过，留下买路财，壮士</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="fanghl 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    fanghl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fanghl.top/2021/06/07/summary-meme/" title="么么直播-总结">http://fanghl.top/2021/06/07/summary-meme/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/么么直播/" rel="tag"># 么么直播</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/04/13/ES6/" rel="next" title="ES6">
+                <i class="fa fa-chevron-left"></i> ES6
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/07/13/MST/" rel="prev" title="MST">
+                MST <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tibet.jpg" alt="fanghl">
+            
+              <p class="site-author-name" itemprop="name">fanghl</p>
+              <p class="site-description motion-element" itemprop="description">站在巨人的肩膀上</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fanghongliang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:fanghljob@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.cnblogs.com/fanghl" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-的更新机制"><span class="nav-number">2.</span> <span class="nav-text">React 的更新机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ref-的一些用法"><span class="nav-number">3.</span> <span class="nav-text">Ref 的一些用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#受控组建和非受控组件"><span class="nav-number">4.</span> <span class="nav-text">受控组建和非受控组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命名空间"><span class="nav-number">5.</span> <span class="nav-text">命名空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Canvas-实现弹幕组件"><span class="nav-number">6.</span> <span class="nav-text">Canvas 实现弹幕组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-的版本控制"><span class="nav-number">7.</span> <span class="nav-text">Node 的版本控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移动端和-H5-的桥接通信"><span class="nav-number">8.</span> <span class="nav-text">移动端和 H5 的桥接通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直播礼物的动画播放队列实现"><span class="nav-number">9.</span> <span class="nav-text">直播礼物的动画播放队列实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Video-播放-mp4-的注意点"><span class="nav-number">10.</span> <span class="nav-text">Video 播放 mp4 的注意点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hooks-封装"><span class="nav-number">11.</span> <span class="nav-text">hooks 封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-中挂载滑动函数"><span class="nav-number">12.</span> <span class="nav-text">React 中挂载滑动函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抽奖"><span class="nav-number">13.</span> <span class="nav-text">抽奖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些-CSS"><span class="nav-number">14.</span> <span class="nav-text">一些 CSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按需加载优化"><span class="nav-number">15.</span> <span class="nav-text">按需加载优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Modal封装"><span class="nav-number">16.</span> <span class="nav-text">Modal封装</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS-点九图"><span class="nav-number"></span> <span class="nav-text">CSS 点九图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hybrid全面屏"><span class="nav-number"></span> <span class="nav-text">Hybrid全面屏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hybrid-touch-bar判断"><span class="nav-number"></span> <span class="nav-text">hybrid touch bar判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iframe-跨域通信"><span class="nav-number"></span> <span class="nav-text">iframe 跨域通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义hooks"><span class="nav-number"></span> <span class="nav-text">自定义hooks</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fanghl</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">46.8k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="么么直播,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="序言React的组件化开发确实对于大型项目非常有用，大型项目的数据状态管理写乱了也是头疼和难以维护的，这里记录一下项目中使用的状态管理MST（mobx-state-tree）    预备知识 MobX：这是MST的核心，MST中存储的响应式“状态”都是MobX的Observable React：使用React来测试MST的功能非常简单 TypeScript：后文中会使用TS来编写示例代码，TS强大">
+<meta name="keywords" content="么么直播">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MST">
+<meta property="og:url" content="http://fanghl.top/2021/07/13/MST/index.html">
+<meta property="og:site_name" content="Fanghongliang&#39;s blog">
+<meta property="og:description" content="序言React的组件化开发确实对于大型项目非常有用，大型项目的数据状态管理写乱了也是头疼和难以维护的，这里记录一下项目中使用的状态管理MST（mobx-state-tree）    预备知识 MobX：这是MST的核心，MST中存储的响应式“状态”都是MobX的Observable React：使用React来测试MST的功能非常简单 TypeScript：后文中会使用TS来编写示例代码，TS强大">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-05-14T03:38:56.820Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MST">
+<meta name="twitter:description" content="序言React的组件化开发确实对于大型项目非常有用，大型项目的数据状态管理写乱了也是头疼和难以维护的，这里记录一下项目中使用的状态管理MST（mobx-state-tree）    预备知识 MobX：这是MST的核心，MST中存储的响应式“状态”都是MobX的Observable React：使用React来测试MST的功能非常简单 TypeScript：后文中会使用TS来编写示例代码，TS强大">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fanghl.top/2021/07/13/MST/">
+
+
+
+
+
+  <title>MST | Fanghongliang's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fanghongliang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Science && Truth</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fanghl.top/2021/07/13/MST/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fanghl">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/tibet.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fanghongliang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MST</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-07-13T14:42:57+08:00">
+                2021-07-13
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2024-05-14T11:38:56+08:00">
+                2024-05-14
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/默认/" itemprop="url" rel="index">
+                    <span itemprop="name">默认</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3.9k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  17
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><p>React的组件化开发确实对于大型项目非常有用，大型项目的数据状态管理写乱了也是头疼和难以维护的，这里记录一下项目中使用的状态管理MST（mobx-state-tree）  </p>
+<hr>
+<h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><ul>
+<li>MobX：这是MST的核心，MST中存储的响应式“状态”都是MobX的Observable</li>
+<li>React：使用React来测试MST的功能非常简单</li>
+<li>TypeScript：后文中会使用TS来编写示例代码，TS强大的智能提示和类型检查，有助于快速掌握MST的API</li>
+</ul>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>MST依赖MobX。<br>项目中执行yarn add mobx mobx-state-tree即可完成安装。<br>MobX有两个版本，新版本需要浏览器Proxy支持，一些老旧的浏览器并不支持，需要兼容老浏览器的请安装mobx@4：yarn add mobx@4 mobx-state-tree。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><ul>
+<li><p>使用MST来维护状态，首先需要让MST知道，这个状态的结构是什么样的。<br>MST内建了一个类型机制。通过类型的组合就可以定义出整个状态的形状。<br>并且，在开发环境下，MST可以通过这个定义好的形状，来判断状态的值和形状与其对应的类型是否匹配，确保状态的类型与预期一致，这有助于在开发时及时发现数据类型的问题：</p>
+</li>
+<li><p>MST提供的一个重要对象就是types，在这个对象中，包含了基础的元类型（primitives types），如string、boolean、number，还包含了一些复杂类型的工厂方法和工具方法，常用的有model、array、map、optional等。<br>model是一个types中最重要的一个type，使用types.model方法得到的就是Model，在Model中，可以包含多个type或者其他Model。<br>一个Model可以看作是一个节点（Node），节点之间相互组合，就构造出了整棵状态树（State Tree）。<br>MST可用的类型和类型方法非常多，这里不一一列举，可以在这里查看完整的列表。<br>完成Model的定义后，可以使用Model.create方法获得Model的实例。Model.create可以传入两个参数，第一个是Model的初始状态值，第二个参数是可选参数，表示需要给Model及子Model的env对象（环境配置对象），env用于实现简单的依赖注入功能。</p>
+</li>
+</ul>
+<h3 id="Props"><a href="#Props" class="headerlink" title="Props"></a>Props</h3><h3 id="Views"><a href="#Views" class="headerlink" title="Views"></a>Views</h3><p>views是Model中一系列衍生数据或获取衍生数据的方法的集合，类似Vue组件的computed计算属性。</p>
+<p>需要注意的是，定义views时有两种选择，使用getter或者不使用。使用getter时，衍生数据的值会被缓存直到依赖的数据发送变化。而不使用时，需要通过方法调用的方式获取衍生数据，无法对计算结果进行缓存。尽可能使用getter，有助于提升应用的性能。</p>
+<h3 id="Actions"><a href="#Actions" class="headerlink" title="Actions"></a>Actions</h3><p>从名字上可以看出来，上面四位都是生命周期方法，可以使用他们在Model的各个生命周期执行一些操作：</p>
+<p>除了通常意义上用来更新状态的actions外，在model.actions方法中，还可以设置一些特殊的actions：</p>
+<p>afterCreate<br>afterAttach<br>beforeDetach<br>beforeDestroy</p>
+<p>从名字上可以看出来，上面四位都是生命周期方法，可以使用他们在Model的各个生命周期执行一些操作：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Model = types</span><br><span class="line">    .model(...)</span><br><span class="line">    .actions(<span class="function"><span class="params">self</span> =&gt;</span> (&#123;</span><br><span class="line">        afterCreate () &#123;</span><br><span class="line">            <span class="comment">// 执行一些初始化操作</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;));</span><br></pre></td></tr></table></figure>
+
+<h3 id="异步Action、Flow"><a href="#异步Action、Flow" class="headerlink" title="异步Action、Flow"></a>异步Action、Flow</h3><p>异步更新状态是非常常见的需求，MST从底层支持异步action。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> model = types</span><br><span class="line">    .model(...)</span><br><span class="line">    .actions(<span class="function"><span class="params">self</span> =&gt;</span> (&#123;</span><br><span class="line">        <span class="comment">// async/await</span></span><br><span class="line">        <span class="keyword">async</span> getData () &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">const</span> data = <span class="keyword">await</span> api.getData();</span><br><span class="line">                ...</span><br><span class="line">            &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">                ...</span><br><span class="line">            &#125;</span><br><span class="line">            ...</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">// promise</span></span><br><span class="line">        updateData () &#123;</span><br><span class="line">            <span class="keyword">return</span> api.updateData()</span><br><span class="line">                .then(...)</span><br><span class="line">                .catch(...);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;));</span><br></pre></td></tr></table></figure>
+
+<p>若使用Promise、async/await来编写异步Action，在异步操作之后更新状态时，代码执行的上下文会脱离action，导致状态在action之外被更新而报错。这里有两种解决办法：</p>
+<ol>
+<li>将更新状态的操作单独封装成action</li>
+<li>编写一个runInAction的action在异步操作中使用</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 方法1</span></span><br><span class="line"><span class="keyword">const</span> Model = types</span><br><span class="line">    .model(...)</span><br><span class="line">    .actions(<span class="function"><span class="params">self</span> =&gt;</span> (&#123;</span><br><span class="line">        setLoading (loading: boolean) &#123;</span><br><span class="line">            self.loading = loading;</span><br><span class="line">        &#125;,</span><br><span class="line">        setData (data: any) &#123;</span><br><span class="line">            self.data = data;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">async</span> getData () &#123;</span><br><span class="line">            ...</span><br><span class="line">            self.setLoading(<span class="literal">true</span>); <span class="comment">// 这里因为在异步操作之前，直接赋值self.loading = true也ok</span></span><br><span class="line">            <span class="keyword">const</span> data = <span class="keyword">await</span> api.getData();</span><br><span class="line">            self.setData(data);</span><br><span class="line">            self.setLoading(<span class="literal">false</span>);</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;));</span><br><span class="line">    </span><br><span class="line"><span class="comment">// 方法2</span></span><br><span class="line"><span class="keyword">const</span> Model = types</span><br><span class="line">    .model(...)</span><br><span class="line">    .actions(<span class="function"><span class="params">self</span> =&gt;</span> (&#123;</span><br><span class="line">        runInAction (fn: <span class="function"><span class="params">()</span> =&gt;</span> any) &#123;</span><br><span class="line">            fn();</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">async</span> getData () &#123;</span><br><span class="line">            ...</span><br><span class="line">            self.runInAction(<span class="function"><span class="params">()</span> =&gt;</span> self.loading = <span class="literal">true</span>);</span><br><span class="line">            <span class="keyword">const</span> data = <span class="keyword">await</span> api.getData();</span><br><span class="line">            self.runInAction(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">                self.data = data;</span><br><span class="line">                self.loading = <span class="literal">false</span>;</span><br><span class="line">            &#125;);</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;));</span><br></pre></td></tr></table></figure>
+
+<p>方法1需要额外封装N个action，比较麻烦。方法2封装一次就可以多次使用。<br>但是在某些情况下，两种方法都不够完美：一个异步action被分割成了N个action调用，无法使用MST的插件机制实现整个异步action的原子操作、撤销/重做等高级功能。<br>为了解决这个问题，MST提供了flow方法来创建异步action：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; types, flow &#125; <span class="keyword">from</span> <span class="string">'mobx-state-tree'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> model = types</span><br><span class="line">    .model(...)</span><br><span class="line">    .actions(<span class="function"><span class="params">self</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> getData = flow(<span class="function"><span class="keyword">function</span> * (<span class="params"></span>) </span>&#123;</span><br><span class="line">            self.loading = <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">const</span> data = <span class="keyword">yield</span> api.getData();</span><br><span class="line">                self.data = data;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">                ...</span><br><span class="line">            &#125;</span><br><span class="line">            self.loading = <span class="literal">false</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            getData</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>使用flow方法需要传入一个generator function，在这个生成器方法中，使用yield关键字可以resolve异步操作。并且，在方法中可以直接给状态赋值，写起来更简单自然。</p>
+<h3 id="快照-Snapshot"><a href="#快照-Snapshot" class="headerlink" title="快照 Snapshot"></a>快照 Snapshot</h3><p>snapshot即“快照”，表示某一时刻，Model的状态序列化之后的值。这个值是标准的JS对象。</p>
+<p>使用getSnapshot方法获取快照：</p>
+<p>使用applySnapshot方法可以更新Model的状态：</p>
+<h3 id="Volatile-State"><a href="#Volatile-State" class="headerlink" title="Volatile State"></a>Volatile State</h3><p>在MST中，props对应的状态都是可持久化的，也就是可以序列化为标准的JSON数据。并且，props对应的状态必须与props的类型相匹配。<br>如果需要在Model中存储无需持久化，并且数据结构或类型无法预知的动态数据，可以设置为Volatile State。</p>
+<p>Volatile State的值也是Observable，但是只会响应引用的变化，是一个非Deep Observable。</p>
+<h2 id="选择正确的types类型"><a href="#选择正确的types类型" class="headerlink" title="选择正确的types类型"></a>选择正确的types类型</h2><h3 id="types-string"><a href="#types-string" class="headerlink" title="types.string"></a>types.string</h3><p>定义一个字符串类型字段。</p>
+<h3 id="types-number"><a href="#types-number" class="headerlink" title="types.number"></a>types.number</h3><p>定义一个数值类型字段。</p>
+<h3 id="types-boolean"><a href="#types-boolean" class="headerlink" title="types.boolean"></a>types.boolean</h3><p>定义一个布尔类型字段。</p>
+<h3 id="types-integer"><a href="#types-integer" class="headerlink" title="types.integer"></a>types.integer</h3><p>定义一个整数类型字段。<br>注意，即使是TypeScript中也没有“整数”这个类型，在编码时，传入一个带小数的值TypeScript也无法发现其中的类型错误。如无必要，请使用types.number。</p>
+<h3 id="types-Date"><a href="#types-Date" class="headerlink" title="types.Date"></a>types.Date</h3><p>定义一个日期类型字段。<br>这个类型存储的值是标准的Date对象。在设置值时，可以选择传入数值类型的时间戳或者Date对象。</p>
+<h3 id="types-null"><a href="#types-null" class="headerlink" title="types.null"></a>types.null</h3><p>定义一个值为null的类型字段。</p>
+<h3 id="types-undefined"><a href="#types-undefined" class="headerlink" title="types.undefined"></a>types.undefined</h3><p>定义一个值为undefined的类型字段。<br>复合类型</p>
+<h3 id="types-model"><a href="#types-model" class="headerlink" title="types.model"></a>types.model</h3><p>定义一个对象类型的字段。</p>
+<h3 id="types-array"><a href="#types-array" class="headerlink" title="types.array"></a>types.array</h3><p>定义一个数组类型的字段。<br>types.array(types.string);<br>types.array(types.model);</p>
+<h3 id="types-map"><a href="#types-map" class="headerlink" title="types.map"></a>types.map</h3><p>定义一个map类型的字段。该map的key都为字符串类型，map的值都为指定类型。<br>map可用set、 get进行取赋值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">export</span> enum PopupType &#123;</span><br><span class="line">  Rule = <span class="string">'规则'</span>,</span><br><span class="line">  Award = <span class="string">'奖励'</span>,</span><br><span class="line">  Buy = <span class="string">'购买'</span>,</span><br><span class="line">  Tip = <span class="string">'提示'</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">popup: types.map(types.boolean);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> showPopup = <span class="function">(<span class="params">type: PopupType</span>) =&gt;</span> &#123;</span><br><span class="line">  self.popup.set(type: <span class="literal">true</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> hidePopup = <span class="function">(<span class="params">type: PopupType</span>) =&gt;</span> &#123;</span><br><span class="line">  self.popup.set(type, <span class="literal">false</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 具体使用</span></span><br><span class="line">&#123;popup.get(PopupType.Rule) &amp;&amp; <span class="xml"><span class="tag">&lt;<span class="name">PopupRule</span> /&gt;</span>&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="types-optional"><a href="#types-optional" class="headerlink" title="types.optional"></a>types.optional</h3><p>可选类型,根据传入的参数，定义一个带有默认值的可选类型。<br>types.optional是一个方法，方法有两个参数，第一个参数是数据的真实类型，第二个参数是数据的默认值。<br>types.optional(types.number, 1);<br>上面的代码定义了一个默认值为1的数值类型。<br>注意，types.array或者types.map定义的类型自带默认值（array为[]，map为{}），也就是说，下面两种定义的结果是一样的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用types.optional</span></span><br><span class="line">types.optional(types.array(types.number), []);</span><br><span class="line">types.optional(types.map(types.number), &#123;&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不使用types.optional</span></span><br><span class="line">types.array(types.number);</span><br><span class="line">types.map(types.number);</span><br></pre></td></tr></table></figure>
+
+<p>如果要设置的默认值与types.array或types.map自带的默认值相同，那么就不需要使用types.optional。  </p>
+<h3 id="types-custom"><a href="#types-custom" class="headerlink" title="types.custom"></a>types.custom</h3><p>如果想控制类型更底层的如序列化和反序列化、类型校验等细节，或者根据一个class或interface来定义类型，可以使用types.custom定义自定义类型。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Decimal</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> DecimalPrimitive = types.custom&lt;string, Decimal&gt;(&#123;</span><br><span class="line">    name: <span class="string">"Decimal"</span>,</span><br><span class="line">    fromSnapshot(value: string) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Decimal(value)</span><br><span class="line">    &#125;,</span><br><span class="line">    toSnapshot(value: Decimal) &#123;</span><br><span class="line">        <span class="keyword">return</span> value.toString()</span><br><span class="line">    &#125;,</span><br><span class="line">    isTargetType(value: string | Decimal): boolean &#123;</span><br><span class="line">        <span class="keyword">return</span> value <span class="keyword">instanceof</span> Decimal</span><br><span class="line">    &#125;,</span><br><span class="line">    getValidationMessage(value: string): string &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="regexp">/^-?\d+\.\d+$/</span>.test(value)) <span class="keyword">return</span> <span class="string">""</span> <span class="comment">// OK</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">`'<span class="subst">$&#123;value&#125;</span>' doesn't look like a valid decimal number`</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="types-union"><a href="#types-union" class="headerlink" title="types.union"></a>types.union</h3><p>实际开发中也许会遇到这样的情况：一个值的类型可能是字符串，也可能是数值。那我们就可以使用types.union定义联合类型：</p>
+<ul>
+<li>types.union(types.number, types.string);<br>联合类型可以有任意个联合的类型。</li>
+</ul>
+<h3 id="types-literal"><a href="#types-literal" class="headerlink" title="types.literal"></a>types.literal</h3><p>字面值类型可以限制存储的内容与给定的值严格相等。<br>比如使用types.literal(‘male’)定义的状态值只能为’male’。<br>实际上，上面提到过的types.null以及types.undefined就是字面值类型：</p>
+<ul>
+<li>const NullType = types.literal(null);<br>const UndefinedType = types.literal(undefined);<br>搭配联合类型，可以这样定义一个性别类型：<br>const GenderType = types.union(types.literal(‘male’), types.literal(‘female’));</li>
+</ul>
+<h3 id="types-enumeration"><a href="#types-enumeration" class="headerlink" title="types.enumeration"></a>types.enumeration</h3><p>枚举类型可以看作是联合类型以及字面值类型的一层封装，比如上面的性别可以使用枚举类型来定义：<br>const GenderType = types.enumeration(‘Gender’, [‘male’, ‘female’]);<br>方法的第一个参数是可选的，表示枚举类型的名称。第二个参数传入的是字面值数组。<br>在TypeScript环境下，可以这样搭配TypeScript枚举使用：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">enum Gender &#123;</span><br><span class="line">    male,</span><br><span class="line">    female</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> GenderType = types.enumeration&lt;Gender&gt;(<span class="string">'Gender'</span>, <span class="built_in">Object</span>.values(Gender));</span><br></pre></td></tr></table></figure>
+
+<h3 id="types-maybe"><a href="#types-maybe" class="headerlink" title="types.maybe"></a>types.maybe</h3><p>定义一个可能为undefined的字段，并自带默认值undefined。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">types.maybe(type)</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line">types.optional(types.union(type, types.literal(<span class="literal">undefined</span>)), <span class="literal">undefined</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="types-maybeNull"><a href="#types-maybeNull" class="headerlink" title="types.maybeNull"></a>types.maybeNull</h3><p>与types.maybe类似，将undefined替换成了null。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">types.maybe(type)</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line">types.optional(types.union(type, types.literal(<span class="literal">null</span>)), <span class="literal">null</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="types-frozen"><a href="#types-frozen" class="headerlink" title="types.frozen"></a>types.frozen</h3><p>frozen意为“冻结的”，types.frozen方法用来定义一个immutable类型，并且存放的值必须是可序列化的。</p>
+<p>当数据的类型不确定时，在TypeScript中通常将值的类型设置为any，而在MST中，就需要使用types.frozen定义。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">awardPosition: types.frozen(),</span><br><span class="line">notices: types.array(types.frozen()),</span><br></pre></td></tr></table></figure>
+
+<p>在MST看来，使用types.frozen定义类型的状态值是不可变的，所以会出现这样的情况：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model.anyData = &#123;<span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span>&#125;; <span class="comment">// ok, reactive</span></span><br><span class="line">model.anyData.b = <span class="number">3</span>; <span class="comment">// not reactive</span></span><br></pre></td></tr></table></figure>
+
+<p>也就是只有设置一个新的值给这个字段，相关的observer才会响应状态的更新。而修改这个字段内部的某个值，是不会被捕捉到的!!</p>
+<h3 id="types-late"><a href="#types-late" class="headerlink" title="types.late"></a>types.late</h3><p>滞后类型<br>有时候会出现这样的需求，需要一个Model A，在A中，存在类型为A本身的字段。</p>
+<p>如果这样写</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> A = types</span><br><span class="line">    .model(<span class="string">'A'</span>, &#123;</span><br><span class="line">        a: types.maybe(A), <span class="comment">// 使用mabe避免无限循环</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>会提示Block-scoped variable ‘A’ used before its declaration，也就是在A定义完成之前就试图使用他，这样是不被允许的</p>
+<p>这个时候就需要使用types.late：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> A = types</span><br><span class="line">  .model(<span class="string">'A'</span>, &#123;</span><br><span class="line">    a: types.maybe(types.late(<span class="function"><span class="params">()</span> =&gt;</span> A))</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>types.late需要传入一个方法，在方法中返回A，这样就可以避开上面报错的问题。</p>
+<h3 id="types-refinement"><a href="#types-refinement" class="headerlink" title="types.refinement"></a>types.refinement</h3><p>提纯类型  </p>
+<p>types.refinement可以在其他类型的基础上，添加额外的类型校验规则。</p>
+<p>比如需要定义一个email字段，类型为字符串但必须满足email的标准格式，就可以这样做：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> EmailType = types.refinement(</span><br><span class="line">    <span class="string">'Email'</span>,</span><br><span class="line">    types.string,</span><br><span class="line">    (snapshot) =&gt; <span class="regexp">/^[a-zA-Z_1-9]+@\.[a-z]+/</span>.test(snapshot), <span class="comment">// 校验是否符合email格式</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h2 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h2><p>MST (mobx-state-tree)，顾名思义是React用于管理状态的状态树结构，根据每个组件构建单独的状态树结构，一般建议状态树结构和接口或者推送保持一致的数据结构，便于更新维护。<br>在请求接口和推送时，只需要更新对应的state，其他的页面级别的渲染等交给 observer 监听的组件。简单使用流程如下⬇️</p>
+<hr>
+<figure class="highlight javascript"><figcaption><span>&#123;.line-numbers&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 1 - 封装useContext</span></span><br><span class="line"><span class="comment">/***</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 创建总的store文件夹</span></span><br><span class="line"><span class="comment"> * ./store</span></span><br><span class="line"><span class="comment"> * ./store/index.ts</span></span><br><span class="line"><span class="comment"> * ./store/room.ts</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 1-1 ./store/index.ts</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; useContent, createContext &#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"><span class="keyword">import</span> &#123; types, Instance, onSnapshot, applySnapshot&#125; <span class="keyword">from</span> <span class="string">'mobx-state-tree'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> room <span class="keyword">from</span> <span class="string">'./room'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> RootModel = types.modal(<span class="string">'RootModel'</span>, &#123;</span><br><span class="line">  room: room.Modal,</span><br><span class="line">  <span class="comment">// 还可以扩展相关其他的store</span></span><br><span class="line">  <span class="comment">// users: users.Modal,</span></span><br><span class="line">&#125;)</span><br><span class="line">.action(<span class="function"><span class="params">self</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> rootStore;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> initStore = <span class="function">(<span class="params">&#123;roomId, allRoomInfo&#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> _rootStore = rootStore ?? RootModal.create(&#123;</span><br><span class="line">    room: assign(&#123;&#125;, room.initStore, &#123;</span><br><span class="line">      roomId: roomId,</span><br><span class="line">      allRoomInfo,</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">//users: users.initState,</span></span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> ( <span class="keyword">typeof</span> <span class="built_in">window</span> !== <span class="string">'undefined'</span> ) &#123;</span><br><span class="line">    <span class="built_in">window</span>.__store = _rootStore</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="built_in">window</span> === <span class="string">'undefined'</span> ) <span class="keyword">return</span> _rootStore</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (!rootStore) &#123;</span><br><span class="line">    rootStore = _rootStore</span><br><span class="line">    <span class="comment">// onSnapshot(rootStore, snapshot =&gt; console.log("stage Snapshot: ", snapshot));</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> rootStore;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> type RootInstance = Instance&lt;<span class="keyword">typeof</span> RootStore&gt;</span><br><span class="line"><span class="keyword">const</span> RootStoreContext = createContext&lt;<span class="literal">null</span> || RootInstance&gt;(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> Provider = RootStoreContext.provider;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useStore = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> store = useContext(RootStoreContext);</span><br><span class="line">  <span class="keyword">if</span> (store === <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Store cannot be null, please add a context provider'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> store;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> getStore = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> rootStore;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建具体store（room.ts）文件</span></span><br><span class="line"><span class="keyword">import</span> &#123; flow, types &#125; <span class="keyword">from</span> <span class="string">'mobx-state-tree'</span></span><br><span class="line"><span class="keyword">import</span> &#123; getStore &#125; <span class="keyword">from</span> <span class="string">'./index'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> initState = &#123;</span><br><span class="line">  roomId: <span class="number">0</span>,</span><br><span class="line">  allRoomInfo: &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> PkModel = types.model(<span class="string">'PkModel'</span>, &#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> AllRoomInfoModel = types.model(<span class="string">'AllRoomInfoModel'</span>, &#123;</span><br><span class="line">  _id: <span class="string">''</span>,</span><br><span class="line">  pk: types.maybeNull(PkModel)</span><br><span class="line">&#125;)</span><br><span class="line">.views(<span class="function"><span class="params">self</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">&#125;)</span><br><span class="line">.actions(<span class="function"><span class="params">self</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> Model = types</span><br><span class="line">  .model(&#123;</span><br><span class="line">    roomId: types.number,</span><br><span class="line">    allRoomInfo: AllRoomInfoModel,</span><br><span class="line">  &#125;)</span><br><span class="line">  .views(<span class="function"><span class="params">self</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="keyword">get</span> hasId() =&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> self._id !== <span class="string">''</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">get</span> isRoomOwner() &#123;</span><br><span class="line">        <span class="keyword">let</span> userId = getGlobalStore().userId;</span><br><span class="line">        <span class="keyword">return</span> userId &amp;&amp; userId === self.roomId;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  .volatile(<span class="function"><span class="params">self</span>=&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  .actions(<span class="function"><span class="params">self</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> update = flow(<span class="function"><span class="keyword">function</span>* (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">let</span> res;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        res = <span class="keyword">yield</span> request.api.get(<span class="string">'****/api/room/$&#123;self.roomID&#125;'</span>)</span><br><span class="line"></span><br><span class="line">        self.allRoomInfo = res.data</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;),</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> setRoomInfo = <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">      self.allRoomInfo = data</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> stopLive = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      update, </span><br><span class="line">      setRoomInfo,</span><br><span class="line">      stopLive,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  initState,</span><br><span class="line">  Modal,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3-组件应用</span></span><br><span class="line"><span class="keyword">import</span> &#123; observer &#125; <span class="keyword">from</span> <span class="string">'mobx-react'</span></span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">'../store'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> BeHeadTip = observer(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; room &#125; = useStore()</span><br><span class="line">  <span class="keyword">const</span> &#123; roomId, allRoomInfo, hasId&#125; = room</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    !hsdId ? <span class="string">'当前房间未在开播哟～'</span> </span><br><span class="line">    : </span><br><span class="line">    &lt;StyledBeHead id=&#123; roomId &#125;&gt;组件内容&lt;<span class="regexp">/StyledBeHead&gt;</span></span><br><span class="line"><span class="regexp">  )</span></span><br><span class="line"><span class="regexp">&#125;)</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">const StyledBeHead = styled.div`</span></span><br><span class="line"><span class="regexp">  position: relative;</span></span><br><span class="line"><span class="regexp">`</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 4-接口、推送更新store</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 4-1 接口</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">const loadInfo = () =&gt; &#123;</span></span><br><span class="line"><span class="regexp">  request.api.get('**/</span>api/info_v2<span class="string">').then(res =&gt; &#123;</span></span><br><span class="line"><span class="string">    setRoomInfo(res.data)</span></span><br><span class="line"><span class="string">  &#125;)</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">export default &#123; loadInfo &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">// 4-2 推送</span></span><br><span class="line"><span class="string">const handle = (socket) =&gt; &#123;</span></span><br><span class="line"><span class="string">  socket.on('</span>room_info<span class="string">', (msg) =&gt; &#123;</span></span><br><span class="line"><span class="string">    setRoomInfo(res.data)</span></span><br><span class="line"><span class="string">  &#125;)</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h2><p>以上的创造store，可以简单封装下逻辑，让程序员更专注于model的构建</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// utils/create-store.ts</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; Instance &#125; <span class="keyword">from</span> <span class="string">'mobx-state-tree'</span></span><br><span class="line"><span class="keyword">import</span> &#123; createContext, useContext &#125; <span class="keyword">from</span> <span class="string">'react'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> createStore = <span class="function">(<span class="params"> Model: any, initialState: any </span>) =&gt;</span> &#123;</span><br><span class="line">  type IStore = Instance&lt;<span class="keyword">typeof</span> Model&gt;</span><br><span class="line">  <span class="keyword">const</span> store = Model.create(initialState)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> StoreContext = createContext&lt;<span class="literal">null</span> | IStore&gt;(<span class="literal">null</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="built_in">window</span> !== <span class="string">'undefined'</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>[<span class="string">'__Act'</span> + Model.name]) &#123;</span><br><span class="line">      <span class="built_in">window</span>[<span class="string">'__Act'</span> + Model.name + random(<span class="number">100000</span>, <span class="number">10000</span>)] = store</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">window</span>[<span class="string">'__Act'</span> + Model.name] = store</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> useStore = ():<span class="function"><span class="params">IStore</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> currentStore = useContext(StoreContext)</span><br><span class="line">    <span class="keyword">if</span> (currentStore === <span class="literal">null</span> ) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">`<span class="subst">$&#123;Model.name&#125;</span> Store cannot be null, please add a context provider`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> currentStore;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    store,</span><br><span class="line">    Provider: StoreContext.Provider,</span><br><span class="line">    useStore,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> createStore;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//具体文件使用</span></span><br><span class="line"><span class="comment">// **/store.tsx</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'@utils/create-store'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> Model = types</span><br><span class="line">  .model(<span class="string">'Model'</span>, &#123;</span><br><span class="line">    currentTab: <span class="string">''</span>,</span><br><span class="line">    list: [],</span><br><span class="line">  &#125;)</span><br><span class="line">  .action(<span class="function">(<span class="params">self</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> setCurrTab = <span class="function">(<span class="params">tab: string</span>) =&gt;</span> &#123;</span><br><span class="line">      self.currentTab = tab</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      setCurrTab</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">interface IModelSnapshotIn extend SnapshotIn&lt;<span class="keyword">typeof</span> Model&gt;&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// const initState: IModelSnapshotIn = &#123;&#125;</span></span><br><span class="line"><span class="keyword">const</span> initState = &#123;</span><br><span class="line">  currentTab: <span class="string">'home'</span>,</span><br><span class="line">  list: []</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; store, Provider, useStore &#125; = createStore(Model, initState)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> &#123; store, Provider, useStore &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 页面引用store</span></span><br><span class="line"><span class="comment">// **/index.tsx</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; useStore &#125; <span class="keyword">from</span> <span class="string">'./store'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; currentTab, setCurrTab &#125; = useStore()</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在整个程序执行中，我们只需要控制数据状态的更新，以及在MST中处理好数据的逻辑，暴露出直接可以使用的方法。例如 hasId, MST中的 views 相当于 Vue 中的 计算属性，根据依赖值的变化，计算最新的结果。数据的更新只能在 actions 中暴露的方法中去实现。在面对具有非常复杂状态的大型项目时，可以提高开发效率。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>走过路过，留下买路财，壮士</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="fanghl 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    fanghl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fanghl.top/2021/07/13/MST/" title="MST">http://fanghl.top/2021/07/13/MST/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/么么直播/" rel="tag"># 么么直播</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/06/07/summary-meme/" rel="next" title="么么直播-总结">
+                <i class="fa fa-chevron-left"></i> 么么直播-总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/01/01/page/" rel="prev" title="直播相关Live【hybrid】">
+                直播相关Live【hybrid】 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tibet.jpg" alt="fanghl">
+            
+              <p class="site-author-name" itemprop="name">fanghl</p>
+              <p class="site-description motion-element" itemprop="description">站在巨人的肩膀上</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fanghongliang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:fanghljob@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.cnblogs.com/fanghl" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#预备知识"><span class="nav-number">2.</span> <span class="nav-text">预备知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">3.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构"><span class="nav-number">4.</span> <span class="nav-text">结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Props"><span class="nav-number">4.1.</span> <span class="nav-text">Props</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Views"><span class="nav-number">4.2.</span> <span class="nav-text">Views</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actions"><span class="nav-number">4.3.</span> <span class="nav-text">Actions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步Action、Flow"><span class="nav-number">4.4.</span> <span class="nav-text">异步Action、Flow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快照-Snapshot"><span class="nav-number">4.5.</span> <span class="nav-text">快照 Snapshot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Volatile-State"><span class="nav-number">4.6.</span> <span class="nav-text">Volatile State</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择正确的types类型"><span class="nav-number">5.</span> <span class="nav-text">选择正确的types类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#types-string"><span class="nav-number">5.1.</span> <span class="nav-text">types.string</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-number"><span class="nav-number">5.2.</span> <span class="nav-text">types.number</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-boolean"><span class="nav-number">5.3.</span> <span class="nav-text">types.boolean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-integer"><span class="nav-number">5.4.</span> <span class="nav-text">types.integer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-Date"><span class="nav-number">5.5.</span> <span class="nav-text">types.Date</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-null"><span class="nav-number">5.6.</span> <span class="nav-text">types.null</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-undefined"><span class="nav-number">5.7.</span> <span class="nav-text">types.undefined</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-model"><span class="nav-number">5.8.</span> <span class="nav-text">types.model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-array"><span class="nav-number">5.9.</span> <span class="nav-text">types.array</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-map"><span class="nav-number">5.10.</span> <span class="nav-text">types.map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-optional"><span class="nav-number">5.11.</span> <span class="nav-text">types.optional</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-custom"><span class="nav-number">5.12.</span> <span class="nav-text">types.custom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-union"><span class="nav-number">5.13.</span> <span class="nav-text">types.union</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-literal"><span class="nav-number">5.14.</span> <span class="nav-text">types.literal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-enumeration"><span class="nav-number">5.15.</span> <span class="nav-text">types.enumeration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-maybe"><span class="nav-number">5.16.</span> <span class="nav-text">types.maybe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-maybeNull"><span class="nav-number">5.17.</span> <span class="nav-text">types.maybeNull</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-frozen"><span class="nav-number">5.18.</span> <span class="nav-text">types.frozen</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-late"><span class="nav-number">5.19.</span> <span class="nav-text">types.late</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#types-refinement"><span class="nav-number">5.20.</span> <span class="nav-text">types.refinement</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实操"><span class="nav-number">6.</span> <span class="nav-text">实操</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#封装"><span class="nav-number">7.</span> <span class="nav-text">封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fanghl</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">46.8k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
+
+
+  
+
+</body>
+</html>

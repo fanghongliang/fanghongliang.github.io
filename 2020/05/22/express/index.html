@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Programming,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="express文档  ： https://www.expressjs.com.cn/guide/using-middleware.htmlsequelize文档:  https://github.com/demopark/sequelize-docs-Zh-CN/blob/master/Readme.md ORM(sequelize)ORM（Object Relational Mapping）对象">
+<meta name="keywords" content="Programming">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Express">
+<meta property="og:url" content="http://fanghl.top/2020/05/22/express/index.html">
+<meta property="og:site_name" content="Fanghongliang&#39;s blog">
+<meta property="og:description" content="express文档  ： https://www.expressjs.com.cn/guide/using-middleware.htmlsequelize文档:  https://github.com/demopark/sequelize-docs-Zh-CN/blob/master/Readme.md ORM(sequelize)ORM（Object Relational Mapping）对象">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.postimg.cc/gjPgxG3j/1590993807462-27-D534-BC-CF10-4f1f-B87-F-DE781-B20-BC22.png">
+<meta property="og:image" content="https://i.postimg.cc/5NJxVvQd/1590994213733-89-C343-C2-BFF0-44a3-988-C-1-D0-D9-E0875-CF.png">
+<meta property="og:updated_time" content="2024-04-22T04:03:21.824Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Express">
+<meta name="twitter:description" content="express文档  ： https://www.expressjs.com.cn/guide/using-middleware.htmlsequelize文档:  https://github.com/demopark/sequelize-docs-Zh-CN/blob/master/Readme.md ORM(sequelize)ORM（Object Relational Mapping）对象">
+<meta name="twitter:image" content="https://i.postimg.cc/gjPgxG3j/1590993807462-27-D534-BC-CF10-4f1f-B87-F-DE781-B20-BC22.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fanghl.top/2020/05/22/express/">
+
+
+
+
+
+  <title>Express | Fanghongliang's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fanghongliang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Science && Truth</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fanghl.top/2020/05/22/express/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fanghl">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/tibet.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fanghongliang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Express</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-22T14:19:11+08:00">
+                2020-05-22
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2024-04-22T12:03:21+08:00">
+                2024-04-22
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/node/" itemprop="url" rel="index">
+                    <span itemprop="name">node</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  12
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>express文档  ： <a href="https://www.expressjs.com.cn/guide/using-middleware.html" target="_blank" rel="noopener">https://www.expressjs.com.cn/guide/using-middleware.html</a><br>sequelize文档:  <a href="https://github.com/demopark/sequelize-docs-Zh-CN/blob/master/Readme.md" target="_blank" rel="noopener">https://github.com/demopark/sequelize-docs-Zh-CN/blob/master/Readme.md</a></p>
+<h4 id="ORM-sequelize"><a href="#ORM-sequelize" class="headerlink" title="ORM(sequelize)"></a>ORM(sequelize)</h4><p>ORM（Object Relational Mapping）对象关系映射，减小操作层的代码量，直接方便的操作数据库。<br>使用前，确保sequelize已经安装  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install --save sequelize</span><br><span class="line">npm install --save mysql2</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* path: @src/models/message.js</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> Sequelize = <span class="built_in">require</span>(<span class="string">'sequelize'</span>)</span><br><span class="line"><span class="keyword">var</span> sequelize = <span class="keyword">new</span> Sequelize(</span><br><span class="line">    <span class="string">'nodesql'</span>,        <span class="comment">//database name</span></span><br><span class="line">    <span class="string">'root'</span>,           <span class="comment">//database user</span></span><br><span class="line">    <span class="string">'123456'</span>,         <span class="comment">//database password</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">'dialect'</span>: <span class="string">'mysql'</span>,</span><br><span class="line">        <span class="string">'host'</span>: <span class="string">'localhost'</span>,</span><br><span class="line">        <span class="string">'port'</span>: <span class="number">3306</span></span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//表模型</span></span><br><span class="line"><span class="keyword">var</span> Message = sequelize.define(<span class="string">'message'</span>, &#123;</span><br><span class="line">    id: &#123;</span><br><span class="line">        type: Sequelize.INTEGER,</span><br><span class="line">        primaryKey: <span class="literal">true</span>,</span><br><span class="line">        autoIncrement: <span class="literal">true</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    userName: &#123;</span><br><span class="line">        type: Sequelize.STRING(<span class="number">32</span>),</span><br><span class="line">    &#125;,</span><br><span class="line">    content: &#123;</span><br><span class="line">        type: Sequelize.TEXT</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> User = sequelize.define(<span class="string">'user'</span>, &#123;</span><br><span class="line">    id: &#123;</span><br><span class="line">        type: Sequelize.INTEGER,</span><br><span class="line">        primaryKey: <span class="literal">true</span>,</span><br><span class="line">        autoIncrement: <span class="literal">true</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    userName: &#123;</span><br><span class="line">        type: Sequelize.STRING(<span class="number">32</span>),</span><br><span class="line">    &#125;,</span><br><span class="line">    age: &#123;</span><br><span class="line">        type: Sequelize.INTEGER</span><br><span class="line">    &#125;,</span><br><span class="line">    gender: &#123;</span><br><span class="line">        type: Sequelize.INTEGER</span><br><span class="line">    &#125;,</span><br><span class="line">    address: &#123;</span><br><span class="line">        type: Sequelize.STRING(<span class="number">32</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">Message.sync();     <span class="comment">//创建表</span></span><br><span class="line">User.sunc()</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;Message, User&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* path: @src/route/index.js</span></span><br><span class="line"><span class="comment">* desc: 在路由中完成增删改查</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"><span class="keyword">var</span> Message = <span class="built_in">require</span>(<span class="string">'../models/message.js'</span>)</span><br><span class="line"><span class="keyword">const</span> setToken = <span class="built_in">require</span>(<span class="string">'../utils/middwares/jwt.js'</span>)</span><br><span class="line"><span class="keyword">const</span> &#123;log&#125; = <span class="built_in">console</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//REST API</span></span><br><span class="line"><span class="comment">//用户登录</span></span><br><span class="line">router.post(<span class="string">'/login'</span>, <span class="keyword">async</span> (req, res, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> user = &#123;&#125;</span><br><span class="line">  <span class="keyword">let</span> &#123;userName&#125; = req.body</span><br><span class="line">  <span class="keyword">let</span> data = <span class="keyword">await</span> User.findOne(&#123;</span><br><span class="line">    where: &#123;</span><br><span class="line">      userName: userName</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// log('查询结果返回：', JSON.stringify(data, null, 2))</span></span><br><span class="line">  <span class="keyword">if</span>(!data) &#123;                                      <span class="comment">//不存在用户则创建用户</span></span><br><span class="line">    user.userName = userName</span><br><span class="line">    data = <span class="keyword">await</span> User.create(user)</span><br><span class="line">  &#125;</span><br><span class="line">  setToken.setToken(data.id).then(<span class="function"><span class="params">token</span> =&gt;</span> &#123;       <span class="comment">//返回用户信息及token</span></span><br><span class="line">    <span class="keyword">return</span> res.json(&#123;<span class="attr">data</span>: &#123;data, token&#125;&#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//查找某内容</span></span><br><span class="line">router.get(<span class="string">'/getOne'</span>, (req, res, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span>(!req.data) &#123;</span><br><span class="line">    <span class="keyword">return</span> res.json(&#123;</span><br><span class="line">			msg:<span class="string">'token invalid'</span></span><br><span class="line">		&#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  Message.findAll().then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    log(<span class="string">'查找数据res'</span>, <span class="built_in">JSON</span>.stringify(data, <span class="literal">null</span>, <span class="number">2</span>))</span><br><span class="line">    res.json(&#123;</span><br><span class="line">      errcode: <span class="number">0</span>,</span><br><span class="line">      data</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//删除一个用户</span></span><br><span class="line">router.get(<span class="string">'/del_user'</span>, <span class="keyword">async</span> (req, res, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> &#123;userName&#125; = req.query</span><br><span class="line">  <span class="keyword">let</span> result = <span class="keyword">await</span> User.findOne(&#123;</span><br><span class="line">    where: &#123;userName,&#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">if</span>(!result) &#123;</span><br><span class="line">    <span class="keyword">return</span> res.json(&#123;<span class="attr">msg</span>: <span class="string">'不存在该用户'</span>, <span class="attr">errcode</span>: <span class="number">601</span>&#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> data = <span class="keyword">await</span> result.destroy()</span><br><span class="line">  <span class="keyword">return</span> res.json(&#123;<span class="attr">msg</span>: <span class="string">'删除成功'</span>, <span class="attr">errcode</span>: <span class="number">0</span>&#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//更新用户信息</span></span><br><span class="line">router.post(<span class="string">'/rich_user_info'</span>, <span class="keyword">async</span> (req, res, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> data = req.body</span><br><span class="line">  <span class="keyword">let</span> result = <span class="keyword">await</span> User.findOne(&#123;</span><br><span class="line">    where: &#123;<span class="attr">userName</span>: data.userName&#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">//用数据表的result字段来匹配前端上传的字段！前端随便传参，我只过滤有用的</span></span><br><span class="line">  <span class="built_in">Object</span>.keys(result.toJSON()).map(<span class="function"><span class="params">item</span> =&gt;</span> &#123;   </span><br><span class="line">    data[item] ? result[item] = data[item] : <span class="string">''</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">await</span> result.save()</span><br><span class="line">  res.json(&#123;<span class="attr">msg</span>: <span class="string">'succ'</span>, <span class="attr">data</span>: result&#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>至此，基本的sequlize就可以跑起来了。  </p>
+<h4 id="原生SQL方法"><a href="#原生SQL方法" class="headerlink" title="原生SQL方法"></a>原生SQL方法</h4><p>sequelize的确方便，但他的查询语句较为繁琐，这里我们还可以使用原生mysql语句。  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* path: utils/dbConfig.js</span></span><br><span class="line"><span class="comment">* 数据库配置</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">mysql = &#123;</span><br><span class="line">    host: <span class="string">'localhost'</span>,</span><br><span class="line">    user: <span class="string">'root'</span>,</span><br><span class="line">    password: <span class="string">'123456'</span>,</span><br><span class="line">    database: <span class="string">'nodesql'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = mysql;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* path: @/db.js</span></span><br><span class="line"><span class="comment">* 手动连接数据库</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">let</span> mysql = <span class="built_in">require</span>(<span class="string">'mysql'</span>)</span><br><span class="line"><span class="keyword">let</span> dbConfig = <span class="built_in">require</span>(<span class="string">'./utils/dbConfig'</span>)</span><br><span class="line"><span class="keyword">const</span> &#123;log&#125; = <span class="built_in">console</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    query: <span class="function"><span class="keyword">function</span>(<span class="params">sql, params, callback</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">let</span> conn = mysql.createConnection(dbConfig)</span><br><span class="line">        conn.connect(<span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(err) &#123;</span><br><span class="line">                log(<span class="string">'数据库连接失败'</span>)</span><br><span class="line">                <span class="keyword">throw</span> err</span><br><span class="line">            &#125;</span><br><span class="line">            conn.query(sql, params, <span class="function"><span class="keyword">function</span>(<span class="params">err, res, fields</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(err) &#123;</span><br><span class="line">                    log(<span class="string">'数据库操作失败'</span>)</span><br><span class="line">                    <span class="keyword">throw</span> err</span><br><span class="line">                &#125;</span><br><span class="line">                callback &amp;&amp; callback(res);</span><br><span class="line">                conn.end(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span>(err) &#123;</span><br><span class="line">                        log(<span class="string">'数据库关闭失败'</span>)</span><br><span class="line">                        <span class="keyword">throw</span> err</span><br><span class="line">                    &#125; </span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* path: @/route/index.js</span></span><br><span class="line"><span class="comment">* 路由使用</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">router.get(<span class="string">'/user'</span>, (req, res, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> &#123;id&#125; = req.query</span><br><span class="line">  <span class="keyword">const</span> sql = <span class="string">`select * from user where id = <span class="subst">$&#123;id&#125;</span>`</span>  <span class="comment">//复杂SQL语句</span></span><br><span class="line">  db.query(sql, [], <span class="function"><span class="keyword">function</span>(<span class="params">result, fields</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> data = <span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(result))</span><br><span class="line">    data1 = req.requestTime</span><br><span class="line">    res.json(&#123;</span><br><span class="line">      status: <span class="number">0</span>,</span><br><span class="line">      data,</span><br><span class="line">      data1</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>ORM和原生SQL语句之间并不冲突，合理选择使用即可。两个一起用也可以</p>
+<h4 id="JWT（token验证）"><a href="#JWT（token验证）" class="headerlink" title="JWT（token验证）"></a>JWT（token验证）</h4><p>jwt(jsonwebtoken)验证，前后端验证的一种方法。<br>express实现jwt验证  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 安装 express-jwt</span></span><br><span class="line">$ npm i express-jwt --save  </span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* path: @/util/jwt.js</span></span><br><span class="line"><span class="comment">* 封装分发token和验证token函数</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> jwt = <span class="built_in">require</span>(<span class="string">'jsonwebtoken'</span>);</span><br><span class="line"><span class="keyword">var</span> signkey = <span class="string">'secret123456'</span>;                   <span class="comment">//随机串</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> setToken = <span class="function"><span class="keyword">function</span>(<span class="params">userid</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span> (<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">		<span class="keyword">const</span> token = jwt.sign(&#123;</span><br><span class="line">			_id: userid</span><br><span class="line">		&#125;, signkey,&#123; <span class="attr">expiresIn</span>:<span class="string">'36h'</span> &#125;);</span><br><span class="line">		resolve(token);</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> verToken = <span class="function"><span class="keyword">function</span> (<span class="params">token</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> info = jwt.verify(token.split(<span class="string">' '</span>)[<span class="number">1</span>], signkey);</span><br><span class="line">    <span class="keyword">if</span>(info) &#123;</span><br><span class="line">      resolve(info);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      reject(info)</span><br><span class="line">    &#125;</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  verToken,</span><br><span class="line">  setToken,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">*  path: @/routes/index.js</span></span><br><span class="line"><span class="comment">*  首先在login接口分发token</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"><span class="keyword">var</span> &#123;Message, User&#125; = <span class="built_in">require</span>(<span class="string">'../models/test.js'</span>)</span><br><span class="line"><span class="keyword">const</span> jwt = <span class="built_in">require</span>(<span class="string">'jsonwebtoken'</span>)</span><br><span class="line"><span class="keyword">const</span> setToken = <span class="built_in">require</span>(<span class="string">'../utils/middwares/jwt.js'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 登录api</span></span><br><span class="line">router.post(<span class="string">'/login'</span>, <span class="keyword">async</span> (req, res, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> user = &#123;&#125;</span><br><span class="line">  <span class="keyword">let</span> &#123;account, password&#125; = req.body   <span class="comment">//小程序这里应接受code，去换取openID存储</span></span><br><span class="line">  <span class="keyword">let</span> data = <span class="keyword">await</span> User.findOne(&#123;</span><br><span class="line">    where: &#123;</span><br><span class="line">      account: account,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// console.log('查询结果返回：', JSON.stringify(data, null, 2))</span></span><br><span class="line">  <span class="keyword">if</span>(!data) &#123;                          <span class="comment">//不存在该用户，则创建用户</span></span><br><span class="line">    user.account = account</span><br><span class="line">    data = <span class="keyword">await</span> User.create(user)</span><br><span class="line">  &#125;</span><br><span class="line">  setToken.setToken(data.id).then(<span class="function"><span class="params">token</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> res.json(&#123;<span class="attr">data</span>: &#123;data, token&#125;&#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//请求内容</span></span><br><span class="line">router.get(<span class="string">'/getOne'</span>, (req, res, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span>(!req.data) &#123;                      <span class="comment">//验证token的中间件成功后，把验证结果放置在req.data中</span></span><br><span class="line">    <span class="keyword">return</span> res.json(&#123;</span><br><span class="line">			msg:<span class="string">'token invalid'</span>,</span><br><span class="line">      errcode: <span class="number">600</span>,</span><br><span class="line">		&#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  Message.findAll().then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">    res.json(&#123;</span><br><span class="line">      errcode: <span class="number">0</span>,</span><br><span class="line">      result,</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* path: @/app.js</span></span><br><span class="line"><span class="comment">* 配置token验证中间件</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> jwt = <span class="built_in">require</span>(<span class="string">'jsonwebtoken'</span>);</span><br><span class="line"><span class="keyword">var</span> verToken = <span class="built_in">require</span>(<span class="string">'./utils/middwares/jwt.js'</span>)</span><br><span class="line"></span><br><span class="line">app.use(<span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> token = req.headers[<span class="string">'authorization'</span>]</span><br><span class="line">	<span class="keyword">if</span>(!token) &#123;</span><br><span class="line">		<span class="keyword">return</span> next();</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		verToken.verToken(token).then(<span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">			req.data = data;</span><br><span class="line">			<span class="keyword">return</span> next();</span><br><span class="line">		&#125;).catch(<span class="function">(<span class="params">error</span>)=&gt;</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> next();</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">//上为封装方法,下为直接调用,都可以使用</span></span><br><span class="line">    <span class="comment">// let info = jwt.verify(token.split(' ')[1], 'secret123456');</span></span><br><span class="line">    <span class="comment">// req.data = info;</span></span><br><span class="line">    <span class="comment">// next()</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//过滤不需要token的路由</span></span><br><span class="line">app.use(expressJwt(&#123;</span><br><span class="line">  secret: <span class="string">'secret123456'</span>  <span class="comment">// 签名的密钥 或 PublicKey</span></span><br><span class="line">&#125;).unless(&#123;</span><br><span class="line">  path: [<span class="string">'/login'</span>,]      <span class="comment">// 指定路径不经过 Token 解析</span></span><br><span class="line">&#125;))</span><br><span class="line"></span><br><span class="line"><span class="comment">//当token失效返回提示信息</span></span><br><span class="line">app.use(<span class="function"><span class="keyword">function</span>(<span class="params">err, req, res, next</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (err.status == <span class="number">401</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> res.status(<span class="number">401</span>).send(&#123;<span class="attr">msg</span>: <span class="string">'token invalid'</span>&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>至此，token验证就可以跑起来了。在发送http时，headers中配置 <code>Authorization: &#39;Bearer ${token}&#39;</code>即可，当然还可以继续再次封装。</p>
+<h4 id="middare-中间件"><a href="#middare-中间件" class="headerlink" title="middare(中间件)"></a>middare(中间件)</h4><p>中间件用来处理后端服务，对前端的路由请求进行过滤处理。<br>express本来就是服务加中间件的集合，不同的中间件构成了完整的api逻辑处理。<br>应用级中间件绑定在APP内，路由中间件绑定在路由，除此之外，还有内置中间件，错误处理中间件等。<br>不带有路由限制的中间件是会被所有路由执行的。    </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">app.use(middareFun)                <span class="comment">//所有请求都会触发</span></span><br><span class="line">app.use(<span class="string">'/user/:id'</span>, middareFun)   <span class="comment">///user路径请求触发</span></span><br></pre></td></tr></table></figure>
+
+<p>这里我们优化了上面的 token 验证中间件。  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* path: @/utils/middares/paramsVerify.js</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">var</span> verToken = <span class="built_in">require</span>(<span class="string">'./jwt.js'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//请求时间</span></span><br><span class="line"><span class="keyword">const</span> requestTime = <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">    req.requestTime = <span class="built_in">Date</span>.now()</span><br><span class="line">    next()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//解析token</span></span><br><span class="line"><span class="keyword">const</span> tokenVerify = <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> token = req.headers[<span class="string">'authorization'</span>];</span><br><span class="line">	<span class="keyword">if</span>(!token)&#123;</span><br><span class="line">		<span class="keyword">return</span> next();</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		verToken.verToken(token).then(<span class="function">(<span class="params">data</span>)=&gt;</span> &#123;</span><br><span class="line">			req.data = data;</span><br><span class="line">			<span class="keyword">return</span> next();</span><br><span class="line">		&#125;).catch(<span class="function">(<span class="params">error</span>)=&gt;</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> next();</span><br><span class="line">    &#125;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//这里可以一个一个导出，也可以直接写在数组内，导出数组即可（二选一）。</span></span><br><span class="line"><span class="keyword">const</span> middArr = [</span><br><span class="line">  requestTime = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">  tokenVerify = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">]</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  requestTime,</span><br><span class="line">  tokenVerify,</span><br><span class="line">  middArr,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* path: @/app.js</span></span><br><span class="line"><span class="comment">* 两种注册方式二选一即可</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">let</span> paramsVerify = <span class="built_in">require</span>(<span class="string">'./utils/middwares/paramsVerify.js'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//1.注册paramsVerify文件中所有的中间件（单个导出式）</span></span><br><span class="line"><span class="keyword">let</span> middwareArr = []</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span>; i&lt;<span class="built_in">Object</span>.keys(paramsVerify).length; i++) &#123;</span><br><span class="line">  <span class="keyword">let</span> item = paramsVerify[<span class="built_in">Object</span>.keys(paramsVerify)[i]]</span><br><span class="line">  middwareArr.push(item)                <span class="comment">//干嘛不直接导出数组了？！en</span></span><br><span class="line">  <span class="comment">//app.use(item)                       </span></span><br><span class="line">&#125;</span><br><span class="line">app.use(middwareArr)</span><br><span class="line"></span><br><span class="line"><span class="comment">//2.导出数组式</span></span><br><span class="line">app.use(paramsVerify.middArr)            <span class="comment">//完事，</span></span><br></pre></td></tr></table></figure>
+
+<p>至此，中间的剥离优化完整。</p>
+<h4 id="封装log"><a href="#封装log" class="headerlink" title="封装log"></a>封装log</h4><p>在调试中，可以封装一个log用来替代 <code>console.log</code>  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* path: @/utils/log.js</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">Date</span>.prototype.Format = <span class="function"><span class="keyword">function</span> (<span class="params">fmt</span>) </span>&#123;</span><br><span class="line"><span class="keyword">var</span> o = &#123;</span><br><span class="line">    <span class="string">"M+"</span>: <span class="keyword">this</span>.getMonth() + <span class="number">1</span>,</span><br><span class="line">    <span class="string">"d+"</span>: <span class="keyword">this</span>.getDate(),</span><br><span class="line">    <span class="string">"h+"</span>: <span class="keyword">this</span>.getHours(),</span><br><span class="line">    <span class="string">"m+"</span>: <span class="keyword">this</span>.getMinutes(),</span><br><span class="line">    <span class="string">"s+"</span>: <span class="keyword">this</span>.getSeconds(),</span><br><span class="line">    <span class="string">"q+"</span>: <span class="built_in">Math</span>.floor((<span class="keyword">this</span>.getMonth() + <span class="number">3</span>) / <span class="number">3</span>),</span><br><span class="line">    <span class="string">"S"</span>: <span class="keyword">this</span>.getMilliseconds()</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">if</span> (<span class="regexp">/(y+)/</span>.test(fmt))</span><br><span class="line">    fmt = fmt.replace(<span class="built_in">RegExp</span>.$<span class="number">1</span>, (<span class="keyword">this</span>.getFullYear() + <span class="string">""</span>).substr(<span class="number">4</span> - <span class="built_in">RegExp</span>.$<span class="number">1.</span>length));</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> o)</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">"("</span> + k + <span class="string">")"</span>).test(fmt))</span><br><span class="line">    fmt = fmt.replace(<span class="built_in">RegExp</span>.$<span class="number">1</span>, (<span class="built_in">RegExp</span>.$<span class="number">1.</span>length === <span class="number">1</span>) ? (o[k]) : ((<span class="string">"00"</span> + o[k]).substr((<span class="string">""</span> + o[k]).length)));</span><br><span class="line"><span class="keyword">return</span> fmt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> show = <span class="literal">true</span>        <span class="comment">//也可以和开发环境挂钩控制日志输出</span></span><br><span class="line">    <span class="keyword">if</span> (show) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">`[<span class="subst">$&#123;<span class="keyword">new</span> <span class="built_in">Date</span>().Format(<span class="string">"yyyy-MM-dd hh:mm:ss"</span>)&#125;</span>] `</span>, ...arguments)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = log</span><br></pre></td></tr></table></figure>
+
+<h4 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h4><p>在搭建完后端api后，需要在前端调试。无论是小程序还是vue的webapp,访问本地连接会出现跨域问题（小程序得在开发工具上关闭域名检测，小程序默认https），如图：<br><a href="https://postimg.cc/KkJPVSqh" target="_blank" rel="noopener"><img src="https://i.postimg.cc/gjPgxG3j/1590993807462-27-D534-BC-CF10-4f1f-B87-F-DE781-B20-BC22.png" alt="1590993807462-27-D534-BC-CF10-4f1f-B87-F-DE781-B20-BC22.png"></a><br>此时需要在app.js内加入允许跨域访问  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* desc: 以下跨域代码未处理 OPTION 形式，在request不携带自定义参数如 token 等headers内的配置时，是可以跑起来的，一旦在request内设置headers内容，请求会被 OPTION 挂起，跨域失败！</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">//设置允许跨域访问该服务.（此代码为坑）</span></span><br><span class="line">app.all(<span class="string">'*'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.header(<span class="string">'Access-Control-Allow-Origin'</span>, <span class="string">'*'</span>);</span><br><span class="line">  <span class="comment">//Access-Control-Allow-Headers ,可根据浏览器的F12查看,把对应的粘贴在这里就行</span></span><br><span class="line">  res.header(<span class="string">'Access-Control-Allow-Headers'</span>, <span class="string">'Content-Type'</span>);</span><br><span class="line">  res.header(<span class="string">'Access-Control-Allow-Methods'</span>, <span class="string">'*'</span>);</span><br><span class="line">  res.header(<span class="string">'Content-Type'</span>, <span class="string">'application/json;charset=utf-8'</span>);</span><br><span class="line">  next();</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* desc: 跨域</span></span><br><span class="line"><span class="comment">* desc: 大胆copy</span></span><br><span class="line"><span class="comment">* path: @/app.js</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">app.use(<span class="function">(<span class="params">req, res, next</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 设置是否运行客户端设置 withCredentials</span></span><br><span class="line">  <span class="comment">// 即在不同域名下发出的请求也可以携带 cookie</span></span><br><span class="line">  res.header(<span class="string">"Access-Control-Allow-Credentials"</span>,<span class="literal">true</span>)</span><br><span class="line">  <span class="comment">// 第二个参数表示允许跨域的域名，* 代表所有域名  </span></span><br><span class="line">  res.header(<span class="string">'Access-Control-Allow-Origin'</span>, <span class="string">'*'</span>)</span><br><span class="line">  res.header(<span class="string">'Access-Control-Allow-Methods'</span>, <span class="string">'GET, PUT, POST, OPTIONS'</span>) <span class="comment">// 允许的 http 请求的方法</span></span><br><span class="line">  <span class="comment">// 允许前台获得的除 Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma 这几张基本响应头之外的响应头</span></span><br><span class="line">  res.header(<span class="string">'Access-Control-Allow-Headers'</span>, <span class="string">'Content-Type, Authorization, Content-Length, X-Requested-With'</span>)</span><br><span class="line">  <span class="keyword">if</span> (req.method == <span class="string">'OPTIONS'</span>) &#123;</span><br><span class="line">      res.sendStatus(<span class="number">200</span>)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      next()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>此时，我们的vue前端使用axios携带token就可以请求到服务端接口了<br><a href="https://postimg.cc/CdvyCR4m" target="_blank" rel="noopener"><img src="https://i.postimg.cc/5NJxVvQd/1590994213733-89-C343-C2-BFF0-44a3-988-C-1-D0-D9-E0875-CF.png" alt="1590994213733-89-C343-C2-BFF0-44a3-988-C-1-D0-D9-E0875-CF.png"></a></p>
+<h4 id="morgan日志"><a href="#morgan日志" class="headerlink" title="morgan日志"></a>morgan日志</h4><p>日志，记录服务器的操作行为，这里使用 morgan 把日志记录在本地文件保存。  </p>
+<pre><code class="javascript"><span class="comment">/**</span>
+<span class="comment">* path: @/utils/morgan.js</span>
+<span class="comment">* desc: 封装一个morgan </span>
+<span class="comment">*/</span>
+
+<span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);
+<span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)
+<span class="keyword">var</span> morgan = <span class="built_in">require</span>(<span class="string">'morgan'</span>);
+<span class="keyword">var</span> FileStreamRotator = <span class="built_in">require</span>(<span class="string">'file-stream-rotator'</span>)
+
+<span class="keyword">var</span> logDirectory = path.join(__dirname, <span class="string">'log'</span>)
+
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+
+morgan.token(<span class="string">'timeStamp'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>{
+    <span class="keyword">let</span> date = <span class="keyword">new</span> <span class="built_in">Date</span>()
+    <span class="keyword">let</span> logHour = date.getHours() &lt; <span class="number">10</span> ? <span class="string">`0<span class="subst">${date.getHours()}</span>`</span> : date.getHours() 
+    <span class="keyword">let</span> logMinute = date.getMinutes() &lt; <span class="number">10</span> ? <span class="string">`0<span class="subst">${date.getMinutes()}</span>`</span> : date.getMinutes()
+    <span class="keyword">let</span> logSecond = date.getSeconds() &lt; <span class="number">10</span> ? <span class="string">`0<span class="subst">${date.getSeconds()}</span>`</span> : date.getSeconds()
+    <span class="keyword">let</span> logDate = <span class="string">`<span class="subst">${logHour}</span>:<span class="subst">${logMinute}</span>:<span class="subst">${logSecond}</span>`</span>
+    <span class="keyword">return</span> logDate
+});
+
+  <span class="comment">// 自定义format，其中包含自定义的token</span>
+  morgan.format(<span class="string">'joke'</span>, <span class="string">'[joke :timeStamp] :remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms'</span>);
+
+  <span class="comment">// create a rotating write stream</span>
+  <span class="keyword">var</span> accessLogStream = FileStreamRotator.getStream({
+    date_format: <span class="string">'YYYYMMDD'</span>,
+    filename: path.join(logDirectory, <span class="string">'access-%DATE%.log'</span>),
+    frequency: <span class="string">'daily'</span>,
+    verbose: <span class="literal">false</span>
+  })
+
+<span class="built_in">module</span>.exports = {morgan, accessLogStream}
+
+<span class="comment">/*</span>
+<span class="comment">* path: @/app</span>
+<span class="comment">* 引用这个日志系统</span>
+<span class="comment">*/</span>
+
+app.use(morgan(<span class="string">'joke'</span>));                                   <span class="comment">//服务器输入实时日志</span>
+app.use(morgan(<span class="string">'short'</span>, {<span class="attr">stream</span>: accessLogStream}));       <span class="comment">//记录日志在文件中</span>
+</code></pre>
+<p>至此，我们可以在 <code>/utils</code> 路径下看到创建的 log 文件夹，日志已经根据 <em>file-stream-rotator</em> 插件做了分割，每一天的日志集约在一个文件。以防日志过多导致混乱。  </p>
+<hr>
+<blockquote>
+<ul>
+<li>本项目git地址在<a href="https://github.com/fanghongliang/NodeProject" target="_blank" rel="noopener"><strong>这里</strong></a>, <strong>欢迎star</strong>   </li>
+<li>本项目部署服务器文档在<a href="http://fanghl.top/2020/06/09/server/#more"><strong>这里</strong></a></li>
+</ul>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>走过路过，留下买路财，壮士</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="fanghl 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    fanghl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fanghl.top/2020/05/22/express/" title="Express">http://fanghl.top/2020/05/22/express/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Programming/" rel="tag"># Programming</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/30/vue-wx-h5/" rel="next" title="vue-wx-h5">
+                <i class="fa fa-chevron-left"></i> vue-wx-h5
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/05/flask/" rel="prev" title="Python-flask">
+                Python-flask <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tibet.jpg" alt="fanghl">
+            
+              <p class="site-author-name" itemprop="name">fanghl</p>
+              <p class="site-description motion-element" itemprop="description">站在巨人的肩膀上</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fanghongliang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:fanghljob@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.cnblogs.com/fanghl" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#ORM-sequelize"><span class="nav-number">1.</span> <span class="nav-text">ORM(sequelize)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原生SQL方法"><span class="nav-number">2.</span> <span class="nav-text">原生SQL方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JWT（token验证）"><span class="nav-number">3.</span> <span class="nav-text">JWT（token验证）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#middare-中间件"><span class="nav-number">4.</span> <span class="nav-text">middare(中间件)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#封装log"><span class="nav-number">5.</span> <span class="nav-text">封装log</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#跨域"><span class="nav-number">6.</span> <span class="nav-text">跨域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#morgan日志"><span class="nav-number">7.</span> <span class="nav-text">morgan日志</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fanghl</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">46.8k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
+
+
+  
+
+</body>
+</html>
