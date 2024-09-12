@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="腾讯云,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言在性能敏感场景下，除了常规的优化方案，如何能从代码底层提高代码性能，例如，一个toC的web H5，静态资源可以压缩图片、CDN加速、懒加载、雪碧图，框架级别有虚拟DOM，React还有useMemo,useCallBack等方法优化，那么除过这些以外，在性能敏感场景下，我们还有什么方法能提高性能呢，本文整理分享了团队内部总结的遍历方法案例 由于 js 是 JIT 的，并不会有 AOT 优化，">
+<meta name="keywords" content="腾讯云">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS遍历性能思考干货">
+<meta property="og:url" content="http://fanghl.top/2024/09/12/JS遍历性能思考/index.html">
+<meta property="og:site_name" content="Fanghongliang&#39;s blog">
+<meta property="og:description" content="前言在性能敏感场景下，除了常规的优化方案，如何能从代码底层提高代码性能，例如，一个toC的web H5，静态资源可以压缩图片、CDN加速、懒加载、雪碧图，框架级别有虚拟DOM，React还有useMemo,useCallBack等方法优化，那么除过这些以外，在性能敏感场景下，我们还有什么方法能提高性能呢，本文整理分享了团队内部总结的遍历方法案例 由于 js 是 JIT 的，并不会有 AOT 优化，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/fdCu4r1SXiFNGVK.jpg">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/v3GQkKapgTEjiLX.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/miLJzBdlFjnWo4f.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/E8wQzgADnGv9RjW.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/K2XlNqczB7muMtj.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/UmF7zstLngwvpu6.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/RYP8Qk5SZnVG4Tz.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/ub3FKrRgfvIOjaX.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/GHOUcaXFL4WoZRe.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/c93N4CjMiqZhTIG.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/2qGRB8hLxiFtmvZ.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/OFMJr7t1UW5NPYn.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/6KRWHu7PAQh4Ypj.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/S3bJLsfxmM1g4KX.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/inaZtH96JYsqcQj.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/niMzPcqQv8taWIj.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/3msr5anRHLd9wEC.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/Uy3OBMTG8a6C2jL.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/84qkHxl2f7NYXcQ.png">
+<meta property="og:image" content="https://s2.loli.net/2024/09/12/912MDUZVxPNd5RS.png">
+<meta property="og:updated_time" content="2024-09-12T11:21:46.047Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JS遍历性能思考干货">
+<meta name="twitter:description" content="前言在性能敏感场景下，除了常规的优化方案，如何能从代码底层提高代码性能，例如，一个toC的web H5，静态资源可以压缩图片、CDN加速、懒加载、雪碧图，框架级别有虚拟DOM，React还有useMemo,useCallBack等方法优化，那么除过这些以外，在性能敏感场景下，我们还有什么方法能提高性能呢，本文整理分享了团队内部总结的遍历方法案例 由于 js 是 JIT 的，并不会有 AOT 优化，">
+<meta name="twitter:image" content="https://s2.loli.net/2024/09/12/fdCu4r1SXiFNGVK.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://fanghl.top/2024/09/12/JS遍历性能思考/">
+
+
+
+
+
+  <title>JS遍历性能思考干货 | Fanghongliang's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fanghongliang's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Science && Truth</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fanghl.top/2024/09/12/JS遍历性能思考/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fanghl">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/tibet.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fanghongliang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JS遍历性能思考干货</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-12T11:18:22+08:00">
+                2024-09-12
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2024-09-12T19:21:46+08:00">
+                2024-09-12
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.9k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在性能敏感场景下，除了常规的优化方案，如何能从代码底层提高代码性能，例如，一个toC的web H5，静态资源可以压缩图片、CDN加速、懒加载、雪碧图，框架级别有虚拟DOM，React还有useMemo,useCallBack等方法优化，那么除过这些以外，在性能敏感场景下，我们还有什么方法能提高性能呢，本文整理分享了团队内部总结的遍历方法案例</p>
+<p>由于 js 是 JIT 的，并不会有 AOT 优化，因此各类迭代方式的选择就显得尤为重要了 —— 因为没有静态编译因此不同的迭代方式或多或少都会有额外的 runtime 开销，本文将对 js 里最常用的 for、forEach、for-of、for-in、Object.entries 进行考察和评估，下面是具体分析过程</p>
+<h3 id="for-amp-while"><a href="#for-amp-while" class="headerlink" title="for &amp; while"></a>for &amp; while</h3><p>这是 js 提供的最基础的循环控制流，跟 C、Java 里的 for 是一样的语义，能直接对应汇编的 JMP 指令，因此通常认为 for &amp; while 是无开销的迭代方式，粒度也最细 —— 因此除了写着繁琐一点没什么硬伤了，性能是最好的。</p>
+<h3 id="forEach-呢？"><a href="#forEach-呢？" class="headerlink" title="forEach 呢？"></a>forEach 呢？</h3><p>通常认为 forEach 不会比 for 慢多少，但这是对 “单个大数组” 来说的，比如长度为一百万的 number[ ] 做求和，此时不会有多少差别；<br>但真实业务中并不存在这么多的大数组情况，100 长度的数组就是 90% 分位了，此时 forEach 内闭包 + stack-frame 开销就不能忽略了 —— 也就是说多次遍历相对短的数组更符合业务实际场景。<br>为此，构造下面两个求和实现： </p>
+<h4 id="forEach-求和"><a href="#forEach-求和" class="headerlink" title="forEach 求和"></a>forEach 求和</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line">    arr.forEach(<span class="function"><span class="params">i</span> =&gt;</span> &#123;</span><br><span class="line">        sum += i;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> sum; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="for-求和"><a href="#for-求和" class="headerlink" title="for 求和"></a>for 求和</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn2</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> len = arr.length;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; len; i ++) &#123;</span><br><span class="line">        sum += arr[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="forEach-慢三倍：重复求和长度为-100-的数组对比"><a href="#forEach-慢三倍：重复求和长度为-100-的数组对比" class="headerlink" title="forEach 慢三倍：重复求和长度为 100 的数组对比"></a>forEach 慢三倍：重复求和长度为 100 的数组对比</h4><p><img src="https://s2.loli.net/2024/09/12/fdCu4r1SXiFNGVK.jpg" alt="image.jpeg"></p>
+<h4 id="🌟-结论：更推荐使用-for-forEach-通常比-for-慢-3-倍左右"><a href="#🌟-结论：更推荐使用-for-forEach-通常比-for-慢-3-倍左右" class="headerlink" title="🌟  结论：更推荐使用 for (forEach 通常比 for 慢 3 倍左右) "></a>🌟 <span style="color: red;"> 结论：更推荐使用 for (forEach 通常比 for 慢 3 倍左右) </span></h4><p>原因：</p>
+<ol>
+<li>forEach 本身调用会新开调用栈，然后对于 “回调” 来说如果 arr 比较短的话，是不会走 TurboFan 深度优化的机器码的。（时间太短了，调用没几次就结束了）</li>
+<li>forEach callback 本身是一个函数，每次都会创建一个新的，会有额外开销，这个内存开销是 28 字节，而 for 是 0 开销的</li>
+</ol>
+<p><img src="https://s2.loli.net/2024/09/12/v3GQkKapgTEjiLX.png" alt="image.png">  </p>
+<p>写这篇文章指出这个问题并不是说禁用 forEach，而是应当在性能敏感场景注意一下迭代方式的选择对性能的影响。</p>
+<h4 id="其他的-map、filter、reduce-呢？"><a href="#其他的-map、filter、reduce-呢？" class="headerlink" title="其他的 map、filter、reduce 呢？"></a>其他的 map、filter、reduce 呢？</h4><p>—— 其实最核心的问题是：for 循环其实直接对应汇编 JMP 指令，而数组的函数式方法做不到这么好的编译效果，最后就带来较大的开销了 </p>
+<h3 id="for-of-呢？"><a href="#for-of-呢？" class="headerlink" title="for-of 呢？"></a>for-of 呢？</h3><p>在 ES6 环境下，对于数组来说基本无差别（略慢一点点） 。。 但是。。。 </p>
+<h4 id="但是-for-of-是为-generator-设计的-…-于是-…"><a href="#但是-for-of-是为-generator-设计的-…-于是-…" class="headerlink" title="但是 for-of 是为 generator 设计的 … 于是 …"></a>但是 for-of 是为 generator 设计的 … 于是 …</h4><p>但是！！！for-of 语义上是为 generator 使用的 —— 这意味着使用在 ES5 下使用 for-of 的时候要引入相当重型的无栈协程 runtime：<br><img src="https://s2.loli.net/2024/09/12/miLJzBdlFjnWo4f.png" alt="image-1.png"></p>
+<p>要是这个 runtime 用 C++ 写的倒也还好，但它是 js 写的，因此慢上加慢 —— 最终高频场景下这东西编译成 ES5 后，在 chrome 下性能极其糟糕：<br><img src="https://s2.loli.net/2024/09/12/E8wQzgADnGv9RjW.png" alt="image-2.png"></p>
+<p>其他浏览器也会不同程度的变慢：<br>safari 差 6 倍<br><img src="https://s2.loli.net/2024/09/12/K2XlNqczB7muMtj.png" alt="image-3.png"></p>
+<p>firefox 差 2 倍<br><img src="https://s2.loli.net/2024/09/12/UmF7zstLngwvpu6.png" alt="image-4.png"></p>
+<h4 id="🌟-结论：不推荐给数组使用，除非你真的需要"><a href="#🌟-结论：不推荐给数组使用，除非你真的需要" class="headerlink" title="🌟 结论：不推荐给数组使用，除非你真的需要"></a>🌟 <span style="color: red;">结论：不推荐给数组使用，除非你真的需要</span></h4><p>虽然 for-of 的语义很静态，比较好做优化，但真实场景下无法判断会不会引入 babel 之类的 runtime 造成极度劣化</p>
+<h3 id="for-in-呢？"><a href="#for-in-呢？" class="headerlink" title="for-in 呢？"></a>for-in 呢？</h3><p>这个特性相当有历史了，它甚至是 ES5 时代就支持的东西，IE 都支持：<br><img src="https://s2.loli.net/2024/09/12/RYP8Qk5SZnVG4Tz.png" alt="image41.png"></p>
+<p>根据 V8 团队写的<a href="https://v8.dev/blog/fast-for-in" target="_blank" rel="noopener">https://v8.dev/blog/fast-for-in</a> 这篇来看，for-in 规范里没有很明确底层 runtime 的逻辑导致 firefox 和 v8 的 for-in 实现执行顺序完全不一样，但他们两者都「符合规范」 。。。。 而由于 for-in 的规范描述相当动态导致其不是很好做优化，比如下面这段代码在 firefox 和 chrome 下输出顺序不同： </p>
+<p><img src="https://s2.loli.net/2024/09/12/ub3FKrRgfvIOjaX.png" alt="image42.png"></p>
+<p>后续 ES 标准委员会为了修复这个问题又搞了一大堆的补丁，整个过程看起来极其复杂：</p>
+<p><img src="https://s2.loli.net/2024/09/12/GHOUcaXFL4WoZRe.png" alt="image45.png"></p>
+<p>最后 V8 还狠狠鄙视了一波 tc39：</p>
+<p><img src="https://s2.loli.net/2024/09/12/c93N4CjMiqZhTIG.png" alt="image46.png"></p>
+<p>截止到 2024 年，上面 for-in 还是一样的调用序，V8 出于性能问题没有严格按照 for-in 上面的十条补丁来实现。 </p>
+<h4 id="for-in-性能对比"><a href="#for-in-性能对比" class="headerlink" title="for-in 性能对比"></a>for-in 性能对比</h4><p>自测了一下，由于 for-in 规范的复杂性和不完备性，性能都不如自己写的遍历</p>
+<h5 id="常规数组遍历：差距极大"><a href="#常规数组遍历：差距极大" class="headerlink" title="常规数组遍历：差距极大"></a>常规数组遍历：差距极大</h5><p>arr: number[] 的遍历，for-in 慢了五十倍，为什么？最主要的原因是 for-in 拿到的 key 是一个字符串而不是一个自增的整数，性能非常糟糕</p>
+<p><img src="https://s2.loli.net/2024/09/12/2qGRB8hLxiFtmvZ.png" alt="t11-1.png"><br><img src="https://s2.loli.net/2024/09/12/OFMJr7t1UW5NPYn.png" alt="t11-2.png"></p>
+<p>业务里是否有对 arr 的 for-in 操作？</p>
+<h5 id="对象遍历"><a href="#对象遍历" class="headerlink" title="对象遍历"></a>对象遍历</h5><h6 id="Slow-Properties"><a href="#Slow-Properties" class="headerlink" title="Slow Properties"></a>Slow Properties</h6><p>慢对象的场景下，keys 性能更好<br><img src="https://s2.loli.net/2024/09/12/6KRWHu7PAQh4Ypj.png" alt="t12.png"></p>
+<h6 id="Fast-Properties-（EnumCache）"><a href="#Fast-Properties-（EnumCache）" class="headerlink" title="Fast Properties （EnumCache）"></a>Fast Properties （EnumCache）</h6><p>带 hiddenmap 的情况下，for-in 更好（推测是不需要 Object.keys 分配一个数组导致）：<br><img src="https://s2.loli.net/2024/09/12/S3bJLsfxmM1g4KX.png" alt="t13.png"></p>
+<p>而且从配合 ICs 的 case 来看，for-in 里动态 key 查找应该还帮做了 ICs 优化： </p>
+<p><img src="https://s2.loli.net/2024/09/12/inaZtH96JYsqcQj.png" alt="t14.png"></p>
+<h4 id="EnumCache"><a href="#EnumCache" class="headerlink" title="EnumCache"></a>EnumCache</h4><p>根据 V8 对象模型，对象可以工作在不同模式下：<br>1.Fast Properties：用 hiddenMap 追踪对象类型，成员存储在 in-object 上<br>2.Slow Properties：key 比较多 or delete key 的时候会变成 Slow Properties，此时成员存储在 *properties 上<br>显然，Fast Properties 从原理上就拥有更快的 Object.keys 速度，可以非常容易的加缓存上去，V8 实现了一个叫做 EnumCache 的字段在 hiddenClass 上</p>
+<p><img src="https://s2.loli.net/2024/09/12/niMzPcqQv8taWIj.png" alt="t15.png"></p>
+<p>这使得百万次调用 Object.keys 的耗时几乎可以忽略不计：</p>
+<p><img src="https://s2.loli.net/2024/09/12/3msr5anRHLd9wEC.png" alt="t16.png"></p>
+<h4 id="🌟-结论：明确是-fast-properties-的场景下推荐使用-（此外不要用-for-in-处理数组）"><a href="#🌟-结论：明确是-fast-properties-的场景下推荐使用-（此外不要用-for-in-处理数组）" class="headerlink" title="🌟 结论：明确是 fast-properties 的场景下推荐使用 （此外不要用 for-in 处理数组）"></a>🌟 <span style="color: red;">结论：明确是 fast-properties 的场景下推荐使用 （此外不要用 for-in 处理数组）</span></h4><p>fast-properties 场景下 for-in 遍历更快，因为不需要分配 arr 数组；<br>而在 slow-properties 的场景下情况下就不如了（枚举 key 的速度太慢）</p>
+<h3 id="Object-entries-呢？"><a href="#Object-entries-呢？" class="headerlink" title="Object.entries 呢？"></a>Object.entries 呢？</h3><p>除了上述几种关键字方式遍历外，还有一种是通过 Object.entries 去枚举遍历对象。</p>
+<h4 id="fast-properties-下：没区别"><a href="#fast-properties-下：没区别" class="headerlink" title="fast-properties 下：没区别"></a>fast-properties 下：没区别</h4><p><img src="https://s2.loli.net/2024/09/12/Uy3OBMTG8a6C2jL.png" alt="t17.png"></p>
+<h4 id="slow-properties：会慢约两倍"><a href="#slow-properties：会慢约两倍" class="headerlink" title="slow-properties：会慢约两倍"></a>slow-properties：会慢约两倍</h4><p><img src="https://s2.loli.net/2024/09/12/84qkHxl2f7NYXcQ.png" alt="t18.png"></p>
+<h4 id="🌟-结论：非必要不使用"><a href="#🌟-结论：非必要不使用" class="headerlink" title="🌟 结论：非必要不使用"></a>🌟 <span style="color: red;">结论：非必要不使用</span></h4><p>建议配合 for-in 或者手动 Object.keys 的方式来做遍历 </p>
+<h3 id="🌟-全总结"><a href="#🌟-全总结" class="headerlink" title="🌟 全总结"></a>🌟 <span style="color: red;">全总结</span></h3><h4 id="性能区别"><a href="#性能区别" class="headerlink" title="性能区别"></a>性能区别</h4><span style="color: red;">
+时间性能上 for >= for-in > forEach > Object.entries >= for-of 
+内存性能上，for 是无开销的直接对应汇编 JMP 指令，其他的或多或少都可能涉及内存分配，尤其是 Object.entries 
+</span>
+
+<h4 id="写算法尤其注意迭代方式的选择"><a href="#写算法尤其注意迭代方式的选择" class="headerlink" title="写算法尤其注意迭代方式的选择"></a>写算法尤其注意迭代方式的选择</h4><p>如果你在写算法、写排版、写数据层，那么优先使用 for 来写，其他场景看具体需求，一般不需要关心选择哪种迭代方式（这种情况推荐 for-of 和 forEach 这类）</p>
+<h4 id="好看不代表性能好"><a href="#好看不代表性能好" class="headerlink" title="好看不代表性能好"></a>好看不代表性能好</h4><p>js 没有 AOT 优化，多数优化都是通过 JIT 做的，比如 ICs、字节码等等，这也意味着：好看好读的代码性不一定能好，而且还有 Terser Webpack 这些东西也很喜欢改代码 —— 这些都可能导致劣化。<br>比如读完上面的文章再看类似这样的迭代模式：</p>
+<p><img src="https://s2.loli.net/2024/09/12/912MDUZVxPNd5RS.png" alt="t19.png"><br>确实好看，但是这里叠了 Object.entries + for-of 下来，在 ES5 下估计要慢很多</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>走过路过，留下买路财，壮士</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="fanghl 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    fanghl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fanghl.top/2024/09/12/JS遍历性能思考/" title="JS遍历性能思考干货">http://fanghl.top/2024/09/12/JS遍历性能思考/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/腾讯云/" rel="tag"># 腾讯云</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2024/08/11/docker/" rel="next" title="Docker排查Grafana日志">
+                <i class="fa fa-chevron-left"></i> Docker排查Grafana日志
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tibet.jpg" alt="fanghl">
+            
+              <p class="site-author-name" itemprop="name">fanghl</p>
+              <p class="site-description motion-element" itemprop="description">站在巨人的肩膀上</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/fanghongliang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:fanghljob@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.cnblogs.com/fanghl" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-amp-while"><span class="nav-number">2.</span> <span class="nav-text">for &amp; while</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#forEach-呢？"><span class="nav-number">3.</span> <span class="nav-text">forEach 呢？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#forEach-求和"><span class="nav-number">3.1.</span> <span class="nav-text">forEach 求和</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for-求和"><span class="nav-number">3.2.</span> <span class="nav-text">for 求和</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#forEach-慢三倍：重复求和长度为-100-的数组对比"><span class="nav-number">3.3.</span> <span class="nav-text">forEach 慢三倍：重复求和长度为 100 的数组对比</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#🌟-结论：更推荐使用-for-forEach-通常比-for-慢-3-倍左右"><span class="nav-number">3.4.</span> <span class="nav-text">🌟  结论：更推荐使用 for (forEach 通常比 for 慢 3 倍左右) </span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他的-map、filter、reduce-呢？"><span class="nav-number">3.5.</span> <span class="nav-text">其他的 map、filter、reduce 呢？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-of-呢？"><span class="nav-number">4.</span> <span class="nav-text">for-of 呢？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#但是-for-of-是为-generator-设计的-…-于是-…"><span class="nav-number">4.1.</span> <span class="nav-text">但是 for-of 是为 generator 设计的 … 于是 …</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#🌟-结论：不推荐给数组使用，除非你真的需要"><span class="nav-number">4.2.</span> <span class="nav-text">🌟 结论：不推荐给数组使用，除非你真的需要</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-in-呢？"><span class="nav-number">5.</span> <span class="nav-text">for-in 呢？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#for-in-性能对比"><span class="nav-number">5.1.</span> <span class="nav-text">for-in 性能对比</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常规数组遍历：差距极大"><span class="nav-number">5.1.1.</span> <span class="nav-text">常规数组遍历：差距极大</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#对象遍历"><span class="nav-number">5.1.2.</span> <span class="nav-text">对象遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Slow-Properties"><span class="nav-number">5.1.2.1.</span> <span class="nav-text">Slow Properties</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Fast-Properties-（EnumCache）"><span class="nav-number">5.1.2.2.</span> <span class="nav-text">Fast Properties （EnumCache）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EnumCache"><span class="nav-number">5.2.</span> <span class="nav-text">EnumCache</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#🌟-结论：明确是-fast-properties-的场景下推荐使用-（此外不要用-for-in-处理数组）"><span class="nav-number">5.3.</span> <span class="nav-text">🌟 结论：明确是 fast-properties 的场景下推荐使用 （此外不要用 for-in 处理数组）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-entries-呢？"><span class="nav-number">6.</span> <span class="nav-text">Object.entries 呢？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fast-properties-下：没区别"><span class="nav-number">6.1.</span> <span class="nav-text">fast-properties 下：没区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#slow-properties：会慢约两倍"><span class="nav-number">6.2.</span> <span class="nav-text">slow-properties：会慢约两倍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#🌟-结论：非必要不使用"><span class="nav-number">6.3.</span> <span class="nav-text">🌟 结论：非必要不使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#🌟-全总结"><span class="nav-number">7.</span> <span class="nav-text">🌟 全总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#性能区别"><span class="nav-number">7.1.</span> <span class="nav-text">性能区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#写算法尤其注意迭代方式的选择"><span class="nav-number">7.2.</span> <span class="nav-text">写算法尤其注意迭代方式的选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#好看不代表性能好"><span class="nav-number">7.3.</span> <span class="nav-text">好看不代表性能好</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fanghl</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">49.5k</span>
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.4"></script>
+
+
+  
+
+</body>
+</html>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="腾讯云,">
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="站在巨人的肩膀上">
-<meta name="keywords" content="IT">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Fanghongliang&#39;s blog">
-<meta property="og:url" content="http://fanghl.top/categories/Programming/index.html">
+<meta name="description" content="前言还记得年初刚来的时候，有人问我要不要接卡顿，又有人跟我说别接啊很难的这个，页面都卡没了不好定位。 去年机缘巧合，卡顿这个事情又到我头上了，同事调侃说性能这个事情接手的都跑路了。 但问题不大，咱没事不惹事，来事不怕事，遇事能抗事。 像腾讯云监控产品RUM（前端性能监控）、APM（终端性能监控）等大型产品，代码复杂，前端页面繁琐，卡顿本身难以监测，即使检测到卡顿的发生，也常常难以快速定位，更别提说">
+<meta name="keywords" content="腾讯云">
+<meta property="og:type" content="article">
+<meta property="og:title" content="性能优化的几点思考实践">
+<meta property="og:url" content="http://fanghl.top/2024/06/05/性能优化/index.html">
 <meta property="og:site_name" content="Fanghongliang&#39;s blog">
-<meta property="og:description" content="站在巨人的肩膀上">
+<meta property="og:description" content="前言还记得年初刚来的时候，有人问我要不要接卡顿，又有人跟我说别接啊很难的这个，页面都卡没了不好定位。 去年机缘巧合，卡顿这个事情又到我头上了，同事调侃说性能这个事情接手的都跑路了。 但问题不大，咱没事不惹事，来事不怕事，遇事能抗事。 像腾讯云监控产品RUM（前端性能监控）、APM（终端性能监控）等大型产品，代码复杂，前端页面繁琐，卡顿本身难以监测，即使检测到卡顿的发生，也常常难以快速定位，更别提说">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-09-12T11:22:47.863Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Fanghongliang&#39;s blog">
-<meta name="twitter:description" content="站在巨人的肩膀上">
+<meta name="twitter:title" content="性能优化的几点思考实践">
+<meta name="twitter:description" content="前言还记得年初刚来的时候，有人问我要不要接卡顿，又有人跟我说别接啊很难的这个，页面都卡没了不好定位。 去年机缘巧合，卡顿这个事情又到我头上了，同事调侃说性能这个事情接手的都跑路了。 但问题不大，咱没事不惹事，来事不怕事，遇事能抗事。 像腾讯云监控产品RUM（前端性能监控）、APM（终端性能监控）等大型产品，代码复杂，前端页面繁琐，卡顿本身难以监测，即使检测到卡顿的发生，也常常难以快速定位，更别提说">
 
 
 
@@ -119,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://fanghl.top/categories/Programming/">
+  <link rel="canonical" href="http://fanghl.top/2024/06/05/性能优化/">
 
 
 
 
 
-  <title>分类: Programming | Fanghongliang's blog</title>
+  <title>性能优化的几点思考实践 | Fanghongliang's blog</title>
   
 
 
@@ -144,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -290,53 +291,275 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Programming<small>分类</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://fanghl.top/2024/06/05/性能优化/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fanghl">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/tibet.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fanghongliang's blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2021/06/07/summary-meme/" itemprop="url">
-              
-                <span itemprop="name">么么直播-总结</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">性能优化的几点思考实践</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2021-06-07T19:25:24+08:00" content="2021-06-07">
-          06-07
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-06-05T15:17:29+08:00">
+                2024-06-05
+              </time>
+            
 
-    </header>
-  </article>
+            
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2024-09-12T19:22:47+08:00">
+                2024-09-12
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/每周一文/" itemprop="url" rel="index">
+                    <span itemprop="name">每周一文</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  714
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>还记得年初刚来的时候，有人问我要不要接卡顿，又有人跟我说别接啊很难的这个，页面都卡没了不好定位。 去年机缘巧合，卡顿这个事情又到我头上了，同事调侃说性能这个事情接手的都跑路了。 但问题不大，咱没事不惹事，来事不怕事，遇事能抗事。</p>
+<p>像腾讯云监控产品RUM（前端性能监控）、APM（终端性能监控）等大型产品，代码复杂，前端页面繁琐，卡顿本身难以监测，即使检测到卡顿的发生，也常常难以快速定位，更别提说想要了解大盘的用户真实体验。</p>
+<p>需求产生，便总会要研究解决方案的。</p>
+<h3 id="卡顿的定义"><a href="#卡顿的定义" class="headerlink" title="卡顿的定义"></a>卡顿的定义</h3><p>理解卡顿之前，我们先了解几个概念： </p>
+<p>1、 Google RAIL模型<br>RAIL 表示 Web 应用生命周期的四个不同方面：响应（Response）、动画（Animation）、空闲（Idel）和加载（Load）。由于用户对每种情境有不同的性能预期，因此，系统会根据情境以及关于用户如何看待延迟的用户体验调研来确定效果目标。</p>
+<p>人机交互学术研究由来已久，在 Jakob Nielsen’s work on response time limits 中提出三个阈值：</p>
+<p>100 毫秒：大概是让用户感觉系统立即做出反应的极限，这意味着除了显示结果之外不需要特殊的反馈</p>
+<p>1 秒：大概是用户思想流保持不间断的极限，即使用户会注意到延迟。一般情况下，大于0.1秒小于1.0秒的延迟不需要特殊反馈，但用户确实失去了直接操作数据的感觉</p>
+<p>10 秒：大概是让用户的注意力集中在对话上的极限。对于较长的延迟，用户会希望在等待计算机完成的同时执行其他任务，因此应该向他们提供反馈，指示计算机预计何时完成。如果响应时间可能变化很大，则延迟期间的反馈尤其重要，因为用户将不知道会发生什么。</p>
+<p>在此基础上，如今机器性能都有大幅度的提升，因此基于用户的体验，RAIL 增加了一项：</p>
+<p>0-16 ms：大概是用户感受到流畅的动画体验的数值。只要每秒渲染 60 帧，这类动画就会感觉很流畅，也就是每帧 16 毫秒（包括浏览器将新帧绘制到屏幕上所需的时间），让应用生成一帧大约 10 毫秒</p>
+<p>由于这篇文章我们讨论的是长任务相关，因此主要考虑生命周期中的响应（Response），目标便是要求 100 毫秒内获得可见响应。</p>
+<p>### </p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>走过路过，留下买路财，壮士</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="fanghl 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    fanghl
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://fanghl.top/2024/06/05/性能优化/" title="性能优化的几点思考实践">http://fanghl.top/2024/06/05/性能优化/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/腾讯云/" rel="tag"># 腾讯云</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2024/01/20/每日一题/" rel="next" title="每日一题">
+                <i class="fa fa-chevron-left"></i> 每日一题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2024/08/11/docker/" rel="prev" title="Docker排查Grafana日志">
+                Docker排查Grafana日志 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -344,6 +567,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -364,8 +591,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -382,7 +618,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -393,7 +629,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -404,7 +640,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -456,6 +692,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#卡顿的定义"><span class="nav-number">2.</span> <span class="nav-text">卡顿的定义</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -483,7 +735,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">46.8k</span>
+    <span title="Site words total count">49.5k</span>
   
 </div>
 
@@ -624,6 +876,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
