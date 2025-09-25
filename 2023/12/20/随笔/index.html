@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="前言总结开发中遇到的思路，方法-dev SWR优化网页体验SWR  SWR 是用于数据请求的 React Hooks 库； “SWR” 这个名字来自于 stale-while-revalidate：一种由 HTTP RFC 5861(opens in a new tab) 推广的 HTTP 缓存失效策略。这种策略首先从缓存中返回数据（过期的），同时发送 fetch 请求（重新验证），最后得到最新数">
+<meta name="description" content="前言总结开发中遇到的思路，方法 SWR优化网页体验SWR  SWR 是用于数据请求的 React Hooks 库； “SWR” 这个名字来自于 stale-while-revalidate：一种由 HTTP RFC 5861(opens in a new tab) 推广的 HTTP 缓存失效策略。这种策略首先从缓存中返回数据（过期的），同时发送 fetch 请求（重新验证），最后得到最新数据。 使">
 <meta name="keywords" content="腾讯云">
 <meta property="og:type" content="article">
 <meta property="og:title" content="每周一文">
-<meta property="og:url" content="http://fanghl.top/2023/12/20/每周一文/index.html">
+<meta property="og:url" content="http://fanghl.top/2023/12/20/随笔/index.html">
 <meta property="og:site_name" content="Fanghongliang&#39;s blog">
-<meta property="og:description" content="前言总结开发中遇到的思路，方法-dev SWR优化网页体验SWR  SWR 是用于数据请求的 React Hooks 库； “SWR” 这个名字来自于 stale-while-revalidate：一种由 HTTP RFC 5861(opens in a new tab) 推广的 HTTP 缓存失效策略。这种策略首先从缓存中返回数据（过期的），同时发送 fetch 请求（重新验证），最后得到最新数">
+<meta property="og:description" content="前言总结开发中遇到的思路，方法 SWR优化网页体验SWR  SWR 是用于数据请求的 React Hooks 库； “SWR” 这个名字来自于 stale-while-revalidate：一种由 HTTP RFC 5861(opens in a new tab) 推广的 HTTP 缓存失效策略。这种策略首先从缓存中返回数据（过期的），同时发送 fetch 请求（重新验证），最后得到最新数据。 使">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2025-03-25T08:40:21.643Z">
+<meta property="og:updated_time" content="2025-03-25T08:46:12.109Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="每周一文">
-<meta name="twitter:description" content="前言总结开发中遇到的思路，方法-dev SWR优化网页体验SWR  SWR 是用于数据请求的 React Hooks 库； “SWR” 这个名字来自于 stale-while-revalidate：一种由 HTTP RFC 5861(opens in a new tab) 推广的 HTTP 缓存失效策略。这种策略首先从缓存中返回数据（过期的），同时发送 fetch 请求（重新验证），最后得到最新数">
+<meta name="twitter:description" content="前言总结开发中遇到的思路，方法 SWR优化网页体验SWR  SWR 是用于数据请求的 React Hooks 库； “SWR” 这个名字来自于 stale-while-revalidate：一种由 HTTP RFC 5861(opens in a new tab) 推广的 HTTP 缓存失效策略。这种策略首先从缓存中返回数据（过期的），同时发送 fetch 请求（重新验证），最后得到最新数据。 使">
 
 
 
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://fanghl.top/2023/12/20/每周一文/">
+  <link rel="canonical" href="http://fanghl.top/2023/12/20/随笔/">
 
 
 
@@ -305,7 +305,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://fanghl.top/2023/12/20/每周一文/">
+    <link itemprop="mainEntityOfPage" href="http://fanghl.top/2023/12/20/随笔/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="fanghl">
@@ -350,7 +350,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2025-03-25T16:40:21+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2025-03-25T16:46:12+08:00">
                 2025-03-25
               </time>
             
@@ -405,7 +405,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4.5k
+                  4.6k
                 </span>
               
 
@@ -421,7 +421,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  16
+                  17
                 </span>
               
             </div>
@@ -442,7 +442,7 @@
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>总结开发中遇到的思路，方法-dev</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>总结开发中遇到的思路，方法</p>
 <h3 id="SWR优化网页体验"><a href="#SWR优化网页体验" class="headerlink" title="SWR优化网页体验"></a>SWR优化网页体验</h3><p><a href="https://swr.vercel.app/zh-CN" target="_blank" rel="noopener">SWR</a> </p>
 <p>SWR 是用于数据请求的 React Hooks 库；</p>
 <p>“SWR” 这个名字来自于 stale-while-revalidate：一种由 HTTP RFC 5861(opens in a new tab) 推广的 HTTP 缓存失效策略。这种策略首先从缓存中返回数据（过期的），同时发送 fetch 请求（重新验证），最后得到最新数据。</p>
@@ -556,12 +556,12 @@
 <p>正如前面所提到的，仅在当前运行的任务完成后，才会对 DOM 中的更改进行绘制，无论这个任务运行花费了多长时间。</p>
 <p>从一方面讲，这非常好，因为我们的函数可能会创建很多元素，将它们一个接一个地插入到文档中，并更改其样式 —— 访问者不会看到任何未完成的“中间态”内容。很重要，对吧？</p>
 <p>这是一个示例，对 i 的更改在该函数完成前不会显示出来，所以我们将只会看到最后的值：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;div id=<span class="string">"progress"</span>&gt;&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">count</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">1e6</span>; i++) &#123;</span><br><span class="line">      i++;</span><br><span class="line">      progress.innerHTML = i;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  count();</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;div id=<span class="string">"progress"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">count</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">1e6</span>; i++) &#123;</span><br><span class="line">      i++;</span><br><span class="line">      progress.innerHTML = i;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  count();</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>……但是我们也可能想在任务执行期间展示一些东西，例如进度条。</p>
 <p>如果我们使用 setTimeout 将繁重的任务拆分成几部分，那么变化就会被在它们之间绘制出来。</p>
 <p>这看起来更好看：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=<span class="string">"progress"</span>&gt;&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">count</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 做繁重的任务的一部分 (*)</span></span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">      i++;</span><br><span class="line">      progress.innerHTML = i;</span><br><span class="line">    &#125; <span class="keyword">while</span> (i % <span class="number">1e3</span> != <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (i &lt; <span class="number">1e7</span>) &#123;</span><br><span class="line">      setTimeout(count);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  count();</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=<span class="string">"progress"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">count</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 做繁重的任务的一部分 (*)</span></span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">      i++;</span><br><span class="line">      progress.innerHTML = i;</span><br><span class="line">    &#125; <span class="keyword">while</span> (i % <span class="number">1e3</span> != <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (i &lt; <span class="number">1e7</span>) &#123;</span><br><span class="line">      setTimeout(count);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  count();</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>现在 div 显示了 i 的值的增长，这就是进度条的一种。</p>
 <p>用例 3：在事件之后做一些事情<br>在事件处理程序中，我们可能会决定推迟某些行为，直到事件冒泡并在所有级别上得到处理后。我们可以通过将该代码包装到零延迟的 setTimeout 中来做到这一点。</p>
@@ -656,9 +656,21 @@
 <li>任务类型与优先级<br>任务类型    示例    优先级    执行时机<br>同步任务    console.log()    最高    立即执行<br>微任务    Promise.then()、MutationObserver、queueMicrotask()    高    当前宏任务结束后立即执行<br>宏任务    setTimeout()、setInterval()、I/O、UI渲染    低    下一次事件循环</li>
 </ul>
 <h4 id="特殊场景分析"><a href="#特殊场景分析" class="headerlink" title="特殊场景分析"></a>特殊场景分析</h4><ol>
-<li>微任务嵌套<br>每个微任务执行时产生的新微任务会在当前批次中执行，不会留到下次事件循环</li>
-<li>宏任务中的微任务</li>
+<li><p>微任务嵌套<br>每个微任务执行时产生的新微任务会在当前批次中执行，不会留到下次事件循环</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 执行顺序： </span></span><br><span class="line"><span class="comment"> * 微任务1</span></span><br><span class="line"><span class="comment"> * 嵌套微任务</span></span><br><span class="line"><span class="comment"> * 微任务2</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'微任务1'</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'嵌套微任务'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'微任务2'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>宏任务中的微任务</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 微任务</span></span><br><span class="line"><span class="comment"> * 宏任务</span></span><br><span class="line"><span class="comment"> * 宏任务中的微任务</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'宏任务'</span>);</span><br><span class="line">  <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'宏任务中的微任务'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'微任务'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+</li>
 </ol>
+<p>实际应用注意事项<br>避免微任务饥饿：不要在微任务中无限添加微任务，否则会阻塞主线程</p>
+<p>性能考量：</p>
+<p>微任务适合高优先级小任务</p>
+<p>宏任务适合耗时较长的任务</p>
+<p>Node.js差异：</p>
+<p>Node中有process.nextTick(优先级高于Promise)</p>
+<p>有setImmediate(特殊类型的宏任务)</p>
 </script></p>
       
     </div>
@@ -703,7 +715,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://fanghl.top/2023/12/20/每周一文/" title="每周一文">http://fanghl.top/2023/12/20/每周一文/</a>
+    <a href="http://fanghl.top/2023/12/20/随笔/" title="每周一文">http://fanghl.top/2023/12/20/随笔/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -822,7 +834,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -844,7 +856,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -939,7 +951,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">52.7k</span>
+    <span title="Site words total count">54.5k</span>
   
 </div>
 
